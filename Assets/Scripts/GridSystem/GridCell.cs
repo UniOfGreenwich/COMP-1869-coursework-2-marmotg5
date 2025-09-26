@@ -1,21 +1,21 @@
 using System;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 
 public class GridCell
 {
-    (int x, int y) cellIndex; // ex. [0, 1] | 0 = Z , 1 = X
+    (int z, int x) cellIndex; // ex. [0, 1] | 0 = Z , 1 = X
     Vector3 cellPosition;
     float cellSize;
 
-    public GridCell((int x, int y) index, float cellSize, Vector3 cellPosition)
+    public GridCell((int z, int x) index, float cellSize, Vector3 cellPosition)
     {
 		this.cellIndex = index;
         this.cellPosition = cellPosition;
         this.cellSize = cellSize;
 
-		Debug.Log("Grid Cell [" + "0" + "] at Coords: " + cellPosition);
-
+        Debug.Log("grid cell [" + cellIndex.z + ", " + cellIndex.x + "] at pos: " + cellPosition);
 	}
 
     //// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,6 +35,8 @@ public class GridCell
 
         return false;
     }
+
+    public Vector3 GetCellCornerPosition() {return cellPosition;}
 
     public Vector3 GetCenteredPosition()
     {
