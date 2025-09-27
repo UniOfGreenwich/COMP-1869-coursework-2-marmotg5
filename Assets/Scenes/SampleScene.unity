@@ -335,6 +335,8 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194230}
+  - component: {fileID: 963194231}
   - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Player/Main Camera
@@ -447,6 +449,32 @@ MonoBehaviour:
   cameraMaxAcceleration: 7.5
   cameraMovingSpeed: 7.5
   cameraFreeroamBox: {fileID: 1330191834}
+--- !u!114 &963194230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab9b83f7703acd043a020c43f943befb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &963194231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72cf6231a8455f640809e1c181104b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingStateKey: 121
+  cancelPlacementButton: 1
 --- !u!1 &1330191834
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,7 +918,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3790614021729638798, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: gridCellSize
-      value: 1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790614021729638798, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
+      propertyPath: gridCellWidthAmount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3790614021729638798, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
+      propertyPath: gridCellHeightAmount
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4171367923577009167, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -898,7 +934,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4171367923577009167, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4171367923577009167, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: m_LocalPosition.z

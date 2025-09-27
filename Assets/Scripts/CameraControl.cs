@@ -85,15 +85,6 @@ public class CameraControl : MonoBehaviour
         HandleCameraControl();
         HandleCameraZoom();
         HandleCameraLock();
-
-		if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
-		{
-			Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit raycastHit))
-            {
-                print(raycastHit.point);
-            }
-		}
 	}
 
     void HandleCameraControl()
@@ -231,5 +222,11 @@ public class CameraControl : MonoBehaviour
         }
 
         return false;
+    }
+
+    // Stop the camera's movement instantly
+    void StopCamera()
+    {
+        currentCameraAcceleration = 0.0f;
     }
 }

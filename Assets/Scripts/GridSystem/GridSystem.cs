@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 public class GridSystem : MonoBehaviour
 {
-    public static GridSystem instance;
-    LineRenderer lineRenderer;
+    public static GridSystem instance { get; private set; }
+	LineRenderer lineRenderer;
 
     [SerializeField]
     int gridCellWidthAmount = 25, gridCellHeightAmount = 25;
@@ -117,6 +117,20 @@ public class GridSystem : MonoBehaviour
         //}    
 
         //          print("Linerenderer pos count: " + lineRenderer.positionCount);
+    }
+
+    public GridCell GetGridCellFromCoords(Vector3 coords)
+    {
+        // Loop through each grid cell and check if the coords are within a certain grid cell's perimeter
+        foreach (KeyValuePair<(int z, int x), GridCell> search in gridArray)
+        {
+            GridCell gridCell = search.Value;
+            bool foundCell = gridCell.IsPointInsideGridCell(coords);
+
+            if (foundCell) {return gridCell;}
+		}
+
+        return null;
     }
 
     public Dictionary<(int z, int x), GridCell> GetGridArray() { return gridArray; }

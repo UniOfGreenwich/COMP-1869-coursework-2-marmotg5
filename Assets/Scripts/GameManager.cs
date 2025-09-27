@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
-    public static GridSystem gridSystem;
-    public static Camera mainCamera;
+	public static GameManager instance { get; private set; }
+	public static GridSystem gridSystem {  get; private set; }
+    public static Camera mainCamera { get; private set; }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
         if (instance == null)
         {
