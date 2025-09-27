@@ -71,7 +71,7 @@ public class CameraControl : MonoBehaviour
 
     void Start()
     {
-        mainCamera = GetComponent<Camera>();
+        mainCamera = Camera.main;
         pointingCoords = offsetCoords;
 
         if (cameraFreeroamBox)
@@ -86,8 +86,15 @@ public class CameraControl : MonoBehaviour
         HandleCameraZoom();
         HandleCameraLock();
 
-        print("pointing coords: " + pointingCoords);
-    }
+		if (Input.GetMouseButtonDown((int)MouseButton.LeftMouse))
+		{
+			Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit raycastHit))
+            {
+                print(raycastHit.point);
+            }
+		}
+	}
 
     void HandleCameraControl()
     {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class GridSystem : MonoBehaviour
 {
-    static GridSystem instance;
+    public static GridSystem instance;
     LineRenderer lineRenderer;
 
     [SerializeField]
@@ -72,8 +72,6 @@ public class GridSystem : MonoBehaviour
 			GridCell firstCell = gridArray[(z, 0)];
 			GridCell lastCell = gridArray[(z, gridCellHeightAmount - 1)];
 			Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
-			print("Drawing lines");
-
 		}
 
         for (int x = 0; x < gridCellHeightAmount; x++)
@@ -81,8 +79,6 @@ public class GridSystem : MonoBehaviour
             GridCell firstCell = gridArray[(0, x)];
             GridCell lastCell = gridArray[(gridCellWidthAmount - 1, x)];
             Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
-            print("Drawing lines");
-
         }
 
 
@@ -123,6 +119,5 @@ public class GridSystem : MonoBehaviour
         //          print("Linerenderer pos count: " + lineRenderer.positionCount);
     }
 
-    public static GridSystem GetInstance() {  return instance; }
-    public Dictionary<(int z, int x), GridCell> GetGridCells() { return gridArray; }
+    public Dictionary<(int z, int x), GridCell> GetGridArray() { return gridArray; }
 }

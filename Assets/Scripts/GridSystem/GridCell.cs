@@ -37,10 +37,10 @@ public class GridCell
     }
 
     public Vector3 GetCellCornerPosition() {return cellPosition;}
-
     public Vector3 GetCenteredPosition()
     {
-        return new Vector3((cellPosition.x * cellSize) / 2.0f, cellPosition.y, (cellPosition.z * cellSize) / 2.0f);
+        Vector3 halfPosition = new Vector3((cellPosition.x * cellSize) / 2.0f, cellPosition.y, (cellPosition.z * cellSize) / 2.0f);
+		return cellPosition + halfPosition;
     }
 
 
