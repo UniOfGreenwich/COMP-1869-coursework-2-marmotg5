@@ -41,16 +41,20 @@ public class GridCell
     {
         // Cell vertices
         Vector3 topLeft = cellPosition; // -- cellPosition always starts on the top-left corner of each grid cell
-        Vector3 topRight = topLeft + new Vector3(topLeft.x, topLeft.y, topLeft.z + cellSize);
-		Vector3 bottomLeft = topLeft + new Vector3(topLeft.x + cellSize, topLeft.y, topLeft.z);
-		Vector3 bottomRight = topLeft + new Vector3(topLeft.x + cellSize, topLeft.y, topLeft.z + cellSize);
+        Vector3 topRight = new Vector3(topLeft.x, topLeft.y, topLeft.z + cellSize);
+		Vector3 bottomLeft = new Vector3(topLeft.x + cellSize, topLeft.y, topLeft.z);
+		Vector3 bottomRight = new Vector3(topLeft.x + cellSize, topLeft.y, topLeft.z + cellSize);
+
+        // Giving the cells a bith of depth to make it easier to be clicked on in case they are elevated/in air
+        float underDepth = cellPosition.y - cellSize;
+		float overDepth = cellPosition.y + cellSize;
 
 		// Check if the point is within the grid cell's perimeter
 		if (point.x >= topLeft.x &&
-			point.x <= bottomLeft.x &&
-			//point.y >= bounds.min.y &&
-			//point.y <= bounds.max.y &&
-			point.z >= topLeft.x &&
+            point.x <= bottomLeft.x &&
+            point.y >= underDepth &&
+            point.y <= overDepth &&
+            point.z >= topLeft.x &&
 			point.z <= topRight.z)
 		{
 			return true;
@@ -59,6 +63,7 @@ public class GridCell
 		return false;
     }
 
+    public (int z, int x) GetCellIndex() {return cellIndex;}
     public Vector3 GetCellCornerPosition() {return cellPosition;}
     public Vector3 GetCenteredPosition()
     {

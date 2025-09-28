@@ -66,10 +66,11 @@ public class PlayerBuilding : MonoBehaviour
 			Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out RaycastHit raycastHit))
 			{
+                //print("Mouse hit coords: " + raycastHit.point);
                 GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
 			    if (gridCell != null)
                 {
-					print(raycastHit.point);
+					print("Cell Index " + gridCell.GetCellIndex() + " at coords: " + raycastHit.point);
 				}
 			}
 			//if (Input.GetMouseButtonDown((int)MouseButton.Left))
