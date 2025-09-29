@@ -70,7 +70,9 @@ public class PlayerBuilding : MonoBehaviour
                 GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
 			    if (gridCell != null)
                 {
-					print("Cell Index " + gridCell.GetCellIndex() + " at coords: " + raycastHit.point);
+                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    cube.transform.position = gridCell.GetCenteredPosition();
+                    print("Cell Index " + gridCell.GetCellIndex() + " at coords: " + raycastHit.point);
 				}
 			}
 			//if (Input.GetMouseButtonDown((int)MouseButton.Left))

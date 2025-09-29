@@ -918,7 +918,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3790614021729638798, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: gridCellSize
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3790614021729638798, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: gridCellWidthAmount
@@ -926,7 +926,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3790614021729638798, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: gridCellHeightAmount
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4171367923577009167, guid: e1dbcde21f11bb447aaba5ff9c7f95b4, type: 3}
       propertyPath: m_LocalPosition.x

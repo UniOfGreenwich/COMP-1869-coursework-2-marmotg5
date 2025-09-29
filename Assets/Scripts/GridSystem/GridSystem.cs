@@ -55,7 +55,7 @@ public class GridSystem : MonoBehaviour
         {
             for (int x = 0; x < gridCellHeightAmount; x++)
             {
-                Vector3 cellPosition = new Vector3(x * gridCellSize, transform.position.y, z * gridCellSize);
+                Vector3 cellPosition = new Vector3(x + gridCellSize, transform.position.y, z + gridCellSize);
                 gridArray.Add((z, x), new GridCell((z, x), gridCellSize, cellPosition));
             }
         }
