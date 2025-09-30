@@ -51,16 +51,16 @@ public class GridSystem : MonoBehaviour
     {
 		gridArray = new Dictionary<(int z, int x), GridCell>(gridCellWidthAmount * gridCellHeightAmount);
 
-		for (int z = 0; z < gridCellWidthAmount; z++)
+		for (int x = 0; x < gridCellHeightAmount; x++)
         {
-            for (int x = 0; x < gridCellHeightAmount; x++)
+            for (int z = 0; z < gridCellWidthAmount; z++)
             {
-                Vector3 cellPosition = new Vector3(x + gridCellSize, transform.position.y, z + gridCellSize);
+                Vector3 cellPosition = new Vector3(x * gridCellSize, transform.position.y, z * gridCellSize);
                 gridArray.Add((z, x), new GridCell((z, x), gridCellSize, cellPosition));
             }
         }
 
-        RenderGrid();
+		RenderGrid();
     }
 
     void RenderGrid()
@@ -80,43 +80,6 @@ public class GridSystem : MonoBehaviour
             GridCell lastCell = gridArray[(gridCellWidthAmount - 1, x)];
             Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
         }
-
-
-
-        //for (int z = 0;z < gridCellWidthAmount; z++)
-        //{
-        //    for (int x = 0; x < gridCellHeightAmount; x++)
-        //    {
-        //        GridCell cell = gridArray[(z, x)];
-        //        Vector3 heightDireciton = new Vector3(cell.GetCellCornerPosition().x, cell.GetCellCornerPosition().y * 100.0f, cell.GetCellCornerPosition().z);
-        //        Debug.DrawLine(cell.GetCellCornerPosition(), heightDireciton, Color.red, 100.0f, true);
-        //    }
-        //}
-
-
-        //      for (int z = 0; z < gridCellWidthAmount; z++)
-        //      {
-        //          //Vector3 firstCell = gridArray[(z, 0)].GetCellCornerPosition();
-        //	Vector3 lastCell = gridArray[(z, gridCellWidthAmount - 1)].GetCellCornerPosition();
-        //          lineRenderer.SetPosition(z, lastCell);
-        //}
-
-        //for (int x = 0; x < gridCellWidthAmount; x++)
-        //{
-        //	//Vector3 firstCell = gridArray[(0, x)].GetCellCornerPosition();
-        //	Vector3 lastCell = gridArray[(x, gridCellHeightAmount - 1)].GetCellCornerPosition();
-        //	lineRenderer.SetPosition(x, lastCell);
-        //}
-        //      for (int z = 0; z < gridCellWidthAmount; z++)
-        //      {
-        //          for (int x = 0; x < gridCellHeightAmount; x++)
-        //          {
-        //              Vector3 lineRenderPositionX = gridArray[(x, z)].GetCellCornerPosition();
-        //              lineRenderer.SetPosition(x, lineRenderPositionX);
-        //	}
-        //}    
-
-        //          print("Linerenderer pos count: " + lineRenderer.positionCount);
     }
 
     public GridCell GetGridCellFromCoords(Vector3 coords)
@@ -126,6 +89,7 @@ public class GridSystem : MonoBehaviour
         {
             GridCell gridCell = search.Value;
             bool foundCell = gridCell.IsPointInsideGridCell(coords);
+
 
             if (foundCell) {return gridCell;}
 		}

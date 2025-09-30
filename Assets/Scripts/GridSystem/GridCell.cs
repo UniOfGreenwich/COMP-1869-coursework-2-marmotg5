@@ -19,17 +19,6 @@ public class GridCell
         //Debug.Log("grid cell [" + cellIndex.z + ", " + cellIndex.x + "] at pos: " + cellPosition);
 	}
 
-    //// Start is called once before the first execution of Update after the MonoBehaviour is created
-    //void Start()
-    //{
-    //}
-
-    //// Update is called once per frame
-    //void Update()
-    //{
-
-    //}
-
     // Checks if there is anything placed on the grid cell block
     public bool IsOccupied()
     {
@@ -45,7 +34,7 @@ public class GridCell
 		Vector3 bottomLeft = new Vector3(topLeft.x + cellSize, topLeft.y, topLeft.z);
 		Vector3 bottomRight = new Vector3(topLeft.x + cellSize, topLeft.y, topLeft.z + cellSize);
 
-        // Giving the cells a bith of depth to make it easier to be clicked on in case they are elevated/in air
+        // Giving the cells a bith of depth to make it easier to be clicked on in case the point coordinates are elevated/in air
         float underDepth = cellPosition.y - cellSize;
 		float overDepth = cellPosition.y + cellSize;
 
@@ -54,7 +43,7 @@ public class GridCell
             point.x <= bottomLeft.x &&
             point.y >= underDepth &&
             point.y <= overDepth &&
-            point.z >= topLeft.x &&
+            point.z >= topLeft.z &&
 			point.z <= topRight.z)
 		{
 			return true;

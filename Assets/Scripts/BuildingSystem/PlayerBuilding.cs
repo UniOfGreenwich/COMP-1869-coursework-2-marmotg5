@@ -68,22 +68,21 @@ public class PlayerBuilding : MonoBehaviour
 			{
                 //print("Mouse hit coords: " + raycastHit.point);
                 GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
-			    if (gridCell != null)
+
+                if (gridCell != null)
                 {
-                    GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                    cube.transform.position = gridCell.GetCenteredPosition();
-                    print("Cell Index " + gridCell.GetCellIndex() + " at coords: " + raycastHit.point);
+
+					if (Input.GetMouseButtonDown((int)MouseButton.Left))
+					{
+						GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+						cube.transform.position = gridCell.GetCenteredPosition();
+
+					}
+					//print("Cell Index " + gridCell.GetCellIndex() + " at coords: " + raycastHit.point);
 				}
-			}
-			//if (Input.GetMouseButtonDown((int)MouseButton.Left))
-			//{
-			//	Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-			//	if (Physics.Raycast(ray, out RaycastHit raycastHit))
-			//	{
-			//		print(raycastHit.point);
-			//	}
-			//}
-		}
+            }
+
+        }
 	}
 
 	void DisplayGridSystem()
