@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class GridObjectData : ScriptableObject
 {
+	public string objectName = "Object";
 	public GameObject objectPrefab;
 	public GridObjectType objectType;
 	public Sprite objectSprite;
