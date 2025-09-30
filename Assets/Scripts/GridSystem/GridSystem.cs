@@ -3,6 +3,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 
+public enum GridObjectType
+{
+	DECORATION,
+	PLANT
+}
+
 public class GridSystem : MonoBehaviour
 {
     public static GridSystem instance { get; private set; }

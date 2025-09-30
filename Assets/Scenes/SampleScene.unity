@@ -412,13 +412,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.21263108, y: 0.67437977, z: -0.21263108, w: 0.67437977}
-  m_LocalPosition: {x: -30, y: 20, z: 0}
+  m_LocalRotation: {x: 0.30070576, y: 0, z: 0, w: 0.953717}
+  m_LocalPosition: {x: 0, y: 20, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 35, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 35, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -437,17 +437,17 @@ MonoBehaviour:
   moveCamRightKey: 100
   toggleCameraLockKey: 32
   freeroamCameraRotateButton: 1
-  minZoomDistance: 20
+  minZoomDistance: 10
   maxZoomDistance: 40
   zoomAmountPerScroll: 5
   cameraRotatingSpeed: 100
   offsetCoords: {x: 0, y: 0, z: 0}
   cameraState: 0
   mouseSensitivity: 10
-  cameraAcceleration: 5
+  cameraAcceleration: 2.5
   cameraDeceleration: 15
-  cameraMaxAcceleration: 7.5
-  cameraMovingSpeed: 7.5
+  cameraMaxAcceleration: 5
+  cameraMovingSpeed: 5
   cameraFreeroamBox: {fileID: 1330191834}
 --- !u!114 &963194230
 MonoBehaviour:

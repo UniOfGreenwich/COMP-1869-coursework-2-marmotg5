@@ -57,14 +57,14 @@ public class CameraControl : MonoBehaviour
     [SerializeField]
     float mouseSensitivity = 10.0f;
     [SerializeField]
-    float cameraAcceleration = 5.0f;
+    float cameraAcceleration = 2.5f;
     [SerializeField]
     float cameraDeceleration = 15.0f;
     [SerializeField]
-    float cameraMaxAcceleration = 7.5f;
+    float cameraMaxAcceleration = 5.0f;
     float currentCameraAcceleration = 0.0f;
     [SerializeField]
-    float cameraMovingSpeed = 7.5f;
+    float cameraMovingSpeed = 5.0f;
     [SerializeField]
     GameObject cameraFreeroamBox; // The box where the camera will have to stay within in freeroam mode (can't leave/exit it)
     BoxCollider cameraFreeroamBoxCollider = null;
