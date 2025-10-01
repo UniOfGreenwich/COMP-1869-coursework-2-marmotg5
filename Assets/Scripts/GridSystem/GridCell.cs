@@ -2,6 +2,7 @@ using System;
 using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 
 public class GridCell
@@ -14,8 +15,8 @@ public class GridCell
     {
 		this.cellIndex = index;
         this.cellPosition = cellPosition;
-        this.cellSize = cellSize;
-        //Debug.Log("grid cell [" + cellIndex.z + ", " + cellIndex.x + "] at pos: " + cellPosition);
+		this.cellSize = cellSize;
+		//Debug.Log("grid cell [" + cellIndex.z + ", " + cellIndex.x + "] at pos: " + cellPosition);
 	}
 
     // Checks if there is anything placed on the grid cell block

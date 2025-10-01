@@ -46,13 +46,15 @@ public class PlayerBuilding : MonoBehaviour
             if (buildingState == BuildingState.NONE)
             {
                 SetBuildingState(BuildingState.CHOOSING_OBJECT);
-                DisplayGridSystem();
+                GameManager.GetGridSystem().SetGridSystemRendering(true);
             }
 
             // Exit building
             else if(buildingState == BuildingState.CHOOSING_OBJECT || buildingState ==  BuildingState.PLACING_OBJECT)
             {
 				SetBuildingState(BuildingState.NONE);
+
+				GameManager.GetGridSystem().SetGridSystemRendering(false);
 			}
             print("Changed Building State To: " + buildingState.ToString());
         }
@@ -83,16 +85,6 @@ public class PlayerBuilding : MonoBehaviour
             }
 
         }
-	}
-
-	void DisplayGridSystem()
-    {
-		// TODO
-		// TODO
-		// TODO
-		// TODO
-		// TODO
-		// TODO
 	}
 
 	public void SetBuildingState(BuildingState state)

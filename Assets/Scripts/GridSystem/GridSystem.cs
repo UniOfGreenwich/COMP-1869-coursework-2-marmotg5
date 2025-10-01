@@ -12,14 +12,16 @@ public enum GridObjectType
 public class GridSystem : MonoBehaviour
 {
     public static GridSystem instance { get; private set; }
-	LineRenderer lineRenderer;
-
     [SerializeField]
+    GameObject gridCellVisualPrefab;
+
+	[SerializeField]
     int gridCellWidthAmount = 25, gridCellHeightAmount = 25;
     [SerializeField]
     float gridCellSize = 1.0f; // 1 meter unit in Unity 
 
     Dictionary<(int z, int x), GridCell> gridArray = new Dictionary<(int z, int x), GridCell>();
+    List<GameObject> gridCellVisuals = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,7 +37,6 @@ public class GridSystem : MonoBehaviour
         }
 
         //grid = GetComponent<Grid>();
-        lineRenderer = GetComponent<LineRenderer>();
         InitializeGrid();
     }
 
@@ -60,31 +61,52 @@ public class GridSystem : MonoBehaviour
             for (int z = 0; z < gridCellWidthAmount; z++)
             {
                 Vector3 cellPosition = new Vector3(x * gridCellSize, transform.position.y, z * gridCellSize);
-                gridArray.Add((z, x), new GridCell((z, x), gridCellSize, cellPosition));
+                GridCell gridCell = new GridCell((z, x), gridCellSize, cellPosition);
+
+
+                //gridArray.Add((z, x), new GridCell((z, x), gridCellSize, cellPosition));
+
+                gridArray.Add((z, x), gridCell);
+
+                // Adding the grid cell visual sprite stuff to a list that we can access later
+                GameObject gridCellVisual = Instantiate(gridCellVisualPrefab, gridCell.GetCenteredPosition() + gridCellVisualPrefab.transform.position, gridCellVisualPrefab.transform.rotation, transform);
+                gridCellVisual.name = "GridCellVisual_" + z + x;
+                gridCellVisuals.Add(gridCellVisual);
             }
         }
 
-        RenderGrid();
-    }
+        SetGridSystemRendering(false); // Don't render grid by default
+		//RenderGrid();
+	}
 
-    void RenderGrid()
+    public void SetGridSystemRendering(bool toggle)
     {
-		lineRenderer.positionCount = gridCellWidthAmount + gridCellHeightAmount;
-
-		for (int z = 0; z < gridCellWidthAmount; z++)
+		foreach (GameObject visualObject in gridCellVisuals)
 		{
-			GridCell firstCell = gridArray[(z, 0)];
-			GridCell lastCell = gridArray[(z, gridCellHeightAmount - 1)];
-			Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
+			SpriteRenderer spriteRenderer = visualObject.GetComponent<SpriteRenderer>();
+			if (spriteRenderer != null)
+			{
+				visualObject.SetActive(toggle);
+			}
 		}
+	}
 
-        for (int x = 0; x < gridCellHeightAmount; x++)
-        {
-            GridCell firstCell = gridArray[(0, x)];
-            GridCell lastCell = gridArray[(gridCellWidthAmount - 1, x)];
-            Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
-        }
-    }
+  //  void RenderGrid()
+  //  {
+		//for (int z = 0; z < gridCellWidthAmount; z++)
+		//{
+		//	GridCell firstCell = gridArray[(z, 0)];
+		//	GridCell lastCell = gridArray[(z, gridCellHeightAmount - 1)];
+		//	Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
+		//}
+
+  //      for (int x = 0; x < gridCellHeightAmount; x++)
+  //      {
+  //          GridCell firstCell = gridArray[(0, x)];
+  //          GridCell lastCell = gridArray[(gridCellWidthAmount - 1, x)];
+  //          Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
+  //      }
+  //  }
 
     public GridCell GetGridCellFromCoords(Vector3 coords)
     {

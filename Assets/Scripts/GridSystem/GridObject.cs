@@ -1,9 +1,7 @@
 using UnityEngine;
 
-public class GridObject : MonoBehaviour
+public abstract class GridObject : MonoBehaviour
 {
-    Sprite cellSprite;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
