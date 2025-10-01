@@ -15,7 +15,6 @@ public class GridCell
 		this.cellIndex = index;
         this.cellPosition = cellPosition;
         this.cellSize = cellSize;
-
         //Debug.Log("grid cell [" + cellIndex.z + ", " + cellIndex.x + "] at pos: " + cellPosition);
 	}
 

@@ -1,28 +1,17 @@
 using UnityEngine;
 
-public class GridObject : MonoBehaviour
+public class PlantObject : GridObject
 {
-    Sprite cellSprite;
-
+    [SerializeField] GridPlantData plantData;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    protected void MoveInGrid()
-    {
-
-    }
-
-    protected void RemoveFromGrid()
-    {
-
     }
 }

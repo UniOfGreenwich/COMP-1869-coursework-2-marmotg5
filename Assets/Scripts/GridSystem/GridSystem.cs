@@ -19,8 +19,6 @@ public class GridSystem : MonoBehaviour
     [SerializeField]
     float gridCellSize = 1.0f; // 1 meter unit in Unity 
 
-    Grid grid;
-
     Dictionary<(int z, int x), GridCell> gridArray = new Dictionary<(int z, int x), GridCell>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -36,7 +34,7 @@ public class GridSystem : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        grid = GetComponent<Grid>();
+        //grid = GetComponent<Grid>();
         lineRenderer = GetComponent<LineRenderer>();
         InitializeGrid();
     }
@@ -66,7 +64,7 @@ public class GridSystem : MonoBehaviour
             }
         }
 
-		RenderGrid();
+        RenderGrid();
     }
 
     void RenderGrid()
