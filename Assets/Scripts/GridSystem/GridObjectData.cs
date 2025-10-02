@@ -8,4 +8,6 @@ public abstract class GridObjectData : ScriptableObject
 	public Sprite objectSprite;
 	public Vector2Int gridCellRequirement = new Vector2Int(1, 1); // Default 1 grid cell per axis
 
+	public abstract GridObjectData GetSelf();
+
 }

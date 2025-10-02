@@ -7,4 +7,9 @@ public class GridDecorationData : GridObjectData
 	{
 		objectType = GridObjectType.DECORATION;
 	}
+
+	public override GridObjectData GetSelf()
+	{
+		return this;
+	}
 }

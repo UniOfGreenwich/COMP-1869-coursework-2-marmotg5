@@ -11,6 +11,8 @@ public class GridCell
     Vector3 cellPosition;
     float cellSize;
 
+    GridObject storedGridObject = null;
+
     public GridCell((int z, int x) index, float cellSize, Vector3 cellPosition)
     {
 		this.cellIndex = index;
@@ -62,5 +64,8 @@ public class GridCell
 		return halfPosition;
     }
 
-
+    public void StoreGridObject(GridObject gridObject)
+    {
+        storedGridObject = gridObject;
+    }
 }

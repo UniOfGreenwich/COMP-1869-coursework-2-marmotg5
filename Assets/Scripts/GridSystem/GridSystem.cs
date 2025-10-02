@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum GridObjectType
 {
@@ -11,8 +12,13 @@ public enum GridObjectType
 
 public class GridSystem : MonoBehaviour
 {
-    public static GridSystem instance { get; private set; }
-    [SerializeField]
+    const string VISUAL_OBJECT_NAME = "GridCellVisual_";
+
+
+	public static GridSystem instance { get; private set; }
+	[SerializeField]
+	GridObjectData[] allowedGridObjects;
+	[SerializeField]
     GameObject gridCellVisualPrefab;
 
 	[SerializeField]
@@ -62,17 +68,14 @@ public class GridSystem : MonoBehaviour
             {
                 Vector3 cellPosition = new Vector3(x * gridCellSize, transform.position.y, z * gridCellSize);
                 GridCell gridCell = new GridCell((z, x), gridCellSize, cellPosition);
-
-
                 //gridArray.Add((z, x), new GridCell((z, x), gridCellSize, cellPosition));
 
                 gridArray.Add((z, x), gridCell);
 
-                // Adding the grid cell visual sprite stuff to a list that we can access later
-                GameObject gridCellVisual = Instantiate(gridCellVisualPrefab, gridCell.GetCenteredPosition() + gridCellVisualPrefab.transform.position, gridCellVisualPrefab.transform.rotation, transform);
-                gridCellVisual.name = "GridCellVisual_" + z + x;
-                gridCellVisuals.Add(gridCellVisual);
-            }
+				GameObject gridCellVisual = Instantiate(gridCellVisualPrefab, gridCell.GetCenteredPosition() + gridCellVisualPrefab.transform.position, gridCellVisualPrefab.transform.rotation, transform);
+				gridCellVisual.name = VISUAL_OBJECT_NAME + z + x;
+				gridCellVisuals.Add(gridCellVisual);
+			}
         }
 
         SetGridSystemRendering(false); // Don't render grid by default
@@ -122,6 +125,81 @@ public class GridSystem : MonoBehaviour
 
         return null;
     }
+
+    // Checks if the grid cell can be found in the grid system
+    bool DoesGridCellExist(GridCell cellToCheck)
+    {
+		foreach (KeyValuePair<(int z, int x), GridCell> search in gridArray)
+		{
+			GridCell arrayGridCell = search.Value;
+            if (cellToCheck == arrayGridCell)
+            {
+                return true;
+            }
+		}
+		return false;
+    }
+
+    GameObject FindVisualObjectBasedOnCell(GridCell gridCell)
+    {
+        (int z, int x) gridCellLocation = gridCell.GetCellIndex();
+
+		for (int i = 0; i < gridCellVisuals.Count; i ++)
+        {
+            GameObject visualObject = gridCellVisuals[i];
+            if (visualObject != null)
+            {
+                if (visualObject.name == VISUAL_OBJECT_NAME + gridCellLocation.z + gridCellLocation.x)
+                {
+                    return visualObject;
+                }
+            }
+        }
+
+		return null;
+    }
+
+	public void SpawnGridObject(GridCell cellToSpawnIn)
+	{
+		if (allowedGridObjects.Contains(allowedGridObjects[0]))
+		{
+			if (DoesGridCellExist(cellToSpawnIn))
+			{
+				GameObject gridObjectPrefab = allowedGridObjects[0].objectPrefab;
+				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+
+				Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
+
+				Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+			}
+		}
+	}
+
+	public void SpawnGridObject(GridCell cellToSpawnIn, GridObjectData gridObjectData)
+    {
+		if (allowedGridObjects.Contains(gridObjectData))
+		{
+			if (DoesGridCellExist(cellToSpawnIn))
+            {
+                GameObject gridObjectPrefab = gridObjectData.objectPrefab;
+                GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+
+                Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
+
+				Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+            }
+		}
+	}
+
+    //// Check if the grid object we want to spawn is allowed within the grid system
+    //bool IsGridObjectAllowed(GridObjectData gridObjectData)
+    //{
+    //    if (allowedGridObjects.Contains(gridObjectData))
+    //    {
+    //        return true;
+    //    }
+    //    return false;
+    //}
 
     public Dictionary<(int z, int x), GridCell> GetGridArray() { return gridArray; }
 }

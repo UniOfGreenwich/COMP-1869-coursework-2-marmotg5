@@ -13,22 +13,19 @@ public class PlayerBuilding : MonoBehaviour
     BuildingState buildingState;
 
     Camera mainCamera;
-    //GridSystem gridSystem;
+    [Header("Grid Building Objects Data")]
+
+    GridObjectData selectedObjectData = null;
 
     [Header("Keyboard Controls")]
     [SerializeField]
     KeyCode buildingStateKey = KeyCode.Y;
-
-	[Header("Mouse Controls")]
-	[SerializeField]
-    MouseButton cancelPlacementButton = MouseButton.Right;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
         buildingState = BuildingState.NONE;
         mainCamera = GetComponent<Camera>();
-        //gridSystem = GridSystem.instance;
     }
 
     // Update is called once per frame
@@ -46,15 +43,15 @@ public class PlayerBuilding : MonoBehaviour
             if (buildingState == BuildingState.NONE)
             {
                 SetBuildingState(BuildingState.CHOOSING_OBJECT);
-                GameManager.GetGridSystem().SetGridSystemRendering(true);
+                OpenBuildingMenu();
             }
 
             // Exit building
             else if(buildingState == BuildingState.CHOOSING_OBJECT || buildingState ==  BuildingState.PLACING_OBJECT)
             {
 				SetBuildingState(BuildingState.NONE);
+                CloseBuildingMenu();
 
-				GameManager.GetGridSystem().SetGridSystemRendering(false);
 			}
             print("Changed Building State To: " + buildingState.ToString());
         }
@@ -68,28 +65,51 @@ public class PlayerBuilding : MonoBehaviour
 			Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out RaycastHit raycastHit))
 			{
-                //print("Mouse hit coords: " + raycastHit.point);
                 GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
 
                 if (gridCell != null)
                 {
-
 					if (Input.GetMouseButtonDown((int)MouseButton.Left))
 					{
-						GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-						cube.transform.position = gridCell.GetCenteredPosition();
+                        GridSystem.instance.SpawnGridObject(gridCell);
+      //                  GridObjectData gridObjectData = allowedGridObjects[0];
+      //                  if (gridObjectData != null)
+      //                  {
+      //                      Instantiate(gridObjectData.objectPrefab, gridCell.GetCenteredPosition());
+
+						//	//GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+						//	//cube.transform.position = gridCell.GetCenteredPosition();
+						//}
+
 
 					}
-					//print("Cell Index " + gridCell.GetCellIndex() + " at coords: " + raycastHit.point);
 				}
             }
 
         }
 	}
 
+    void OpenBuildingMenu()
+    {
+		GameManager.GetGridSystem().SetGridSystemRendering(true);
+
+	}
+
+    void CloseBuildingMenu()
+    {
+		GameManager.GetGridSystem().SetGridSystemRendering(false);
+		selectedObjectData = null;
+
+	}
+
 	public void SetBuildingState(BuildingState state)
     {
         buildingState = state;
+    }
+
+    void SwitchBuildingObject()
+    {
+
     }
 
     BuildingState GetBuildingState() {return buildingState;}
