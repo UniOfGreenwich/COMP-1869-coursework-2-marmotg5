@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Linq;
+using System;
+using Unity.Mathematics;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public enum GridObjectType
 {
@@ -89,8 +92,9 @@ public class GridSystem : MonoBehaviour
 			SpriteRenderer spriteRenderer = visualObject.GetComponent<SpriteRenderer>();
 			if (spriteRenderer != null)
 			{
-				visualObject.SetActive(toggle);
-			}
+                spriteRenderer.enabled = toggle;
+
+            }
 		}
 	}
 
@@ -122,6 +126,20 @@ public class GridSystem : MonoBehaviour
 
             if (foundCell) {return gridCell;}
 		}
+
+        return null;
+    }
+
+    public GridCell GetGridCellFromLocation((int z, int x) locationToCheck)
+    {
+        // Loop through each grid cell and check if the coords are within a certain grid cell's perimeter
+        foreach (KeyValuePair<(int z, int x), GridCell> search in gridArray)
+        {
+            GridCell gridCell = search.Value;
+            (int z, int x) gridCellLocation = gridCell.GetCellIndex();
+
+            if (gridCellLocation == locationToCheck) {return gridCell;}
+        }
 
         return null;
     }
@@ -165,13 +183,44 @@ public class GridSystem : MonoBehaviour
 		{
 			if (DoesGridCellExist(cellToSpawnIn))
 			{
-				GameObject gridObjectPrefab = allowedGridObjects[0].objectPrefab;
-				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+                // Grab the object's data
+                GridObjectData gridObjectData = allowedGridObjects[0];
+                Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
 
-				Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
+                if (!IsGridCellAreaBlocked(cellToSpawnIn, gridObjectCellRequirements))
+                {
 
-				Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
-			}
+                    GameObject gridObjectPrefab = gridObjectData.objectPrefab;
+
+                    // Calculate object world position
+                    GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+                    Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
+
+                    // Set the object's data
+                    GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+                    GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
+                    if (spawnedGridObjectData != null)
+                    {
+                        spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
+                        cellToSpawnIn.StoreGridObject(spawnedGridObject);
+                    }
+                }
+
+    //            GameObject gridObjectPrefab = gridObjectData.objectPrefab;
+
+    //            // Calculate object world position
+				//GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+				//Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
+
+    //            // Set the object's data
+				//GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+    //            GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
+    //            if (spawnedGridObjectData != null)
+    //            {
+    //                spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
+    //                cellToSpawnIn.StoreGridObject(spawnedGridObject);
+    //            }
+            }
 		}
 	}
 
@@ -186,20 +235,34 @@ public class GridSystem : MonoBehaviour
 
                 Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
 
-				Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+                GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+
+                cellToSpawnIn.StoreGridObject(spawnedGridObject);
             }
 		}
 	}
 
-    //// Check if the grid object we want to spawn is allowed within the grid system
-    //bool IsGridObjectAllowed(GridObjectData gridObjectData)
-    //{
-    //    if (allowedGridObjects.Contains(gridObjectData))
-    //    {
-    //        return true;
-    //    }
-    //    return false;
-    //}
+    bool IsGridCellAreaBlocked(GridCell gridCell, Vector2Int gridCellRequirements) // x = Z | y = X
+    {
+        (int z, int x) cellLocation = gridCell.GetCellIndex();
+
+        int leftOverWidth = Mathf.Abs(gridCellRequirements.x - cellLocation.z);
+        int leftOverHeigt = Mathf.Abs(gridCellRequirements.y - cellLocation.x);
+
+        for (int z = 0; z <= leftOverWidth; z++)
+        {
+            for (int x = 0; x <= leftOverHeigt; x++)
+            {
+                GridCell cellToCheck = GetGridCellFromLocation((cellLocation.z + z, cellLocation.x + x));
+                if (cellToCheck != null)
+                {
+                    if (cellToCheck.IsOccupied()) {return true;}
+                }
+            }
+        }
+
+        return false;
+    }
 
     public Dictionary<(int z, int x), GridCell> GetGridArray() { return gridArray; }
 }

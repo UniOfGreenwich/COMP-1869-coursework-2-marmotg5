@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: MushroomData
   m_EditorClassIdentifier: 
   objectName: Mushroom
-  objectPrefab: {fileID: 0}
+  objectPrefab: {fileID: 1216198311438213683, guid: 64d7f2e55577f6f41bfcdf4bb9b561e9, type: 3}
   objectType: 1
   objectSprite: {fileID: 0}
   gridCellRequirement: {x: 1, y: 2}
   growingStages: 3
   cashReward: 100
-  growingStageMeshes: []
+  requiredGrowingTime: 10
+  growingStageMeshes:
+  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}

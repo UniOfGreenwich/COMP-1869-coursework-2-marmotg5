@@ -1,9 +1,6 @@
 using System;
-using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-
 
 public class GridCell
 {
@@ -11,7 +8,7 @@ public class GridCell
     Vector3 cellPosition;
     float cellSize;
 
-    GridObject storedGridObject = null;
+    GameObject storedGridObject = null;
 
     public GridCell((int z, int x) index, float cellSize, Vector3 cellPosition)
     {
@@ -20,13 +17,6 @@ public class GridCell
 		this.cellSize = cellSize;
 		//Debug.Log("grid cell [" + cellIndex.z + ", " + cellIndex.x + "] at pos: " + cellPosition);
 	}
-
-    // Checks if there is anything placed on the grid cell block
-    public bool IsOccupied()
-    {
-
-        return false;
-    }
 
     public bool IsPointInsideGridCell(Vector3 point)
     {
@@ -64,8 +54,14 @@ public class GridCell
 		return halfPosition;
     }
 
-    public void StoreGridObject(GridObject gridObject)
+    public void StoreGridObject(GameObject gridObject)
     {
         storedGridObject = gridObject;
+    }
+
+    // Checks if there is anything placed on the grid cell block
+    public bool IsOccupied()
+    {
+        return (storedGridObject != null);
     }
 }
