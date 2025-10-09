@@ -16,7 +16,7 @@ MonoBehaviour:
   objectPrefab: {fileID: 1216198311438213683, guid: 64d7f2e55577f6f41bfcdf4bb9b561e9, type: 3}
   objectType: 1
   objectSprite: {fileID: 0}
-  gridCellRequirement: {x: 1, y: 2}
+  gridCellRequirement: {x: 1, y: 1}
   growingStages: 3
   cashReward: 100
   requiredGrowingTime: 10

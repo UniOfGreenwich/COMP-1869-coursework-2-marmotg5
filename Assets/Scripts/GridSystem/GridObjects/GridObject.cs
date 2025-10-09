@@ -30,8 +30,8 @@ public abstract class GridObject : MonoBehaviour
 
     public void UpdateParentCell(GridCell cell)
     {
-        parentCell = cell;
-    }
+        if (cell != null) parentCell = cell;
+	}
 
 
 }
