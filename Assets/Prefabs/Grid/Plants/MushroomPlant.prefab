@@ -127,4 +127,8 @@ MonoBehaviour:
   plantWaterLevel: 100
   plantWaterGainAmount: 5
   plantWaterDrainingAmount: 0.25
+  pestAttackChance: 50
+  minAttackTimer: 10
+  maxAttackTimer: 30
   plantHealth: 5
+  pestDamage: 1

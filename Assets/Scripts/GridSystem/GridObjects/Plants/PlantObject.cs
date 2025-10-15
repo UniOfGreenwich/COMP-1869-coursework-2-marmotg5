@@ -4,44 +4,52 @@ using UnityEngine.EventSystems;
 public class PlantObject : GridObject
 {
     const float MAX_WATER_LEVEL = 100.0f;
-    const float MIN_PEST_ATTACK_TIMER = 30.0f;
+	const float MAX_PEST_ATTACK_CHANCE = 100.0f;
+	const float MIN_PEST_ATTACK_TIMER = 10.0f;
     const float MAX_PEST_ATTACK_TIMER = 30.0f;
 
-    [SerializeField] GridPlantData plantData;
 
-    [Header("Plant Watering Settings")]
-    [SerializeField] float minAttackTimer = 30.0f;
-    [SerializeField] float maxAttackTimer = 50.0f;
+	[SerializeField] GridPlantData plantData;
 
+	[SerializeField] int plantHealth = 10;
+
+
+	// Plant watering
+	[Header("Plant Watering Settings")]
     [Range(0f, MAX_WATER_LEVEL)]
-    [SerializeField] float plantWaterLevel = 100.0f;
+    [SerializeField] float plantWaterLevel = MAX_WATER_LEVEL;
     [SerializeField] float plantWaterGainAmount = 5.0f;
     [SerializeField] float plantWaterDrainingAmount = 0.25f;
 
-    [Header("Plant/Pest Settings")]
-    [SerializeField] int plantHealth = 10;
+    // Plant pests
+    [Header("Plant Pest Attack Settings")]
+    [Range (0f, MAX_PEST_ATTACK_CHANCE)]
+    [SerializeField] float pestAttackChance = 50.0f;
+	[SerializeField] float minAttackTimer = MIN_PEST_ATTACK_TIMER;
+	[SerializeField] float maxAttackTimer = MAX_PEST_ATTACK_TIMER;
     [SerializeField] int pestDamage = 1;
 
-    float randomPestAttackTimer = 50.0f; // Default value
+    float randomPestAttackTimer = 0.0f; // Gets set in void Start()
     float currentTimeFromLastAttack = 0.0f;
 
+    // Plant growing data
     float currentGrowingTime = 0.0f;
-
     int currentGrowingStage = 0;
 
     // A value that tells the plant after how many seconds it should grow
-    float timePerGrowingStage = 0.0f;
+    float timePerGrowingStage = 0.0f; // Gets set in void Start()
 
-    // A value that tracks how much time has passed after it's growth
+    // A value that tracks how much time has passed after it's last growth
     float elapsedTimeSinceLastGrowth = 0.0f;
 
-    MeshFilter plantMeshFilter = null;
+    MeshFilter plantMeshFilter = null; // The plant's mesh data
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        randomPestAttackTimer = Random.Range(MIN_PEST_ATTACK_TIMER, MAX_PEST_ATTACK_TIMER);
-        plantMeshFilter = GetComponent<MeshFilter>();
+		plantMeshFilter = GetComponent<MeshFilter>();
+		randomPestAttackTimer = Random.Range(MIN_PEST_ATTACK_TIMER, MAX_PEST_ATTACK_TIMER);
+
         if (plantData != null)
         {
             // Giving the plant a time frame to "grow" and get bigger
@@ -124,9 +132,17 @@ public class PlantObject : GridObject
 
     void TakePeriodicPestDamage()
     {
-        // Check if pests are ready to attack
+        // Check if pests are ready to attack after timer
         if (currentTimeFromLastAttack >= randomPestAttackTimer)
         {
+            // Make a small chance for the pests to skip a cycle of attacking the plant and repeat process
+            float randomChance = Random.Range(0.0f, MAX_PEST_ATTACK_CHANCE);
+            if (randomChance <= pestAttackChance)
+            {
+
+            }
+
+
             plantHealth -= pestDamage;
 
             if (plantHealth <= 0)
