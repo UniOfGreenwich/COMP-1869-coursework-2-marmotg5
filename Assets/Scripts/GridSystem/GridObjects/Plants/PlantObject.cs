@@ -3,8 +3,28 @@ using UnityEngine.EventSystems;
 
 public class PlantObject : GridObject
 {
+    const float MAX_WATER_LEVEL = 100.0f;
+    const float MIN_PEST_ATTACK_TIMER = 30.0f;
+    const float MAX_PEST_ATTACK_TIMER = 30.0f;
+
     [SerializeField] GridPlantData plantData;
-    
+
+    [Header("Plant Watering Settings")]
+    [SerializeField] float minAttackTimer = 30.0f;
+    [SerializeField] float maxAttackTimer = 50.0f;
+
+    [Range(0f, MAX_WATER_LEVEL)]
+    [SerializeField] float plantWaterLevel = 100.0f;
+    [SerializeField] float plantWaterGainAmount = 5.0f;
+    [SerializeField] float plantWaterDrainingAmount = 0.25f;
+
+    [Header("Plant/Pest Settings")]
+    [SerializeField] int plantHealth = 10;
+    [SerializeField] int pestDamage = 1;
+
+    float randomPestAttackTimer = 50.0f; // Default value
+    float currentTimeFromLastAttack = 0.0f;
+
     float currentGrowingTime = 0.0f;
 
     int currentGrowingStage = 0;
@@ -20,6 +40,7 @@ public class PlantObject : GridObject
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        randomPestAttackTimer = Random.Range(MIN_PEST_ATTACK_TIMER, MAX_PEST_ATTACK_TIMER);
         plantMeshFilter = GetComponent<MeshFilter>();
         if (plantData != null)
         {
@@ -39,6 +60,8 @@ public class PlantObject : GridObject
     void Update()
     {
         HandleGrowing();
+        DrainWaterLevel();
+        TakePeriodicPestDamage();
     }
 
     void HandleGrowing()
@@ -58,8 +81,23 @@ public class PlantObject : GridObject
         }
         else
         {
-            
+
         }
+    }
+
+    // Drain the water meter of the plant over time
+    void DrainWaterLevel()
+    {
+        float drainAmount = plantWaterDrainingAmount * Time.deltaTime;
+        plantWaterLevel -= drainAmount;
+
+        // Plant has run out of water
+        if (plantWaterLevel < 0.0f)
+        {
+            plantWaterLevel = 0.0f;
+            KillPlant();
+        }
+        print("Water amount in plant: " + plantWaterLevel);
     }
 
     void ProcessGrowingStage()
@@ -81,6 +119,42 @@ public class PlantObject : GridObject
                 }
 
             }
+        }
+    }
+
+    void TakePeriodicPestDamage()
+    {
+        // Check if pests are ready to attack
+        if (currentTimeFromLastAttack >= randomPestAttackTimer)
+        {
+            plantHealth -= pestDamage;
+
+            if (plantHealth <= 0)
+            {
+                KillPlant();
+            }
+
+            currentTimeFromLastAttack = 0.0f;
+            randomPestAttackTimer = Random.Range(MIN_PEST_ATTACK_TIMER, MAX_PEST_ATTACK_TIMER);
+        }
+        currentTimeFromLastAttack += Time.deltaTime;
+    }
+
+    public void WaterPlant()
+    {
+        plantWaterLevel += plantWaterGainAmount;
+        if (plantWaterLevel > MAX_WATER_LEVEL)
+        {
+            plantWaterLevel = MAX_WATER_LEVEL;
+        }
+    }
+
+    void KillPlant()
+    {
+        // If health or water level reaches 0
+        if (plantHealth <= 0 || plantWaterLevel <= 0.0f)
+        {
+            Destroy(gameObject);
         }
     }
 }

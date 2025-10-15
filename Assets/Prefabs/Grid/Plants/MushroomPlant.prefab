@@ -124,3 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plantData: {fileID: 11400000, guid: 685537ba817538243a78a45162dbf2e6, type: 2}
+  plantWaterLevel: 100
+  plantWaterGainAmount: 5
+  plantWaterDrainingAmount: 0.25
+  plantHealth: 5
