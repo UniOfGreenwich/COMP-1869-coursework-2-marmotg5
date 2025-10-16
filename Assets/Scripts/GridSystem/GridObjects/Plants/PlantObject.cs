@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -5,14 +6,14 @@ public class PlantObject : GridObject
 {
     const float MAX_WATER_LEVEL = 100.0f;
 	const float MAX_PEST_ATTACK_CHANCE = 100.0f;
+
 	const float MIN_PEST_ATTACK_TIMER = 10.0f;
     const float MAX_PEST_ATTACK_TIMER = 30.0f;
 
-
+    [Header("Plant Settings")]
 	[SerializeField] GridPlantData plantData;
 
 	[SerializeField] int plantHealth = 10;
-
 
 	// Plant watering
 	[Header("Plant Watering Settings")]
@@ -44,11 +45,13 @@ public class PlantObject : GridObject
 
     MeshFilter plantMeshFilter = null; // The plant's mesh data
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+	IEnumerator pestAttackCoroutine = null;
+
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
 		plantMeshFilter = GetComponent<MeshFilter>();
-		randomPestAttackTimer = Random.Range(MIN_PEST_ATTACK_TIMER, MAX_PEST_ATTACK_TIMER);
+		randomPestAttackTimer = Random.Range(minAttackTimer, maxAttackTimer);
 
         if (plantData != null)
         {
@@ -69,10 +72,16 @@ public class PlantObject : GridObject
     {
         HandleGrowing();
         DrainWaterLevel();
-        TakePeriodicPestDamage();
+		HandlePestAttacks();
     }
 
-    void HandleGrowing()
+	void OnMouseDown()
+	{
+		print("plant haas been clicked");
+	}
+
+
+	void HandleGrowing()
     {
         // Check if the plant still has time to grow
         if (currentGrowingTime < plantData.requiredGrowingTime)
@@ -100,12 +109,11 @@ public class PlantObject : GridObject
         plantWaterLevel -= drainAmount;
 
         // Plant has run out of water
-        if (plantWaterLevel < 0.0f)
+        if (plantWaterLevel <= 0.0f)
         {
             plantWaterLevel = 0.0f;
             KillPlant();
         }
-        print("Water amount in plant: " + plantWaterLevel);
     }
 
     void ProcessGrowingStage()
@@ -130,8 +138,10 @@ public class PlantObject : GridObject
         }
     }
 
-    void TakePeriodicPestDamage()
+    void HandlePestAttacks()
     {
+        if (pestAttackCoroutine != null) return; // Ignore the rest of the function if pests are already attacking plant
+
         // Check if pests are ready to attack after timer
         if (currentTimeFromLastAttack >= randomPestAttackTimer)
         {
@@ -139,24 +149,46 @@ public class PlantObject : GridObject
             float randomChance = Random.Range(0.0f, MAX_PEST_ATTACK_CHANCE);
             if (randomChance <= pestAttackChance)
             {
-
+                // Create pests that will attack the plant
+                pestAttackCoroutine = TakePeriodicPestDamage();
+                StartCoroutine(pestAttackCoroutine);
             }
 
 
-            plantHealth -= pestDamage;
-
-            if (plantHealth <= 0)
-            {
-                KillPlant();
-            }
-
+            // Reset the current pest attack timer back to 0, and generate a new wait timer
             currentTimeFromLastAttack = 0.0f;
-            randomPestAttackTimer = Random.Range(MIN_PEST_ATTACK_TIMER, MAX_PEST_ATTACK_TIMER);
-        }
+			randomPestAttackTimer = Random.Range(minAttackTimer, maxAttackTimer);
+		}
+
         currentTimeFromLastAttack += Time.deltaTime;
     }
 
-    public void WaterPlant()
+    IEnumerator TakePeriodicPestDamage()
+    {
+        while (plantHealth > 0)
+        {
+            
+            plantHealth--;
+
+            yield return new WaitForSeconds(1); // Attack every second
+        }
+
+        KillPlant();
+
+        yield return null;
+    }
+
+    // Gonna be executed when the "Clear Pests" UI element for the plant is clicked
+    public void StopPeriodicPestDamage()
+    {
+        if (pestAttackCoroutine != null)
+        {
+			StopCoroutine(pestAttackCoroutine);
+            pestAttackCoroutine = null;
+        }
+    }
+
+	public void WaterPlant()
     {
         plantWaterLevel += plantWaterGainAmount;
         if (plantWaterLevel > MAX_WATER_LEVEL)
@@ -173,4 +205,6 @@ public class PlantObject : GridObject
             Destroy(gameObject);
         }
     }
+
+    public int GetPlantHealth() {return plantHealth;}
 }

@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum BuildingState
 {
@@ -66,12 +67,25 @@ public class PlayerBuilding : MonoBehaviour
 			if (Physics.Raycast(ray, out RaycastHit raycastHit))
 			{
                 GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
-
+                
+                // Make sure player is clicking with the grid system and a grid cell has been found
                 if (gridCell != null)
                 {
 					if (Input.GetMouseButtonDown((int)MouseButton.Left))
 					{
-                        GridSystem.instance.SpawnGridObject(gridCell);
+						// Check if the mouse IS NOT over any UI element object
+						if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
+						{
+							GridSystem.instance.SpawnGridObject(gridCell);
+						}
+						//else
+						//{
+						//	// The click was not on a UI element
+						//	Debug.Log("The pointer is not over a UI object.");
+						//}
+
+						//GridSystem.instance.SpawnGridObject(gridCell);
+
       //                  GridObjectData gridObjectData = allowedGridObjects[0];
       //                  if (gridObjectData != null)
       //                  {
