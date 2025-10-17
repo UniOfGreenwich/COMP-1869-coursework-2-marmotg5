@@ -5,14 +5,15 @@ using UnityEngine.EventSystems;
 public class PlantObject : GridObject
 {
     const float MAX_WATER_LEVEL = 100.0f;
-	const float MAX_PEST_ATTACK_CHANCE = 100.0f;
 
+	const float MAX_PEST_ATTACK_CHANCE = 100.0f;
 	const float MIN_PEST_ATTACK_TIMER = 10.0f;
     const float MAX_PEST_ATTACK_TIMER = 30.0f;
 
     [Header("Plant Settings")]
+    [SerializeField] GameObject plantUI;
+    [SerializeField] GameObject plantUICanvas;
 	[SerializeField] GridPlantData plantData;
-
 	[SerializeField] int plantHealth = 10;
 
 	// Plant watering
@@ -78,6 +79,7 @@ public class PlantObject : GridObject
 	void OnMouseDown()
 	{
 		print("plant haas been clicked");
+        Instantiate(plantUI, transform.position, Quaternion.identity, plantUICanvas.transform);
 	}
 
 

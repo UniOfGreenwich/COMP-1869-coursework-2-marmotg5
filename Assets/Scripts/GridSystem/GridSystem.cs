@@ -24,7 +24,7 @@ public class GridSystem : MonoBehaviour
 	[SerializeField] int gridCellWidthAmount = 25, gridCellHeightAmount = 25;
 	[SerializeField] float gridCellSize = 1.0f; // 1 meter unit in Unity 
 
-	Dictionary<(int z, int x), GridCell> gridArray = new Dictionary<(int z, int x), GridCell>();
+    Dictionary<(int z, int x), GridCell> gridArray = new Dictionary<(int z, int x), GridCell>();
 	List<GameObject> gridCellVisuals = new List<GameObject>();
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
