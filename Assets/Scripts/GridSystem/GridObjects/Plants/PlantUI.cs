@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PlantUI : MonoBehaviour
 {
+    PlantObject plantObject = null;
+
     [Header("UI Naming")]
     [SerializeField] string healthPrefix = "Health: ";
     [SerializeField] string waterPrefix = "Water: ";
@@ -27,5 +29,10 @@ public class PlantUI : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void DestroyUI()
+    {
+        Destroy(gameObject);
     }
 }

@@ -123,8 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12b8ff037c356d342bf0b2b00ba806d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plantUI: {fileID: 2520333981389030653, guid: 23fb001788c92ff4884df1bded07bb4a, type: 3}
-  plantUICanvas: {fileID: 0}
+  plantUIPrefab: {fileID: 2520333981389030653, guid: 23fb001788c92ff4884df1bded07bb4a, type: 3}
   plantData: {fileID: 11400000, guid: 685537ba817538243a78a45162dbf2e6, type: 2}
   plantHealth: 20
   plantWaterLevel: 100

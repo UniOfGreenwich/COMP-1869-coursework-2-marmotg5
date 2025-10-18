@@ -11,8 +11,7 @@ public class PlantObject : GridObject
     const float MAX_PEST_ATTACK_TIMER = 30.0f;
 
     [Header("Plant Settings")]
-    [SerializeField] GameObject plantUI;
-    [SerializeField] GameObject plantUICanvas;
+    [SerializeField] GameObject plantUIPrefab;
 	[SerializeField] GridPlantData plantData;
 	[SerializeField] int plantHealth = 10;
 
@@ -76,10 +75,22 @@ public class PlantObject : GridObject
 		HandlePestAttacks();
     }
 
+    // Event that registers when the player has clicked on the plant
 	void OnMouseDown()
 	{
-		print("plant haas been clicked");
-        Instantiate(plantUI, transform.position, Quaternion.identity, plantUICanvas.transform);
+        if (GameManager.UIManager != null)
+        {
+            GameManager.UIManager.CreatePlantUI(this, plantUIPrefab);
+        }
+
+  //      Camera mainCamera = GameManager.mainCamera;
+  //      if (mainCamera != null)
+  //      {
+  //          Vector3 screenPosition = mainCamera.WorldToScreenPoint(transform.position); // Convert the plant's 3D position into a screen position
+		//	print("plant haas been clicked");
+		//	Instantiate(plantUI, screenPosition - new Vector3(0, 100, 0), Quaternion.identity, GameManager.UIManager?.transform);
+
+		//}
 	}
 
 
