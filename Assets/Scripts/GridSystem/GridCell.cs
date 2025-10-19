@@ -1,8 +1,7 @@
 using System;
-using Unity.VisualScripting;
 using Unity.VisualScripting.FullSerializer;
+using UnityEditor;
 using UnityEngine;
-
 
 public class GridCell
 {
@@ -10,21 +9,14 @@ public class GridCell
     Vector3 cellPosition;
     float cellSize;
 
+    GameObject storedGridObject = null;
+
     public GridCell((int z, int x) index, float cellSize, Vector3 cellPosition)
     {
 		this.cellIndex = index;
         this.cellPosition = cellPosition;
-        this.cellSize = cellSize;
-
-        //Debug.Log("grid cell [" + cellIndex.z + ", " + cellIndex.x + "] at pos: " + cellPosition);
+		this.cellSize = cellSize;
 	}
-
-    // Checks if there is anything placed on the grid cell block
-    public bool IsOccupied()
-    {
-
-        return false;
-    }
 
     public bool IsPointInsideGridCell(Vector3 point)
     {
@@ -54,6 +46,8 @@ public class GridCell
 
     public (int z, int x) GetCellIndex() {return cellIndex;}
     public Vector3 GetCellCornerPosition() {return cellPosition;}
+
+    // Default position of a cell is on the top-left corner
     public Vector3 GetCenteredPosition()
     {
         float halfZ = cellPosition.z + ((cellPosition.z + cellSize) - cellPosition.z) * 0.5f; // Width
@@ -62,5 +56,21 @@ public class GridCell
 		return halfPosition;
     }
 
+    // Set the cell to be occupied with a game object
+    public void StoreGridObject(GameObject gridObject)
+    {
+        storedGridObject = gridObject;
+    }
 
+    // Clear cell and allow it to be occupied again
+	public void EmptyOutCell()
+	{
+		storedGridObject = null;
+	}
+
+	// Checks if there is anything placed on the grid cell block
+	public bool IsOccupied()
+    {
+        return (storedGridObject != null);
+    }
 }

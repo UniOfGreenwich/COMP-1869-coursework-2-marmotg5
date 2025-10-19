@@ -4,7 +4,7 @@ using UnityEngine;
 struct PlayerStats
 {
     int level;
-    float cash;
+    int cash;
 
     public void SetLevel(int level)
     {        
@@ -18,15 +18,15 @@ struct PlayerStats
         }
     }
     
-    public void SetCash(float cash)
+    public void SetCash(int cash)
     {
-        if (cash >= 0.0f)
+        if (cash >= 0)
         {
 			this.cash = cash;
 		}
 		else
 		{
-			this.cash = 0.0f;
+			this.cash = 0;
 		}
 	}
 }
