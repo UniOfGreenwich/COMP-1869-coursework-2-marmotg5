@@ -9,87 +9,75 @@ public class UIManager : MonoBehaviour
 	Vector3 plantUIOffset = new Vector3(0.0f, -100.0f, 0.0f);
 	IEnumerator trackCurrentPlantUICoroutine = null;
 
-	// Plant
+	// Plant object
 	PlantObject currentPlantObject = null;
-
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
-
 	}
 
     // Update is called once per frame
     void Update()
     {
-        //MakeUIFollowPlant();
-
 	}
 
     public void CreatePlantUI(PlantObject plantObject, GameObject plantUIPrefab)
     {
-        currentPlantObject = plantObject;
 		Camera mainCamera = GameManager.mainCamera;
 
-		// Check in case the player has clicked on a different plant before
-		if (currentPlantUIGameObject != null)
-        {
-            // Destroy the previous plant's UI
-            currentPlantUI = currentPlantUIGameObject.GetComponent<PlantUI>();
-            if (currentPlantUI != null) currentPlantUI.DestroyUI();
+		// Check for any existing plant UI the player may have clicked on before
+		RemovePlantUI();
 
-			currentPlantUIGameObject = null; // The UI GAME OBJECT for it
-			currentPlantUI = null; // The UI script for it
-            currentPlantObject = null; // The actual plant in 3D
-
-		}
-
-        // Create a new plant UI for the UI manager to keep track of and follow the camera
-        if (mainCamera != null)
+		// Create a new plant UI for the UI manager to keep track of and follow the camera
+		if (mainCamera != null && plantObject != null)
         {
             Vector3 screenPosition = mainCamera.WorldToScreenPoint(plantObject.transform.position); // Convert the plant's 3D position into a 2D screen position
 
             // Set the UI manager script to store data of the current plant UI the player is trying to use/look at
 			currentPlantUIGameObject = Instantiate(plantUIPrefab, screenPosition + plantUIOffset, Quaternion.identity, transform);
-			currentPlantUI = (currentPlantUIGameObject.GetComponent<PlantUI>() != null) ? currentPlantUIGameObject.GetComponent<PlantUI>() : null;
+			currentPlantUI = currentPlantUIGameObject.GetComponent<PlantUI>();
+            currentPlantObject = plantObject;
 
             // Start a coroutine that tracks the current plant object the player has clicked on
             trackCurrentPlantUICoroutine = TrackCurrentPlantUI(plantObject, mainCamera);
             StartCoroutine(trackCurrentPlantUICoroutine);
 		}
-    }
+	}
 
-    IEnumerator TrackCurrentPlantUI(PlantObject plantObject, Camera renderCamera)
-    {
-        while (plantObject != null || plantObject.gameObject == currentPlantObject.gameObject)
-        {
+	IEnumerator TrackCurrentPlantUI(PlantObject plantObject, Camera renderCamera)
+	{
+		// While the current plant we are tracking exists
+		while (plantObject != null && plantObject == currentPlantObject)
+		{
 			Vector3 screenPosition = renderCamera.WorldToScreenPoint(plantObject.transform.position);
-            currentPlantUIGameObject.transform.position = screenPosition + plantUIOffset;
+			currentPlantUIGameObject.transform.position = screenPosition + plantUIOffset;
 
 			yield return new WaitForSeconds(Time.deltaTime);
 		}
-		// MAKE IT SO THE OLD UI GETS DELETED AND REPLACED WITH A NEW UI WHEN PLAYER CLICKS ON DIFF PLANT
-		// MAKE IT SO THE OLD UI GETS DELETED AND REPLACED WITH A NEW UI WHEN PLAYER CLICKS ON DIFF PLANT
-		// MAKE IT SO THE OLD UI GETS DELETED AND REPLACED WITH A NEW UI WHEN PLAYER CLICKS ON DIFF PLANT
-		// MAKE IT SO THE OLD UI GETS DELETED AND REPLACED WITH A NEW UI WHEN PLAYER CLICKS ON DIFF PLANT
-		// MAKE IT SO THE OLD UI GETS DELETED AND REPLACED WITH A NEW UI WHEN PLAYER CLICKS ON DIFF PLANT
-		// MAKE IT SO THE OLD UI GETS DELETED AND REPLACED WITH A NEW UI WHEN PLAYER CLICKS ON DIFF PLANT
-
+		// Cleanup
 		Destroy(currentPlantUIGameObject);
+		StopCoroutine(trackCurrentPlantUICoroutine);
+	}
 
-		yield return null;
-    }
+	public void RemovePlantUI()
+	{
+		// Stop the coroutine that was tracking the previous plant, if it was running.
+		if (trackCurrentPlantUICoroutine != null)
+		{
+			StopCoroutine(trackCurrentPlantUICoroutine);
+			trackCurrentPlantUICoroutine = null;
+		}
 
-    //void MakeUIFollowPlant()
-    //{
-    //    if (currentPlantUI != null && currentPlantUIGameObject != null)
-    //    {
-    //        if (GameManager.mainCamera != null)
-    //        {
-    //            Camera mainCamera = GameManager.mainCamera;
-    //            Vector3 screenPosition = mainCamera.WorldToScreenPoint(currentPlantUIGameObject.transform.position);
-    //            Vector3 newUIPosition = screenPosition + plantUIOffset;
-    //        }
-    //    }
-    //}
+		// Destroy the previous UI GameObject if it exists.
+		if (currentPlantUIGameObject != null)
+		{
+			Destroy(currentPlantUIGameObject);
+
+			// Clear all references associated with the old plant/UI
+			currentPlantUIGameObject = null;
+			currentPlantUI = null;
+			currentPlantObject = null;
+		}
+	}
 }
