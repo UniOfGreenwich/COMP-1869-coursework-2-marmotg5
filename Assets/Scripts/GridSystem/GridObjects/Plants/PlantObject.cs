@@ -82,15 +82,6 @@ public class PlantObject : GridObject
         {
             GameManager.UIManager.CreatePlantUI(this, plantUIPrefab);
         }
-
-  //      Camera mainCamera = GameManager.mainCamera;
-  //      if (mainCamera != null)
-  //      {
-  //          Vector3 screenPosition = mainCamera.WorldToScreenPoint(transform.position); // Convert the plant's 3D position into a screen position
-		//	print("plant haas been clicked");
-		//	Instantiate(plantUI, screenPosition - new Vector3(0, 100, 0), Quaternion.identity, GameManager.UIManager?.transform);
-
-		//}
 	}
 
 
@@ -219,5 +210,7 @@ public class PlantObject : GridObject
         }
     }
 
-    public int GetPlantHealth() {return plantHealth;}
+    public int GetPlantHealth() {return plantHealth; }
+    public float GetPlantWaterLevel() { return plantWaterLevel; }
+    public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
 }

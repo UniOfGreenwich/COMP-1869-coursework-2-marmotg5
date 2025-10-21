@@ -66,6 +66,8 @@ public class UIManager : MonoBehaviour
 			Vector3 screenPosition = renderCamera.WorldToScreenPoint(plantObject.transform.position);
 			currentPlantUIGameObject.transform.position = screenPosition + plantUIOffset;
 
+			currentPlantUI.UpdatePlantUIData(plantObject);
+
 			yield return new WaitForSeconds(Time.deltaTime);
 		}
 		// Cleanup

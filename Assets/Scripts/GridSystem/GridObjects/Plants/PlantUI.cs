@@ -12,7 +12,7 @@ public class PlantUI : MonoBehaviour
     [SerializeField] string waterPrefix = "Water: ";
 
     [SerializeField] TextMeshProUGUI plantHealthText;
-    [SerializeField] TextMeshProUGUI plantWaterText;
+    [SerializeField] TextMeshProUGUI plantWaterLevelText;
 
     [Header("UI Buttons")]
     [SerializeField] Button clearPestsButton;
@@ -28,7 +28,26 @@ public class PlantUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    // Updates the data on the UI based on the plant object passed in the function
+    public void UpdatePlantUIData(PlantObject plantObject)
+    {
+        plantHealthText.text = healthPrefix + plantObject.GetPlantHealth();
+
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
+
+        plantWaterLevelText.text = waterPrefix + plantObject.GetPlantWaterLevel().ToString("F0") + "%";
     }
 
     public void DestroyUI()
