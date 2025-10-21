@@ -55,6 +55,9 @@ public class UIManager : MonoBehaviour
             // Start a coroutine that tracks the current plant object the player has clicked on
             trackCurrentPlantUICoroutine = TrackCurrentPlantUI(plantObject, mainCamera);
             StartCoroutine(trackCurrentPlantUICoroutine);
+
+			// Bind the plant UI's buttons with the current selected plant
+			currentPlantUI.BindUIButtons(plantObject);
 		}
 	}
 
@@ -70,8 +73,10 @@ public class UIManager : MonoBehaviour
 
 			yield return new WaitForSeconds(Time.deltaTime);
 		}
+
 		// Cleanup
 		Destroy(currentPlantUIGameObject);
+		currentPlantUI?.UnbindUIButtons(plantObject); // Unbind any old events/functions applied to the current tracked plant
 		StopCoroutine(trackCurrentPlantUICoroutine);
 	}
 

@@ -105,14 +105,20 @@ public class PlayerBuilding : MonoBehaviour
 
     void OpenBuildingMenu()
     {
-		GameManager.GetGridSystem().SetGridSystemRendering(true);
+        if (GameManager.gridSystem != null)
+        {
+			GameManager.gridSystem.SetGridSystemRendering(true);
+		}
 
 	}
 
     void CloseBuildingMenu()
     {
-		GameManager.GetGridSystem().SetGridSystemRendering(false);
-		selectedObjectData = null;
+		if (GameManager.gridSystem != null)
+		{
+			GameManager.gridSystem.SetGridSystemRendering(false);
+			selectedObjectData = null;
+		}
 
 	}
 

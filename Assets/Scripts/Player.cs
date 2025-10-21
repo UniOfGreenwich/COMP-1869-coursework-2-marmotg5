@@ -3,32 +3,8 @@ using UnityEngine;
 [System.Serializable]
 struct PlayerStats
 {
-    int level;
-    int cash;
-
-    public void SetLevel(int level)
-    {        
-        if (level >= 0)
-        {
-			this.level = level;
-		}
-        else
-        {
-            this.level = 0;
-        }
-    }
-    
-    public void SetCash(int cash)
-    {
-        if (cash >= 0)
-        {
-			this.cash = cash;
-		}
-		else
-		{
-			this.cash = 0;
-		}
-	}
+    public int level;
+    public int cash;
 }
 
 public class Player : MonoBehaviour
@@ -50,4 +26,38 @@ public class Player : MonoBehaviour
     void Update()
     {
     }
+
+	public void SetLevel(int level)
+	{
+		if (level >= 0)
+		{
+			playerStats.level = level;
+		}
+		else
+		{
+			playerStats.level = 0;
+		}
+	}
+
+	public void AddLevel(int levelToAdd)
+	{
+		playerStats.level += levelToAdd;
+	}
+
+	public void SetCash(int cash)
+	{
+		if (cash >= 0)
+		{
+			playerStats.cash = cash;
+		}
+		else
+		{
+			playerStats.cash = 0;
+		}
+	}
+
+	public void AddCash(int cashToAdd)
+	{
+		playerStats.cash += cashToAdd;
+	}
 }

@@ -198,7 +198,6 @@ public class GridSystem : MonoBehaviour
 					{
 						// Set the spawned grid object to keep track of the parent cell its placed in
 						spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
-						print("updating parent cell");
 
 						// Set each necessary grid cell to keep track of the spawned grid object that may occupy more than 1x1 cells
 						Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(cellToSpawnIn, gridObjectCellRequirements);

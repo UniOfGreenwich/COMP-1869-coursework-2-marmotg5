@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PlantUI : MonoBehaviour
 {
-    PlantObject plantObject = null;
-
     [Header("UI Naming")]
     [SerializeField] string healthPrefix = "Health: ";
     [SerializeField] string waterPrefix = "Water: ";
@@ -31,27 +29,25 @@ public class PlantUI : MonoBehaviour
 
     }
 
+    public void BindUIButtons(PlantObject plantObject)
+    {
+        clearPestsButton.onClick.AddListener(plantObject.ClearPestDamage);
+        waterPlantButton.onClick.AddListener(plantObject.WaterPlant);
+        harvestPlantButton.onClick.AddListener(plantObject.HarvestPlant);
+    }
+
+    public void UnbindUIButtons(PlantObject plantObject)
+    {
+        clearPestsButton.onClick.RemoveListener(plantObject.ClearPestDamage);
+		waterPlantButton.onClick.RemoveListener(plantObject.WaterPlant);
+		harvestPlantButton.onClick.RemoveListener(plantObject.HarvestPlant);
+
+	}
+
     // Updates the data on the UI based on the plant object passed in the function
     public void UpdatePlantUIData(PlantObject plantObject)
     {
         plantHealthText.text = healthPrefix + plantObject.GetPlantHealth();
-
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-        // MAKE AN ENTIRE FUNCTION THAT ALSO BINDS BUTTON CLICK EVENTS AND ALSO UPDATE PLANT UI DATA
-
         plantWaterLevelText.text = waterPrefix + plantObject.GetPlantWaterLevel().ToString("F0") + "%";
-    }
-
-    public void DestroyUI()
-    {
-        Destroy(gameObject);
     }
 }

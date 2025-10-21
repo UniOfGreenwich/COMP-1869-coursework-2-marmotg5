@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 	public static GridSystem gridSystem {  get; private set; }
     public static UIManager UIManager{ get; private set; }
     public static Camera mainCamera { get; private set; }
+    public static Player player { get; private set; }
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
         }
 
         mainCamera = Camera.main;
+        player = FindFirstObjectByType<Player>();
         gridSystem = FindFirstObjectByType<GridSystem>();
         UIManager = FindFirstObjectByType<UIManager>();
 	}
@@ -33,6 +35,4 @@ public class GameManager : MonoBehaviour
 	void Update()
     {
     }
-
-    public static GridSystem GetGridSystem() {return gridSystem;}
 }

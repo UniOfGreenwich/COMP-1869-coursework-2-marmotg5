@@ -7,28 +7,26 @@ public class PlantObject : GridObject
     const float MAX_WATER_LEVEL = 100.0f;
 
 	const float MAX_PEST_ATTACK_CHANCE = 100.0f;
-	const float MIN_PEST_ATTACK_TIMER = 10.0f;
-    const float MAX_PEST_ATTACK_TIMER = 30.0f;
 
     [Header("Plant Settings")]
     [SerializeField] GameObject plantUIPrefab;
 	[SerializeField] GridPlantData plantData;
-	[SerializeField] int plantHealth = 10;
+	[SerializeField] int plantHealth = 25;
 
 	// Plant watering
 	[Header("Plant Watering Settings")]
     [Range(0f, MAX_WATER_LEVEL)]
     [SerializeField] float plantWaterLevel = MAX_WATER_LEVEL;
-    [SerializeField] float plantWaterGainAmount = 5.0f;
+    [SerializeField] float plantWaterGainAmount = 2.5f;
     [SerializeField] float plantWaterDrainingAmount = 0.25f;
 
     // Plant pests
     [Header("Plant Pest Attack Settings")]
     [Range (0f, MAX_PEST_ATTACK_CHANCE)]
-    [SerializeField] float pestAttackChance = 50.0f;
-	[SerializeField] float minAttackTimer = MIN_PEST_ATTACK_TIMER;
-	[SerializeField] float maxAttackTimer = MAX_PEST_ATTACK_TIMER;
-    [SerializeField] int pestDamage = 1;
+    [SerializeField] float pestAttackChance = 25.0f;
+	[SerializeField] float minAttackTimer = 10.0f; // In seconds
+	[SerializeField] float maxAttackTimer = 20.0f; // In seconds
+    [SerializeField] int pestDamage = 1; // Per tick
 
     float randomPestAttackTimer = 0.0f; // Gets set in void Start()
     float currentTimeFromLastAttack = 0.0f;
@@ -183,7 +181,7 @@ public class PlantObject : GridObject
     }
 
     // Gonna be executed when the "Clear Pests" UI element for the plant is clicked
-    public void StopPeriodicPestDamage()
+    public void ClearPestDamage()
     {
         if (pestAttackCoroutine != null)
         {
@@ -201,7 +199,21 @@ public class PlantObject : GridObject
         }
     }
 
-    void KillPlant()
+	public void HarvestPlant()
+	{
+        // Check if plant has grown long enough to reach the required time
+        if (currentGrowingTime >= plantData.requiredGrowingTime)
+        {
+            Player player = GameManager.player;
+            if (player != null)
+            {
+                player.AddCash(plantData.cashReward);
+                Destroy(gameObject);
+            }
+        }
+	}
+
+	void KillPlant()
     {
         // If health or water level reaches 0
         if (plantHealth <= 0 || plantWaterLevel <= 0.0f)
