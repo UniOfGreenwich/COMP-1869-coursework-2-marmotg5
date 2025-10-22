@@ -222,7 +222,15 @@ public class PlantObject : GridObject
         }
     }
 
+    public float GetPlantGrowingTimeLeft()
+    {
+        return plantData.requiredGrowingTime - currentGrowingTime;
+    }
+
+    public string GetPlantName() { return plantData.objectName; }
     public int GetPlantHealth() {return plantHealth; }
     public float GetPlantWaterLevel() { return plantWaterLevel; }
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
+
+    public GridPlantData GetPlantData() { return plantData; }
 }

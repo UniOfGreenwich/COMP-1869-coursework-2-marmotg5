@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,8 +10,14 @@ public class PlantUI : MonoBehaviour
     [SerializeField] string healthPrefix = "Health: ";
     [SerializeField] string waterPrefix = "Water: ";
 
+    [Header("UI Texts")]
+    [SerializeField] TextMeshProUGUI plantNameText;
     [SerializeField] TextMeshProUGUI plantHealthText;
     [SerializeField] TextMeshProUGUI plantWaterLevelText;
+    [SerializeField] TextMeshProUGUI plantTimeLeftText;
+
+    [Header("UI Images")]
+    [SerializeField] Image planTimeLeftImage;
 
     [Header("UI Buttons")]
     [SerializeField] Button clearPestsButton;
@@ -47,7 +54,16 @@ public class PlantUI : MonoBehaviour
     // Updates the data on the UI based on the plant object passed in the function
     public void UpdatePlantUIData(PlantObject plantObject)
     {
+        plantNameText.text = plantObject.GetPlantName();
         plantHealthText.text = healthPrefix + plantObject.GetPlantHealth();
         plantWaterLevelText.text = waterPrefix + plantObject.GetPlantWaterLevel().ToString("F0") + "%";
+
+        // Update the timer left for the plant to fully grow
+        float plantTimeLeft = plantObject.GetPlantData().requiredGrowingTime - plantObject.GetPlantCurrentGrowingTime();
+        float progressImageBarValue = plantObject.GetPlantCurrentGrowingTime() / plantObject.GetPlantData().requiredGrowingTime;
+        progressImageBarValue = (float)Math.Round(progressImageBarValue, 2);
+
+        plantTimeLeftText.text = plantTimeLeft.ToString();
+        planTimeLeftImage.fillAmount = progressImageBarValue;
     }
 }
