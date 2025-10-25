@@ -12,13 +12,22 @@ public enum BuildingState
 public class PlayerBuilding : MonoBehaviour
 {
     BuildingState buildingState;
-
     Camera mainCamera;
-    [Header("Grid Building Objects Data")]
 
+    [Header("Grid Building Objects Data")]
     GridObjectData selectedObjectData = null;
 
-    [Header("Keyboard Controls")]
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+
+	[Header("Keyboard Controls")]
     [SerializeField]
     KeyCode buildingStateKey = KeyCode.Y;
 
@@ -73,28 +82,11 @@ public class PlayerBuilding : MonoBehaviour
                 {
 					if (Input.GetMouseButtonDown((int)MouseButton.Left))
 					{
-						// Check if the mouse IS NOT over any UI element object
-						if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
-						{
-							GridSystem.instance.SpawnGridObject(gridCell);
-						}
-						//else
-						//{
-						//	// The click was not on a UI element
-						//	Debug.Log("The pointer is not over a UI object.");
-						//}
-
-						//GridSystem.instance.SpawnGridObject(gridCell);
-
-      //                  GridObjectData gridObjectData = allowedGridObjects[0];
-      //                  if (gridObjectData != null)
-      //                  {
-      //                      Instantiate(gridObjectData.objectPrefab, gridCell.GetCenteredPosition());
-
-						//	//GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-						//	//cube.transform.position = gridCell.GetCenteredPosition();
-						//}
-
+                        // Check if the mouse IS NOT over any UI element object
+                        if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
+                        {
+                            GridSystem.instance.SpawnGridObject(gridCell);
+                        }
 
 					}
 				}

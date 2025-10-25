@@ -428,6 +428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthPrefix: 'Health: '
   waterPrefix: 'Water: '
+  growingRemainingPrefix: 'Remaining: '
   plantNameText: {fileID: 306725713097194575}
   plantHealthText: {fileID: 5234937697439900807}
   plantWaterLevelText: {fileID: 7252356997861492963}

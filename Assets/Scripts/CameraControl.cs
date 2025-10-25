@@ -47,10 +47,9 @@ public class CameraControl : MonoBehaviour
     float cameraRotatingSpeed = 10.0f;
 
     [SerializeField]
-    Vector3 offsetCoords = Vector3.zero; // The coords where the camera will be rotating/looking at (realistically we want at 0,0,0)
-    Vector3 pointingCoords;
+    Vector3 pointingCoords = Vector3.zero; // The coords where the camera will be rotating/looking at | default: (0,0,0)
 
-    [SerializeField]
+	[SerializeField]
     CameraState cameraState = CameraState.CAMERA_LOCKED; // If the camera is locked, it will only be able to move around the offsetCoords
 
     [Header("Camera Freeroam Settings")]
@@ -72,7 +71,6 @@ public class CameraControl : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
-        pointingCoords = offsetCoords;
 
         if (cameraFreeroamBox)
         {
@@ -144,31 +142,36 @@ public class CameraControl : MonoBehaviour
 
     void HandleCameraZoom()
     {
-        Vector2 mouseScrollDelta = Input.mouseScrollDelta; // Scroll wheel value
-        if (mouseScrollDelta.y != 0)
+		// Check if the mouse IS NOT over any UI element object
+		if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
         {
-            Vector3 direction = (offsetCoords - mainCamera.transform.position).normalized;
-            Vector3 newCameraPosition;
+			Vector2 mouseScrollDelta = Input.mouseScrollDelta; // Scroll wheel value
+			if (mouseScrollDelta.y != 0)
+			{
+				//Vector3 direction = (offsetCoords - mainCamera.transform.position).normalized;
+				Vector3 direction = mainCamera.transform.forward;
+				Vector3 newCameraPosition;
 
-            if (mouseScrollDelta.y > 0) // Zooming in
-            {
-                newCameraPosition = mainCamera.transform.position + (direction * zoomAmountPerScroll);
+				if (mouseScrollDelta.y > 0) // Zooming in
+				{
+					newCameraPosition = mainCamera.transform.position + (direction * zoomAmountPerScroll);
 
-            }
-            else // Zooming out
-            {
-                newCameraPosition = mainCamera.transform.position + (-direction * zoomAmountPerScroll);
-            }
+				}
+				else // Zooming out
+				{
+					newCameraPosition = mainCamera.transform.position + (-direction * zoomAmountPerScroll);
+				}
 
-            // Making sure that we are keeping the distance from the camera to the offset limited within the min/max zoom distances
-            float yDistance = Mathf.Abs(newCameraPosition.y - offsetCoords.y);
-            if (yDistance < minZoomDistance || yDistance > maxZoomDistance) return;
+				// Making sure that we are keeping the distance from the camera to the offset limited within the min/max zoom distances
+				float yDistance = Mathf.Abs(newCameraPosition.y - pointingCoords.y);
+				if (yDistance < minZoomDistance || yDistance > maxZoomDistance) return;
 
-            // Try to clamp the y-value of the new position in case it exceeds the min/max zoom distances
-            newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, minZoomDistance, maxZoomDistance);
+				// Try to clamp the y-value of the new position in case it exceeds the min/max zoom distances
+				newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, minZoomDistance, maxZoomDistance);
 
-            mainCamera.transform.position = newCameraPosition;
-        }
+				mainCamera.transform.position = newCameraPosition;
+			}
+		}
     }
 
     void HandleCameraLock()
