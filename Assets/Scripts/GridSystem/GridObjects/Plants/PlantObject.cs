@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -98,15 +99,14 @@ public class PlantObject : GridObject
             elapsedTimeSinceLastGrowth += Time.deltaTime;
             currentGrowingTime += Time.deltaTime;
         }
-        else
-        {
-
-        }
     }
 
     // Drain the water meter of the plant over time
     void DrainWaterLevel()
     {
+        if (IsPlantFullyGrown()) return; // Don't drain water if plant has fully grown
+
+        // Drain the plant's water while it's still in it's growing stages
         float drainAmount = plantWaterDrainingAmount * Time.deltaTime;
         plantWaterLevel -= drainAmount;
 
@@ -142,7 +142,14 @@ public class PlantObject : GridObject
 
     void HandlePestAttacks()
     {
-        if (pestAttackCoroutine != null) return; // Ignore the rest of the function if pests are already attacking plant
+        if (pestAttackCoroutine != null) // Ignore the rest of the function if pests are already attacking plant
+		{
+            if (IsPlantFullyGrown())
+            {
+                ClearPestDamage(); // Force the pests to stop attacking the plant if it's already fully grown
+            }
+            return;
+        }
 
         // Check if pests are ready to attack after timer
         if (currentTimeFromLastAttack >= randomPestAttackTimer)
@@ -233,4 +240,6 @@ public class PlantObject : GridObject
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
 
     public GridPlantData GetPlantData() { return plantData; }
+
+    bool IsPlantFullyGrown() { return (currentGrowingTime >= plantData.requiredGrowingTime); }
 }

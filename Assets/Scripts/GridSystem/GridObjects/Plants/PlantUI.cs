@@ -9,8 +9,9 @@ public class PlantUI : MonoBehaviour
     [Header("UI Naming")]
     [SerializeField] string healthPrefix = "Health: ";
     [SerializeField] string waterPrefix = "Water: ";
+	[SerializeField] string growingRemainingPrefix = "Remaining: ";
 
-    [Header("UI Texts")]
+	[Header("UI Texts")]
     [SerializeField] TextMeshProUGUI plantNameText;
     [SerializeField] TextMeshProUGUI plantHealthText;
     [SerializeField] TextMeshProUGUI plantWaterLevelText;
@@ -38,6 +39,8 @@ public class PlantUI : MonoBehaviour
 
     public void BindUIButtons(PlantObject plantObject)
     {
+        if (plantObject == null) return;
+
         clearPestsButton.onClick.AddListener(plantObject.ClearPestDamage);
         waterPlantButton.onClick.AddListener(plantObject.WaterPlant);
         harvestPlantButton.onClick.AddListener(plantObject.HarvestPlant);
@@ -45,7 +48,9 @@ public class PlantUI : MonoBehaviour
 
     public void UnbindUIButtons(PlantObject plantObject)
     {
-        clearPestsButton.onClick.RemoveListener(plantObject.ClearPestDamage);
+		if (plantObject == null) return;
+
+		clearPestsButton.onClick.RemoveListener(plantObject.ClearPestDamage);
 		waterPlantButton.onClick.RemoveListener(plantObject.WaterPlant);
 		harvestPlantButton.onClick.RemoveListener(plantObject.HarvestPlant);
 
@@ -54,16 +59,18 @@ public class PlantUI : MonoBehaviour
     // Updates the data on the UI based on the plant object passed in the function
     public void UpdatePlantUIData(PlantObject plantObject)
     {
-        plantNameText.text = plantObject.GetPlantName();
+		if (plantObject == null) return;
+
+		plantNameText.text = plantObject.GetPlantName();
         plantHealthText.text = healthPrefix + plantObject.GetPlantHealth();
         plantWaterLevelText.text = waterPrefix + plantObject.GetPlantWaterLevel().ToString("F0") + "%";
 
         // Update the timer left for the plant to fully grow
         float plantTimeLeft = plantObject.GetPlantData().requiredGrowingTime - plantObject.GetPlantCurrentGrowingTime();
         float progressImageBarValue = plantObject.GetPlantCurrentGrowingTime() / plantObject.GetPlantData().requiredGrowingTime;
-        progressImageBarValue = (float)Math.Round(progressImageBarValue, 2);
 
-        plantTimeLeftText.text = plantTimeLeft.ToString();
-        planTimeLeftImage.fillAmount = progressImageBarValue;
+		//plantTimeLeftText.text = plantTimeLeft.ToString();
+		plantTimeLeftText.text = growingRemainingPrefix + Math.Round(plantTimeLeft).ToString() + "s";
+		planTimeLeftImage.fillAmount = progressImageBarValue;
     }
 }
