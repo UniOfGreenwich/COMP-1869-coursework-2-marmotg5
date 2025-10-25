@@ -26,11 +26,24 @@ public class UIManager : MonoBehaviour
     {
 		Camera mainCamera = GameManager.mainCamera;
 
-		// Check for any existing plant UI the player may have clicked on before
-		RemovePlantUI();
+		// Check if there is already a plant object with UI rendered on it
+		if (currentPlantObject != null)
+		{
+			// Check if the player is trying to create plant UI in the same location another plant UI already exists
+            if (plantObject.GetObjectGridCell().GetCellIndex() == currentPlantObject.GetObjectGridCell().GetCellIndex()) 
+			{
+                RemovePlantUI();
+                return; // Ignore the rest of the function as the player wanted to hide the UI of the current selected plant
+			}
+			// Player has clicked on a different plant, so we delete the old existing UI and continue with the function
+			else
+			{
+				RemovePlantUI();
+			}
+        }
 
-		// Create a new plant UI for the UI manager to keep track of and follow the camera
-		if (mainCamera != null && plantObject != null)
+        // Create a new plant UI for the UI manager to keep track of and follow the camera
+        if (mainCamera != null && plantObject != null)
         {
             Vector3 screenPosition = mainCamera.WorldToScreenPoint(plantObject.transform.position); // Convert the plant's 3D position into a 2D screen position
 
@@ -42,6 +55,9 @@ public class UIManager : MonoBehaviour
             // Start a coroutine that tracks the current plant object the player has clicked on
             trackCurrentPlantUICoroutine = TrackCurrentPlantUI(plantObject, mainCamera);
             StartCoroutine(trackCurrentPlantUICoroutine);
+
+			// Bind the plant UI's buttons with the current selected plant
+			currentPlantUI.BindUIButtons(plantObject);
 		}
 	}
 
@@ -53,10 +69,14 @@ public class UIManager : MonoBehaviour
 			Vector3 screenPosition = renderCamera.WorldToScreenPoint(plantObject.transform.position);
 			currentPlantUIGameObject.transform.position = screenPosition + plantUIOffset;
 
+			currentPlantUI.UpdatePlantUIData(plantObject);
+
 			yield return new WaitForSeconds(Time.deltaTime);
 		}
+
 		// Cleanup
 		Destroy(currentPlantUIGameObject);
+		currentPlantUI?.UnbindUIButtons(plantObject); // Unbind any old events/functions applied to the current tracked plant
 		StopCoroutine(trackCurrentPlantUICoroutine);
 	}
 

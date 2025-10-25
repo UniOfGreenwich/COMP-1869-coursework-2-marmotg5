@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class GridObject : MonoBehaviour
 {
-    protected GridCell parentCell; // The cell the grid object belongs to
+    protected GridCell parentCell = null; // The cell the grid object belongs to
 
 	//// Start is called once before the first execution of Update after the MonoBehaviour is created
 	//void Start()
@@ -30,8 +30,11 @@ public abstract class GridObject : MonoBehaviour
 
     public void UpdateParentCell(GridCell cell)
     {
-        if (cell != null) parentCell = cell;
+        if (cell != null) 
+            parentCell = cell;
 	}
+
+    public GridCell GetObjectGridCell() {  return parentCell; }
 
 
 }

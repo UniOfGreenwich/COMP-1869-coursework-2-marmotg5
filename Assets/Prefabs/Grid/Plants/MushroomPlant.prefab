@@ -125,11 +125,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantUIPrefab: {fileID: 2520333981389030653, guid: d7128788996318b42abce6f63c2d401f, type: 3}
   plantData: {fileID: 11400000, guid: 685537ba817538243a78a45162dbf2e6, type: 2}
-  plantHealth: 20
+  plantHealth: 25
   plantWaterLevel: 100
-  plantWaterGainAmount: 5
+  plantWaterGainAmount: 2.5
   plantWaterDrainingAmount: 0.25
   pestAttackChance: 100
-  minAttackTimer: 1
-  maxAttackTimer: 2
+  minAttackTimer: 5
+  maxAttackTimer: 15
   pestDamage: 1
