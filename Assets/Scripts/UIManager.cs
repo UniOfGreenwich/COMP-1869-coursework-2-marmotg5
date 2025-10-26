@@ -9,6 +9,9 @@ public class UIManager : MonoBehaviour
 	Vector3 plantUIOffset = new Vector3(0.0f, -100.0f, 0.0f);
 	IEnumerator trackCurrentPlantUICoroutine = null;
 
+	// Shop UI
+	GameObject currentShopUIGameObject = null;
+
 	// Plant object
 	PlantObject currentPlantObject = null;
 
@@ -61,7 +64,23 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	IEnumerator TrackCurrentPlantUI(PlantObject plantObject, Camera renderCamera)
+	public void CreateShopUI(GridPlantData[] shopPlantData, GameObject shopUIPrefab)
+	{
+		currentShopUIGameObject = Instantiate(shopUIPrefab, Vector3.zero, Quaternion.identity, transform);
+		ShopUI shopUI = currentShopUIGameObject.GetComponent<ShopUI>();
+		if (shopUI != null)
+		{
+
+		}
+	}
+
+	public void RemoveShopUI()
+	{
+		Destroy(currentShopUIGameObject);
+		currentShopUIGameObject = null;
+	}
+
+		IEnumerator TrackCurrentPlantUI(PlantObject plantObject, Camera renderCamera)
 	{
 		// While the current plant we are tracking exists
 		while (plantObject != null && plantObject == currentPlantObject)

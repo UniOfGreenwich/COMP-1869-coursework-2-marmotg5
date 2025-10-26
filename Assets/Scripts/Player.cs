@@ -63,6 +63,11 @@ public class Player : MonoBehaviour
 		playerStats.cash += cashToAdd;
 	}
 
+	public void RemoveCash(int cashToRemove)
+	{
+		playerStats.cash -= cashToRemove;
+	}
+
 	public int GetLevel() { return playerStats.level; }
 	public int GetCash() { return playerStats.cash; }
 }
