@@ -62,4 +62,7 @@ public class Player : MonoBehaviour
 	{
 		playerStats.cash += cashToAdd;
 	}
+
+	public int GetLevel() { return playerStats.level; }
+	public int GetCash() { return playerStats.cash; }
 }
