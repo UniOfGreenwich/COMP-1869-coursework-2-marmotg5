@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
@@ -66,18 +67,33 @@ public class UIManager : MonoBehaviour
 
 	public void CreateShopUI(GridPlantData[] shopPlantData, GameObject shopUIPrefab)
 	{
-		currentShopUIGameObject = Instantiate(shopUIPrefab, Vector3.zero, Quaternion.identity, transform);
-		ShopUI shopUI = currentShopUIGameObject.GetComponent<ShopUI>();
-		if (shopUI != null)
+		// If we don't have a shop created
+		if (currentShopUIGameObject == null)
 		{
-
+			// Create a shop
+			currentShopUIGameObject = Instantiate(shopUIPrefab, transform);
+			ShopUI shopUI = currentShopUIGameObject.GetComponent<ShopUI>();
+			if (shopUI != null)
+			{
+				shopUI.PopulateShop(shopPlantData); // Populate the shop list with items
+			}
 		}
+		// We already have a shop created, so delete it
+		else
+		{
+			Destroy(currentShopUIGameObject);
+			currentShopUIGameObject = null;
+		}
+
 	}
 
 	public void RemoveShopUI()
 	{
-		Destroy(currentShopUIGameObject);
-		currentShopUIGameObject = null;
+		if (currentShopUIGameObject != null)
+		{
+			Destroy(currentShopUIGameObject);
+			currentShopUIGameObject = null;
+		}
 	}
 
 		IEnumerator TrackCurrentPlantUI(PlantObject plantObject, Camera renderCamera)
