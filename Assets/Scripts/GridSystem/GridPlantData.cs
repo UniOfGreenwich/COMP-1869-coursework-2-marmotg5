@@ -5,6 +5,7 @@ public class GridPlantData : GridObjectData
 {
 	[Range(0, 3)]
 	public int growingStages = 3;
+
 	public int cashReward = 100;
 	public float requiredGrowingTime = 10.0f; // In seconds 
 

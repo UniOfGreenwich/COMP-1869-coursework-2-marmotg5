@@ -12,6 +12,9 @@ public class ShopSystem : MonoBehaviour
 
     GridPlantData[] organizedItemArray; // The actual organized array with all the items from "shopItemsArray"
 
+    // Shop UI
+    GameObject currentShopUIGameObject = null;
+
     bool isShopOpen = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -38,14 +41,43 @@ public class ShopSystem : MonoBehaviour
 	void ToggleShopUI()
 	{
 		// Make sure we have a UI manager handling the shop UI and items to populate the shop UI with
-		if (GameManager.UIManager != null && organizedItemArray != null && organizedItemArray.Length > 0)
+		if (organizedItemArray != null && organizedItemArray.Length > 0)
 		{
-			GameManager.UIManager.CreateShopUI(organizedItemArray, shopUIPrefab);
+            CreateShopUI();
 		}
 	}
 
-	// Function that will organize an array which will start with the smallest level of plants at the beginning and put the highest levels at the end
-	GridPlantData[] GetOrganizedShopByPlantLevel()
+    void CreateShopUI()
+    {
+        // If we don't have a shop created
+        if (currentShopUIGameObject == null && GameManager.UIManager != null)
+        {
+            // Create a shop
+            currentShopUIGameObject = Instantiate(shopUIPrefab, GameManager.UIManager.transform);
+            ShopUI shopUI = currentShopUIGameObject.GetComponent<ShopUI>();
+            if (shopUI != null)
+            {
+                shopUI.PopulateShop(organizedItemArray); // Populate the shop list with items
+            }
+        }
+        // We already have a shop created, so delete it
+        else
+        {
+            RemoveShopUI();
+        }
+    }
+
+    public void RemoveShopUI()
+    {
+        if (currentShopUIGameObject != null)
+        {
+            Destroy(currentShopUIGameObject);
+            currentShopUIGameObject = null;
+        }
+    }
+
+    // Function that will organize an array which will start with the smallest level of plants at the beginning and put the highest levels at the end
+    GridPlantData[] GetOrganizedShopByPlantLevel()
     {
         if (shopItemsArray.Length > 0)
         {

@@ -46,8 +46,7 @@ public class ShopUI : MonoBehaviour
     {
         if (GameManager.UIManager != null)
         {
-			GameManager.UIManager.RemoveShopUI();
-            Destroy(gameObject); // Double destroy the UI in case the UI manager doesn't find a saved reference
+            Destroy(gameObject);
         }
 	}
 }

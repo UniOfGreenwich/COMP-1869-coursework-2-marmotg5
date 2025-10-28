@@ -135,7 +135,6 @@ public class PlantObject : GridObject
 
                     currentGrowingStage++;
                 }
-
             }
         }
     }

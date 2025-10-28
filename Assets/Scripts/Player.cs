@@ -70,4 +70,6 @@ public class Player : MonoBehaviour
 
 	public int GetLevel() { return playerStats.level; }
 	public int GetCash() { return playerStats.cash; }
+
+	public InventorySystem GetInventory() { return inventorySystem; }
 }

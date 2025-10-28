@@ -10,8 +10,6 @@ public class UIManager : MonoBehaviour
 	Vector3 plantUIOffset = new Vector3(0.0f, -100.0f, 0.0f);
 	IEnumerator trackCurrentPlantUICoroutine = null;
 
-	// Shop UI
-	GameObject currentShopUIGameObject = null;
 
 	// Plant object
 	PlantObject currentPlantObject = null;
@@ -65,38 +63,30 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	public void CreateShopUI(GridPlantData[] shopPlantData, GameObject shopUIPrefab)
-	{
-		// If we don't have a shop created
-		if (currentShopUIGameObject == null)
-		{
-			// Create a shop
-			currentShopUIGameObject = Instantiate(shopUIPrefab, transform);
-			ShopUI shopUI = currentShopUIGameObject.GetComponent<ShopUI>();
-			if (shopUI != null)
-			{
-				shopUI.PopulateShop(shopPlantData); // Populate the shop list with items
-			}
-		}
-		// We already have a shop created, so delete it
-		else
-		{
-			Destroy(currentShopUIGameObject);
-			currentShopUIGameObject = null;
-		}
+	//public void CreateShopUI(GridPlantData[] shopPlantData, GameObject shopUIPrefab)
+	//{
+	//	// If we don't have a shop created
+	//	if (currentShopUIGameObject == null)
+	//	{
+	//		// Create a shop
+	//		currentShopUIGameObject = Instantiate(shopUIPrefab, transform);
+	//		ShopUI shopUI = currentShopUIGameObject.GetComponent<ShopUI>();
+	//		if (shopUI != null)
+	//		{
+	//			shopUI.PopulateShop(shopPlantData); // Populate the shop list with items
+	//		}
+	//	}
+	//	// We already have a shop created, so delete it
+	//	else
+	//	{
+	//		Destroy(currentShopUIGameObject);
+	//		currentShopUIGameObject = null;
+	//	}
 
-	}
+	//}
 
-	public void RemoveShopUI()
-	{
-		if (currentShopUIGameObject != null)
-		{
-			Destroy(currentShopUIGameObject);
-			currentShopUIGameObject = null;
-		}
-	}
 
-		IEnumerator TrackCurrentPlantUI(PlantObject plantObject, Camera renderCamera)
+    IEnumerator TrackCurrentPlantUI(PlantObject plantObject, Camera renderCamera)
 	{
 		// While the current plant we are tracking exists
 		while (plantObject != null && plantObject == currentPlantObject)

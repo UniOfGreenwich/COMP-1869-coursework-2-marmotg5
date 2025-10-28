@@ -11,28 +11,23 @@ public enum BuildingState
 
 public class PlayerBuilding : MonoBehaviour
 {
-    BuildingState buildingState;
-    Camera mainCamera;
-
     [Header("Grid Building Objects Data")]
     GridObjectData selectedObjectData = null;
 
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
-	// START WORKING ON SOME BUILDING UI AND ALLOW PLAYERS TO SELECT DIFFERNT PLANTS
+    [Header("UI Elements")]
+    [SerializeField] GameObject playerBuildingUIPrefab;
 
 	[Header("Keyboard Controls")]
     [SerializeField]
     KeyCode buildingStateKey = KeyCode.Y;
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+    GameObject playerBuildingUIGameObject = null;
+
+    BuildingState buildingState;
+    Camera mainCamera;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
         buildingState = BuildingState.NONE;
         mainCamera = GetComponent<Camera>();
@@ -99,7 +94,14 @@ public class PlayerBuilding : MonoBehaviour
     {
         if (GameManager.gridSystem != null)
         {
+            // Activate the grid system
 			GameManager.gridSystem.SetGridSystemRendering(true);
+            
+            // Try to create the player building UI
+            if (playerBuildingUIPrefab != null)
+            {
+                
+            }
 		}
 
 	}
@@ -108,6 +110,7 @@ public class PlayerBuilding : MonoBehaviour
     {
 		if (GameManager.gridSystem != null)
 		{
+            // Close the grid system UI
 			GameManager.gridSystem.SetGridSystemRendering(false);
 			selectedObjectData = null;
 		}
