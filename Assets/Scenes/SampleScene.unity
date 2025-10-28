@@ -470,8 +470,8 @@ GameObject:
   - component: {fileID: 963194226}
   - component: {fileID: 963194230}
   - component: {fileID: 963194231}
-  - component: {fileID: 963194229}
   - component: {fileID: 963194232}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Player/Main Camera
   m_TagString: MainCamera
@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72cf6231a8455f640809e1c181104b03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerBuildingUIPrefab: {fileID: 0}
+  playerBuildingUIPrefab: {fileID: 9044528672923266066, guid: 46ef73f5f19c2aa48a3df67660a43fc4, type: 3}
   buildingStateKey: 121
 --- !u!114 &963194232
 MonoBehaviour:

@@ -11,9 +11,6 @@ public enum BuildingState
 
 public class PlayerBuilding : MonoBehaviour
 {
-    [Header("Grid Building Objects Data")]
-    GridObjectData selectedObjectData = null;
-
     [Header("UI Elements")]
     [SerializeField] GameObject playerBuildingUIPrefab;
 
@@ -26,8 +23,11 @@ public class PlayerBuilding : MonoBehaviour
     BuildingState buildingState;
     Camera mainCamera;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+	GridObjectData selectedObjectData = null;
+
+
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
         buildingState = BuildingState.NONE;
         mainCamera = GetComponent<Camera>();
@@ -98,10 +98,11 @@ public class PlayerBuilding : MonoBehaviour
 			GameManager.gridSystem.SetGridSystemRendering(true);
             
             // Try to create the player building UI
-            if (playerBuildingUIPrefab != null)
+            if (playerBuildingUIPrefab != null && GameManager.UIManager != null)
             {
-                
-            }
+                playerBuildingUIGameObject = Instantiate(playerBuildingUIPrefab, GameManager.UIManager.transform);
+
+			}
 		}
 
 	}
@@ -112,9 +113,39 @@ public class PlayerBuilding : MonoBehaviour
 		{
             // Close the grid system UI
 			GameManager.gridSystem.SetGridSystemRendering(false);
+
+            // Remove the building UI
+            if (playerBuildingUIGameObject != null)
+            {
+                Destroy(playerBuildingUIGameObject);
+                playerBuildingUIGameObject = null;
+
+			}
+
 			selectedObjectData = null;
 		}
 
+	}
+
+    void PopulateBuildingMenu()
+    {
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
+		// MAKE A PREFAB FOR THE ITEM IN THE PLAYER BUILDING UI AND MAKE A FOR LOOP TO POPULATE IT WITH THE INVENTORY SYSTEM ITEM LIST
 	}
 
 	public void SetBuildingState(BuildingState state)

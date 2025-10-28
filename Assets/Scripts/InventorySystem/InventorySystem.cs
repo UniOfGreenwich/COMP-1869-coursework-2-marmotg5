@@ -6,10 +6,10 @@ public class InventorySystem : MonoBehaviour
 {
     [SerializeField] List<InventoryItem> items = new List<InventoryItem>();     // Holds all of the items
     
-    public void AddItem(InventoryItem item)  // Add an item to the inventory
+    public void AddItem(GridPlantData plantItemData)  // Add an item to the inventory
     {
         // Try and check if we already have an item in the list with the same data
-        InventoryItem similarItem = FindSameItem(item);
+        InventoryItem similarItem = FindSameItem(plantItemData);
         if (similarItem != null)
         {
             similarItem.IncreaseQuantity();
@@ -17,10 +17,8 @@ public class InventorySystem : MonoBehaviour
         // We don't have a similar object in the inventory, so we add a new one
         else
         {
-            items.Add(item);
+            items.Add(new InventoryItem(plantItemData));
         }
-        //    items.Add(item);
-        //Debug.Log(item.itemName + " is now in your inventory");
     }
 
     public void RemoveItem(InventoryItem item)   // Remove an item from the inventory
@@ -37,12 +35,13 @@ public class InventorySystem : MonoBehaviour
    
     }
 
-    InventoryItem FindSameItem(InventoryItem itemToCheck)
+    // This function will go through the current inventory and will check if we already have an item with that's using the same data
+    InventoryItem FindSameItem(GridPlantData itemDataToCheck)
     {
-        foreach (InventoryItem item in items)
+        foreach (InventoryItem loopedItem in items)
         {
-            if (item == itemToCheck)
-                return item;
+            if (itemDataToCheck == loopedItem.itemData)
+                return loopedItem;
         }
 
         return null;
