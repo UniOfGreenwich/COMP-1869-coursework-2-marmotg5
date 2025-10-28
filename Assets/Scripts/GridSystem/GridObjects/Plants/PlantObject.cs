@@ -46,11 +46,14 @@ public class PlantObject : GridObject
 
 	IEnumerator pestAttackCoroutine = null;
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+    ParticleSystem particleSystem = null;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
 		plantMeshFilter = GetComponent<MeshFilter>();
 		randomPestAttackTimer = Random.Range(minAttackTimer, maxAttackTimer);
+        particleSystem = GetComponent<ParticleSystem>();
 
         if (plantData != null)
         {
@@ -83,7 +86,7 @@ public class PlantObject : GridObject
         }
 	}
 
-
+    bool hasPlayedHarvestVFX = false;
 	void HandleGrowing()
     {
         // Check if the plant still has time to grow
@@ -99,6 +102,22 @@ public class PlantObject : GridObject
             elapsedTimeSinceLastGrowth += Time.deltaTime;
             currentGrowingTime += Time.deltaTime;
         }
+        // Plant is ready to be harvested
+        else
+        {
+            if (!hasPlayedHarvestVFX)
+            {
+                ApplyHarvestVFX();
+                hasPlayedHarvestVFX = true;
+            }
+        }
+    }
+
+    void ApplyHarvestVFX()
+    {
+        if (particleSystem != null) {
+            particleSystem.Play();
+            }
     }
 
     // Drain the water meter of the plant over time
@@ -135,7 +154,6 @@ public class PlantObject : GridObject
 
                     currentGrowingStage++;
                 }
-
             }
         }
     }
@@ -215,6 +233,7 @@ public class PlantObject : GridObject
             if (player != null)
             {
                 player.AddCash(plantData.cashReward);
+                Destroy(particleSystem);
                 Destroy(gameObject);
             }
         }
