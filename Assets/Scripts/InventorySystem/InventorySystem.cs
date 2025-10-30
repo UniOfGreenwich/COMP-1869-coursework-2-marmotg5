@@ -12,6 +12,7 @@ public class InventorySystem : MonoBehaviour
         InventoryItem similarItem = FindSameItem(plantItemData);
         if (similarItem != null)
         {
+            print("found same item");
             similarItem.IncreaseQuantity();
         }
         // We don't have a similar object in the inventory, so we add a new one
@@ -47,7 +48,7 @@ public class InventorySystem : MonoBehaviour
         return null;
     }
 
-    public void ShowInventory() // Show items in inventory
+    public void ShowInventory()
     {
         if (items.Count == 0)
         {
@@ -55,7 +56,9 @@ public class InventorySystem : MonoBehaviour
         }
         foreach (InventoryItem item in items)
         {
-            //Debug.Log("- "+ item.itemName);
+            Debug.Log("- " + item.itemData.objectName + ": "+item.quantity+"x amount");
         }
     }
+
+    public List<InventoryItem> GetItems() {  return items; }
 }

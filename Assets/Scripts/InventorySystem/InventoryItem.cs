@@ -9,7 +9,7 @@ public class InventoryItem
     public InventoryItem(GridPlantData plantData)
     {
         itemData = plantData;
-        quantity = 0;
+        quantity = 1; // Create a new item with a default quantity of 1
     }
     
     public void IncreaseQuantity()
