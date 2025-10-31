@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(instance);
+            instance = this;
         }
 
         mainCamera = Camera.main;

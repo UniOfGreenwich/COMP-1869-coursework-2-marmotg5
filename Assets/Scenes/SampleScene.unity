@@ -597,7 +597,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStats:
     level: 0
-    cash: 0
+    cash: 200
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0

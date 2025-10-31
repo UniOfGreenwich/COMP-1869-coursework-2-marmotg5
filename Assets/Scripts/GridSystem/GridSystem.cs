@@ -92,23 +92,6 @@ public class GridSystem : MonoBehaviour
 		}
 	}
 
-	//  void RenderGrid()
-	//  {
-	//for (int z = 0; z < gridCellWidthAmount; z++)
-	//{
-	//	GridCell firstCell = gridArray[(z, 0)];
-	//	GridCell lastCell = gridArray[(z, gridCellHeightAmount - 1)];
-	//	Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
-	//}
-
-	//      for (int x = 0; x < gridCellHeightAmount; x++)
-	//      {
-	//          GridCell firstCell = gridArray[(0, x)];
-	//          GridCell lastCell = gridArray[(gridCellWidthAmount - 1, x)];
-	//          Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
-	//      }
-	//  }
-
 	public GridCell GetGridCellFromCoords(Vector3 coords)
 	{
 		// Loop through each grid cell and check if the coords are within a certain grid cell's perimeter
