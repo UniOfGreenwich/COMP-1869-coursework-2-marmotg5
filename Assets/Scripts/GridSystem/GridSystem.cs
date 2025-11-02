@@ -20,6 +20,7 @@ public class GridSystem : MonoBehaviour
 	public static GridSystem instance { get; private set; }
 	[SerializeField] GridObjectData[] allowedGridObjects;
 	[SerializeField] GameObject gridCellVisualPrefab;
+	Color gridCellVisualDefaultColor; // The default color of the grid cell's visual prefab sprite renderer
 
 	[SerializeField] int gridCellWidthAmount = 25, gridCellHeightAmount = 25;
 	[SerializeField] float gridCellSize = 1.0f; // 1 meter unit in Unity 
@@ -40,7 +41,13 @@ public class GridSystem : MonoBehaviour
 			Destroy(this.gameObject);
 		}
 
+		// Grab the default color of the grid cell visual object from its prefab
+		if (gridCellVisualPrefab != null)
+			gridCellVisualDefaultColor = gridCellVisualPrefab.GetComponent<SpriteRenderer>() ? gridCellVisualPrefab.GetComponent<SpriteRenderer>().color : Color.white;
+
+		// Create the grid
 		InitializeGrid();
+		
 	}
 
 	void Awake()
@@ -63,11 +70,13 @@ public class GridSystem : MonoBehaviour
 		{
 			for (int z = 0; z < gridCellWidthAmount; z++)
 			{
+				// Calculate the position of the new grid cell
 				Vector3 cellPosition = new Vector3(x * gridCellSize, transform.position.y, z * gridCellSize);
 				GridCell gridCell = new GridCell((z, x), gridCellSize, cellPosition);
 
 				gridArray.Add((z, x), gridCell);
 
+				// Create a visual object to represent the grid cell
 				GameObject gridCellVisual = Instantiate(gridCellVisualPrefab, gridCell.GetCenteredPosition() + gridCellVisualPrefab.transform.position, gridCellVisualPrefab.transform.rotation, transform);
 				gridCellVisual.name = VISUAL_OBJECT_NAME + z + x;
 				gridCellVisuals.Add(gridCellVisual);
@@ -75,7 +84,6 @@ public class GridSystem : MonoBehaviour
 		}
 
 		SetGridSystemRendering(false); // Don't render grid by default
-		//RenderGrid();
 	}
 
 	public void SetGridSystemRendering(bool toggle)
@@ -190,7 +198,7 @@ public class GridSystem : MonoBehaviour
 	}
 
 	// Checks if any grid cell is occupied within a specified range
-	bool IsGridCellAreaClear(GridCell gridCell, Vector2Int gridCellRequirements) // x = Z | y = X
+	public bool IsGridCellAreaClear(GridCell gridCell, Vector2Int gridCellRequirements) // x = Z | y = X
 	{
 		Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(gridCell, gridCellRequirements);
 
@@ -239,9 +247,9 @@ public class GridSystem : MonoBehaviour
 		return gridCellsInArea;
 	}
 
-	GameObject FindVisualObjectBasedOnCell(GridCell gridCell)
+	public GameObject FindVisualObjectBasedOnCell(GridCell gridCell)
 	{
-		(int z, int x) gridCellLocation = gridCell.GetCellIndex();
+		(int z, int x) gridCellLocation = gridCell.GetCellIndex(); // The location of the grid cell on the grid system
 
 		for (int i = 0; i < gridCellVisuals.Count; i++)
 		{
@@ -260,15 +268,18 @@ public class GridSystem : MonoBehaviour
 
 	public List<GameObject> FindVisualObjectsBasedOnCell(GridCell targetCell, Vector2Int targetCellRequirements)
 	{
+		// Grab the actual grid cells using the target cell and its size requirements
 		Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(targetCell, targetCellRequirements);
+	
 		if (gridCellsInArea.Count > 0)
 		{
 			List<GameObject> cellVisualObjects = new List<GameObject>();
 
-			// Loop through the items in the dictionary
+			// Loop through the grid cells
 			foreach (KeyValuePair<(int z, int x), GridCell> search in gridCellsInArea)
 			{
-				GameObject cellVisualObject = FindVisualObjectBasedOnCell(targetCell);
+				// Grab the visual object for the grid cell
+				GameObject cellVisualObject = FindVisualObjectBasedOnCell(search.Value);
 				if (cellVisualObject != null)
 				{
 					cellVisualObjects.Add(cellVisualObject);
@@ -302,4 +313,6 @@ public class GridSystem : MonoBehaviour
 	}
 
     public Dictionary<(int z, int x), GridCell> GetGridArray() { return gridArray; }
+
+	public Color GetGridCellVisualDefaultColor() { return gridCellVisualDefaultColor; }
 }

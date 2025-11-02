@@ -22,6 +22,9 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
 
 	// The placeholder object that the player will see before spawning in the ACTUAL/REAL thing (will show if cells are occupied or empty) 
 	GameObject placeHolderObject = null;
+    GridCell placeHolderObjectGridCell = null; // The grid cell the "placeHolderObject" is currently on top of
+
+    List<GameObject> colouredGridCellVisualObjects = new List<GameObject>();
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -59,10 +62,36 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
     // Gets called when the player stops dragging the mouse
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
-        if (placeHolderObject == null) return; // It should never be null since it only executes after the OnDrag ends but still just in case
-    }
+        if (GameManager.gridSystem == null || 
+        placeHolderObject == null || placeHolderObjectGridCell == null) return; // It should never be null since it only executes after the OnDrag event ends but still just in case
+        
+        ResetColourOfAllGridCells(); // Reset the colour of all grid cell visual objects
+		Destroy(placeHolderObject); // Delete the place holder object
+        placeHolderObject = null;
 
-    void CreatePlaceholderObject(GridCell gridCellToSpawnAt)
+        GameManager.gridSystem.SpawnGridObject(placeHolderObjectGridCell);
+
+		// REPLACE THE SpawnGridObject OVERRIDED FUNCTION ABOVE WITH THE OTHER ONE IN THE GridSystem.cs AND MAKE IT SEND THE CURRENT inventoryItem.itemData THROUGH
+		// THAT WAY THE ONLY WAY TO SPAWN THINGS IN THE GAME IS THROUGH THE PLAYER BUILDING UI
+		// ALSO REMOVE THE DEFAULT WAY OF SPAWNING OBJECTS FROM THE PlayerBuilding.cs
+
+
+		// REPLACE THE SpawnGridObject OVERRIDED FUNCTION ABOVE WITH THE OTHER ONE IN THE GridSystem.cs AND MAKE IT SEND THE CURRENT inventoryItem.itemData THROUGH
+		// THAT WAY THE ONLY WAY TO SPAWN THINGS IN THE GAME IS THROUGH THE PLAYER BUILDING UI
+		// ALSO REMOVE THE DEFAULT WAY OF SPAWNING OBJECTS FROM THE PlayerBuilding.cs
+
+
+		// REPLACE THE SpawnGridObject OVERRIDED FUNCTION ABOVE WITH THE OTHER ONE IN THE GridSystem.cs AND MAKE IT SEND THE CURRENT inventoryItem.itemData THROUGH
+		// THAT WAY THE ONLY WAY TO SPAWN THINGS IN THE GAME IS THROUGH THE PLAYER BUILDING UI
+		// ALSO REMOVE THE DEFAULT WAY OF SPAWNING OBJECTS FROM THE PlayerBuilding.cs
+
+
+		// REPLACE THE SpawnGridObject OVERRIDED FUNCTION ABOVE WITH THE OTHER ONE IN THE GridSystem.cs AND MAKE IT SEND THE CURRENT inventoryItem.itemData THROUGH
+		// THAT WAY THE ONLY WAY TO SPAWN THINGS IN THE GAME IS THROUGH THE PLAYER BUILDING UI
+		// ALSO REMOVE THE DEFAULT WAY OF SPAWNING OBJECTS FROM THE PlayerBuilding.cs
+	}
+
+	void CreatePlaceholderObject(GridCell gridCellToSpawnAt)
     {
         if (GameManager.gridSystem == null || inventoryItem == null) return; // Make sure we have a grid system we can create the placeholder object on
 
@@ -90,42 +119,94 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
                 // Change the new object's material to transparent
                 placeHolderRenderer.material.color = new Color(placeHolderRenderer.material.color.r, placeHolderRenderer.material.color.g, placeHolderRenderer.material.color.b, 0.5f);
 
-                ColourCells(gridCellToSpawnAt, inventoryItem.itemData.gridCellRequirement);
             }
 		}
         // We already have an existing one
         else
         {
             placeHolderObject.transform.position = GameManager.gridSystem.GetObjectSpawnPosition(gridCellToSpawnAt, inventoryItem.itemData.objectPrefab);
+			ResetColourOfOldGridCells(gridCellToSpawnAt); // Reset the colours of all the grid cell visual objects after moving the placeholder object to a different location
 
 		}
-    }
 
-    void ColourCells(GridCell targetCell, Vector2Int targetCellRequirements)
+        placeHolderObjectGridCell = gridCellToSpawnAt;
+		ColourCells(gridCellToSpawnAt, inventoryItem.itemData.gridCellRequirement); // Color all the necessary cells around the placeholder object
+
+	}
+
+	void ColourCells(GridCell targetCell, Vector2Int targetCellRequirements)
     {
         if (GameManager.gridSystem == null) return;
 
         List<GameObject> cellVisualObjects = GameManager.gridSystem.FindVisualObjectsBasedOnCell(targetCell, targetCellRequirements);
         if (cellVisualObjects != null || cellVisualObjects.Count > 0)
         {
+            Color colourToChange = Color.red;
+            if (GameManager.gridSystem.IsGridCellAreaClear(targetCell, targetCellRequirements))
+            {
+                colourToChange = Color.green;
+            }
+
+
             foreach (GameObject cellVisualObject in cellVisualObjects)
             {
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
-				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+                // Ignore any cells that are already coloured and continue to next iteration
+                if (colouredGridCellVisualObjects.Contains(cellVisualObject)) continue;
+
+                SpriteRenderer spriteRenderer = cellVisualObject.GetComponent<SpriteRenderer>();
+                if (spriteRenderer != null)
+                {
+                    spriteRenderer.color = colourToChange;
+                    colouredGridCellVisualObjects.Add(cellVisualObject);
+				}
 			}
 		}
 
     }
 
-    public void UpdateInventoryItemUI(InventoryItem updatedInventoryItem)
+    void ResetColourOfOldGridCells(GridCell ignoreGridCell)
+    {
+        if (GameManager.gridSystem == null) return;
+
+        // Make sure we have coloured grid cells saved before trying to remove anything
+        if (colouredGridCellVisualObjects.Count > 0)
+        {
+            // This will ignore removing the colour of the main grid cell the player is dragging their mouse/finger on
+			GameObject ignoreVisualObject = GameManager.gridSystem.FindVisualObjectBasedOnCell(ignoreGridCell);
+
+            // Loop through all coloured grid cell visual game objects and set them to their default colour
+			foreach (GameObject gridCellVisualObject in colouredGridCellVisualObjects)
+			{
+
+                if (gridCellVisualObject == ignoreVisualObject) continue;
+
+				SpriteRenderer spriteRenderer = gridCellVisualObject.GetComponent<SpriteRenderer>();
+				if (spriteRenderer != null)
+				{
+					spriteRenderer.color = GameManager.gridSystem.GetGridCellVisualDefaultColor();
+				}
+			}
+
+            colouredGridCellVisualObjects.Clear();
+		}
+    }
+
+	void ResetColourOfAllGridCells()
+    {
+        foreach (GameObject gridCellVisualObject in colouredGridCellVisualObjects)
+        {
+			SpriteRenderer spriteRenderer = gridCellVisualObject.GetComponent<SpriteRenderer>();
+			if (spriteRenderer != null)
+			{
+				spriteRenderer.color = GameManager.gridSystem.GetGridCellVisualDefaultColor();
+			}
+		}
+
+        colouredGridCellVisualObjects.Clear();
+    }
+
+
+	public void UpdateInventoryItemUI(InventoryItem updatedInventoryItem)
     {
         if (updatedInventoryItem == null) return;
         inventoryItem = updatedInventoryItem;
