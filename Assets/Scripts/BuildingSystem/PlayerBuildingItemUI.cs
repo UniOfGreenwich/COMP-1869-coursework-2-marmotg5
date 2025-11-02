@@ -1,7 +1,9 @@
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
 {
@@ -15,7 +17,11 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
 	[Header("UI Image")]
 	[SerializeField] Image itemImage;
 
-    InventoryItem inventoryItem;
+    // The data
+    InventoryItem inventoryItem = null;
+
+	// The placeholder object that the player will see before spawning in the ACTUAL/REAL thing (will show if cells are occupied or empty) 
+	GameObject placeHolderObject = null;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
@@ -43,23 +49,8 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
             GridCell gridCellAtCoords = GameManager.gridSystem.GetGridCellFromCoords(raycastHit.point);
             if (gridCellAtCoords != null)
             {
-                //MeshFilter itemPrefabMeshFilter = inventoryItem.itemData.objectPrefab.GetComponentInChildren<MeshFilter>();
-
-                GameObject primitive = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                primitive.transform.position = gridCellAtCoords.GetCenteredPosition();
-                //primitive.GetComponent<MeshFilter>().mesh = itemPrefabMeshFilter.mesh;
-
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-                // MAKE IT SO THE NEW PLACEHOLDER GAMEOBJECT SHOWS THE PREFABS MESH AND MATERIAL WITH A BIT OF TRANSPARENCY
-            }
+                CreatePlaceholderObject(gridCellAtCoords);
+			}
 
         }
 
@@ -68,6 +59,69 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
     // Gets called when the player stops dragging the mouse
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
+        if (placeHolderObject == null) return; // It should never be null since it only executes after the OnDrag ends but still just in case
+    }
+
+    void CreatePlaceholderObject(GridCell gridCellToSpawnAt)
+    {
+        if (GameManager.gridSystem == null || inventoryItem == null) return; // Make sure we have a grid system we can create the placeholder object on
+
+        // Create a new placeholder object
+        if (placeHolderObject == null)
+        {
+			// Check if the prefab has a mesh filter and a mesh renderer
+			MeshFilter prefabMeshFilter = inventoryItem.itemData.objectPrefab.GetComponentInChildren<MeshFilter>();
+			MeshRenderer prefabMeshRenderer = inventoryItem.itemData.objectPrefab.GetComponentInChildren<MeshRenderer>();
+
+			if (prefabMeshFilter != null && prefabMeshRenderer != null)
+			{
+                // Create the placeholder object
+				placeHolderObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                placeHolderObject.transform.position = GameManager.gridSystem.GetObjectSpawnPosition(gridCellToSpawnAt, inventoryItem.itemData.objectPrefab);
+
+                // Get the new object's mesh filter and renderer
+				MeshFilter placeHolderMeshFilter = placeHolderObject.GetComponent<MeshFilter>();
+				MeshRenderer placeHolderRenderer = placeHolderObject.GetComponent<MeshRenderer>();
+
+                // Set the new object's mesh filter and renderer to the ACTUAL prefab's
+				placeHolderMeshFilter.mesh = prefabMeshFilter.sharedMesh;
+				placeHolderRenderer.material = prefabMeshRenderer.sharedMaterial;
+
+                // Change the new object's material to transparent
+                placeHolderRenderer.material.color = new Color(placeHolderRenderer.material.color.r, placeHolderRenderer.material.color.g, placeHolderRenderer.material.color.b, 0.5f);
+
+                ColourCells(gridCellToSpawnAt, inventoryItem.itemData.gridCellRequirement);
+            }
+		}
+        // We already have an existing one
+        else
+        {
+            placeHolderObject.transform.position = GameManager.gridSystem.GetObjectSpawnPosition(gridCellToSpawnAt, inventoryItem.itemData.objectPrefab);
+
+		}
+    }
+
+    void ColourCells(GridCell targetCell, Vector2Int targetCellRequirements)
+    {
+        if (GameManager.gridSystem == null) return;
+
+        List<GameObject> cellVisualObjects = GameManager.gridSystem.FindVisualObjectsBasedOnCell(targetCell, targetCellRequirements);
+        if (cellVisualObjects != null || cellVisualObjects.Count > 0)
+        {
+            foreach (GameObject cellVisualObject in cellVisualObjects)
+            {
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+				// STORE THE DEFAULT COLOR OF THE VISIUAL OBJECT AND THEN MAKE IT RED OR GREEN DEPENDING ON THE OCCUPATION STATE OF THE GRID CELLS
+			}
+		}
 
     }
 
