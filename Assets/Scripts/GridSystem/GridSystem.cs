@@ -18,7 +18,6 @@ public class GridSystem : MonoBehaviour
 	const string VISUAL_OBJECT_NAME = "GridCellVisual_";
 
 	public static GridSystem instance { get; private set; }
-	[SerializeField] GridObjectData[] allowedGridObjects;
 	[SerializeField] GameObject gridCellVisualPrefab;
 	Color gridCellVisualDefaultColor; // The default color of the grid cell's visual prefab sprite renderer
 
@@ -88,6 +87,7 @@ public class GridSystem : MonoBehaviour
 
 	public void SetGridSystemRendering(bool toggle)
 	{
+		// Show/hide the sprite renderer for each grid cell visual object
 		foreach (GameObject visualObject in gridCellVisuals)
 		{
 			SpriteRenderer spriteRenderer = visualObject.GetComponent<SpriteRenderer>();
@@ -99,59 +99,73 @@ public class GridSystem : MonoBehaviour
 		}
 	}
 
-	// Spawn a default grid object for testing purposes
-	public void SpawnGridObject(GridCell cellToSpawnIn)
+	//// Spawn a default grid object for testing purposes
+	//public void SpawnGridObject(GridCell cellToSpawnIn)
+	//{
+	//	if (DoesGridCellExist(cellToSpawnIn))
+	//	{
+	//		// Grab the allowed grid object's data
+	//		GridObjectData gridObjectData = allowedGridObjects[0];
+	//		Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
+
+	//		// Check if the grid object we are trying to place has enough space to be spawned on the grid
+	//		if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
+	//		{
+	//			GameObject gridObjectPrefab = gridObjectData.objectPrefab;
+
+	//			// Calculate the object's spawn position
+	//			GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+	//			Vector3 spawnPosition = GetObjectSpawnPosition(cellToSpawnIn, gridObjectPrefab);
+
+	//			// Create the grid object
+	//			GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+	//			GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
+	//			if (spawnedGridObjectData != null)
+	//			{
+	//				// Set the spawned grid object to keep track of the parent cell its placed in
+	//				spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
+
+	//				// Set each necessary grid cell to keep track of the spawned grid object that may occupy more than 1x1 cells
+	//				Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(cellToSpawnIn, gridObjectCellRequirements);
+	//				OccupyCellsWithObject(gridCellsInArea, spawnedGridObject);
+	//			}
+	//		}
+	//	}
+	//}
+
+	public bool SpawnGridObject(GridCell cellToSpawnIn, GridObjectData gridObjectData)
 	{
-		if (allowedGridObjects.Contains(allowedGridObjects[0]))
+		if (DoesGridCellExist(cellToSpawnIn))
 		{
-			if (DoesGridCellExist(cellToSpawnIn))
+			Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
+
+			// Check if the grid object we are trying to place has enough space to be spawned on the grid
+			if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
 			{
-				// Grab the allowed grid object's data
-				GridObjectData gridObjectData = allowedGridObjects[0];
-				Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
+				GameObject gridObjectPrefab = gridObjectData.objectPrefab;
 
-				// Check if the grid object we are trying to place has enough space to be spawned on the grid
-				if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
+				// Calculate the object's spawn position
+				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+				Vector3 spawnPosition = GetObjectSpawnPosition(cellToSpawnIn, gridObjectPrefab);
+
+				// Create the grid object
+				GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+				GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
+				if (spawnedGridObjectData != null)
 				{
-					GameObject gridObjectPrefab = gridObjectData.objectPrefab;
+					// Set the spawned grid object to keep track of the parent cell its placed in
+					spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
 
-					// Calculate the object's spawn position
-					GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
-					Vector3 spawnPosition = GetObjectSpawnPosition(cellToSpawnIn, gridObjectPrefab);
+					// Set each necessary grid cell to keep track of the spawned grid object that may occupy more than 1x1 cells
+					Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(cellToSpawnIn, gridObjectCellRequirements);
+					OccupyCellsWithObject(gridCellsInArea, spawnedGridObject);
 
-					// Create the grid object
-					GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
-					GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
-					if (spawnedGridObjectData != null)
-					{
-						// Set the spawned grid object to keep track of the parent cell its placed in
-						spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
-
-						// Set each necessary grid cell to keep track of the spawned grid object that may occupy more than 1x1 cells
-						Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(cellToSpawnIn, gridObjectCellRequirements);
-						OccupyCellsWithObject(gridCellsInArea, spawnedGridObject);
-					}
+					return true;
 				}
 			}
 		}
-	}
 
-	public void SpawnGridObject(GridCell cellToSpawnIn, GridObjectData gridObjectData)
-	{
-		if (allowedGridObjects.Contains(gridObjectData))
-		{
-			if (DoesGridCellExist(cellToSpawnIn))
-			{
-				GameObject gridObjectPrefab = gridObjectData.objectPrefab;
-				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
-
-				Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
-
-				GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
-
-				cellToSpawnIn.StoreGridObject(spawnedGridObject);
-			}
-		}
+		return false;
 	}
 
 	public GridCell GetGridCellFromCoords(Vector3 coords)
@@ -218,7 +232,7 @@ public class GridSystem : MonoBehaviour
 	}
 
 	// Returns a dictionary of all grid cells around the "targetCell" with a set cell location radius
-	Dictionary<(int z, int x), GridCell> GetGridCellsInArea(GridCell targetCell, Vector2Int targetCellSizeRequierements)
+	public Dictionary<(int z, int x), GridCell> GetGridCellsInArea(GridCell targetCell, Vector2Int targetCellSizeRequierements)
 	{
 		Dictionary<(int z, int x), GridCell> gridCellsInArea = new Dictionary<(int z, int x), GridCell>();
 
@@ -290,6 +304,22 @@ public class GridSystem : MonoBehaviour
 		}
 
 		return null;
+	}
+
+	// Returns a list of all grid cells that have objects placed on top of the cells
+	public List<GridCell> GetAllOccupiedGridCells()
+	{
+		List<GridCell> occupiedCells = new List<GridCell>();
+
+		// Loop through the grid cells in the grid system
+		foreach (KeyValuePair<(int z, int x), GridCell> search in gridArray)
+		{
+			if (!search.Value.IsOccupied()) continue; // Ignore the grid cell if it's not occupied
+			
+			occupiedCells.Add(search.Value);
+		}
+
+		return occupiedCells;
 	}
 
 	// Set grid cells to be occupied with a certain game object (disallowing other game/grid objects to be spawned on the grid cells)

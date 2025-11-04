@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -64,10 +65,12 @@ public class PlantObject : GridObject
                 timePerGrowingStage = plantData.requiredGrowingTime;
             }
         }
-    }
 
-    // Update is called once per frame
-    void Update()
+		SetGridCellsOccupationalColour();
+	}
+
+	// Update is called once per frame
+	void Update()
     {
         HandleGrowing();
         DrainWaterLevel();
@@ -214,7 +217,12 @@ public class PlantObject : GridObject
             if (player != null)
             {
                 player.AddCash(plantData.cashReward);
-                Destroy(gameObject);
+
+				// Reset the grid cell's visual object's colour to the default one since the plant is not occupying anything anymore
+				ResetGridCellsVisualObjectsColour();
+
+				// Destroy the plant
+				KillPlant();
             }
         }
 	}
@@ -222,11 +230,56 @@ public class PlantObject : GridObject
 	void KillPlant()
     {
         // If health or water level reaches 0
-        if (plantHealth <= 0 || plantWaterLevel <= 0.0f)
+        if (plantHealth <= 0 || plantWaterLevel <= 0.0f || currentGrowingTime >= plantData.requiredGrowingTime)
         {
+            // Reset the colour of the grid cells the plant was previously occupying
+
+
             Destroy(gameObject);
         }
     }
+
+	// Change the colour of the grid cell visual objects the plant is staying on top of and any other nearby that it's occupying
+	void SetGridCellsOccupationalColour()
+    {
+        if (GameManager.gridSystem == null || parentCell == null) return;
+
+		List<GameObject> gridCellsVisualObjects = GameManager.gridSystem.FindVisualObjectsBasedOnCell(parentCell, plantData.gridCellRequirement);
+
+		if (gridCellsVisualObjects != null && gridCellsVisualObjects.Count > 0)
+		{
+			// Loop through all coloured grid cell visual game objects and set them to their default colour
+			foreach (GameObject gridCellVisualObject in gridCellsVisualObjects)
+			{
+				SpriteRenderer spriteRenderer = gridCellVisualObject.GetComponent<SpriteRenderer>();
+				if (spriteRenderer != null)
+				{
+					spriteRenderer.color = Color.red;
+				}
+			}
+		}
+	}
+
+    // Same functions as the one on top, but this one just returns back all the cells to the their default colour
+    void ResetGridCellsVisualObjectsColour()
+    {
+		if (GameManager.gridSystem == null || parentCell == null) return;
+
+		List<GameObject> gridCellsVisualObjects = GameManager.gridSystem.FindVisualObjectsBasedOnCell(parentCell, plantData.gridCellRequirement);
+
+		if (gridCellsVisualObjects != null && gridCellsVisualObjects.Count > 0)
+		{
+			// Loop through all grid cell visual game objects and set them to their default colour
+			foreach (GameObject gridCellVisualObject in gridCellsVisualObjects)
+			{
+				SpriteRenderer spriteRenderer = gridCellVisualObject.GetComponent<SpriteRenderer>();
+				if (spriteRenderer != null)
+				{
+					spriteRenderer.color = GameManager.gridSystem.GetGridCellVisualDefaultColor();
+				}
+			}
+		}
+	}
 
     public float GetPlantGrowingTimeLeft()
     {

@@ -36,6 +36,17 @@ public class InventorySystem : MonoBehaviour
    
     }
 
+    public void UseItem(InventoryItem itemToUse)
+    {
+        itemToUse.DecreaseQuantity();
+
+        // Item is finished and has no quantity left
+        if (itemToUse.quantity <= 0)
+        {
+            RemoveItem(itemToUse);
+        }
+    }
+
     // This function will go through the current inventory and will check if we already have an item with that's using the same data
     InventoryItem FindSameItem(GridPlantData itemDataToCheck)
     {

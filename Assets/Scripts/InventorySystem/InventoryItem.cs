@@ -16,4 +16,13 @@ public class InventoryItem
     {
         quantity++;
     }
+
+    public void DecreaseQuantity()
+    {
+        quantity--;
+        if (quantity < 0)
+        {
+            quantity = 0;
+        }
+    }
 }

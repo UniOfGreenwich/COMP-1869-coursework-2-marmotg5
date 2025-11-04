@@ -66,25 +66,25 @@ public class PlayerBuilding : MonoBehaviour
 		//if (buildingState == BuildingState.CHOOSING_OBJECT || buildingState == BuildingState.PLACING_OBJECT)
 		if (buildingState == BuildingState.CHOOSING_OBJECT)
 		{
-			Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-			if (Physics.Raycast(ray, out RaycastHit raycastHit))
-			{
-                GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
+			//Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+			//if (Physics.Raycast(ray, out RaycastHit raycastHit))
+			//{
+   //             GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
                 
-                // Make sure player is clicking with the grid system and a grid cell has been found
-                if (gridCell != null)
-                {
-					if (Input.GetMouseButtonDown((int)MouseButton.Left))
-					{
-                        // Check if the mouse IS NOT over any UI element object
-                        if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
-                        {
-                            GridSystem.instance.SpawnGridObject(gridCell);
-                        }
+   //             // Make sure player is clicking with the grid system and a grid cell has been found
+   //             if (gridCell != null)
+   //             {
+			//		if (Input.GetMouseButtonDown((int)MouseButton.Left))
+			//		{
+   //                     // Check if the mouse IS NOT over any UI element object
+   //                     if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
+   //                     {
+   //                         GridSystem.instance.SpawnGridObject(gridCell);
+   //                     }
 
-					}
-				}
-            }
+			//		}
+			//	}
+   //         }
 
         }
 	}
