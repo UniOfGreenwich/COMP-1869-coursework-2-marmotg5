@@ -9,5 +9,5 @@ public class GrowthVFX : MonoBehaviour
         fullyGrownVFX = GetComponentInChildren<ParticleSystem>();
     }
 
-    void
+    
 }
