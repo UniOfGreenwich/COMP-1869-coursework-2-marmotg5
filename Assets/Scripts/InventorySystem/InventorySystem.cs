@@ -2,17 +2,19 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor.Search;
 
-public class InventorySystem : MonoBehaviour
+[System.Serializable]
+public class InventorySystem
 {
-    [SerializeField] List<InventoryItem> items = new List<InventoryItem>();     // Holds all of the items
-    
-    public void AddItem(GridPlantData plantItemData)  // Add an item to the inventory
+	//[SerializeField] List<InventoryItem> items = new List<InventoryItem>();     // Holds all of the items
+
+	public List<InventoryItem> items = new List<InventoryItem>();     // Holds all of the items
+
+	public void AddItem(GridPlantData plantItemData)  // Add an item to the inventory
     {
         // Try and check if we already have an item in the list with the same data
         InventoryItem similarItem = FindSameItem(plantItemData);
         if (similarItem != null)
         {
-            print("found same item");
             similarItem.IncreaseQuantity();
         }
         // We don't have a similar object in the inventory, so we add a new one
