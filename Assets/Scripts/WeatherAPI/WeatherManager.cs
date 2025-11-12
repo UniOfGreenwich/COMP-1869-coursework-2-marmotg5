@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.Networking;
 using System;
 
-
+// Classes
 [Serializable]
 public class WeatherInfo
 {
@@ -24,14 +24,73 @@ public class WeatherDescription
     public string main;
     public string description;
 }
+
 public class WeatherManager : MonoBehaviour
 {
     [Header("API Settings")]
-    public string city = "London";
-    public string apiKey = "caf8a5594d72e756e08740053486f79b";
+    public string city = "London";  // City to request data for
+    public string apiKey = "caf8a5594d72e756e08740053486f79b";  // API key from OpenWeatherMap
 
+    // Potential changes we'd use the API for, can change to whatever, just examples
     [Header("Game Environment")]
-    // add whatever you want to use the weather api for, im guessing rain/sun idk
+    public Light sunLight;
+    public ParticleSystem rainEffect;
 
-    // (SOMETHING MESSED UP HERE IM NOT SURE) private string apiUrl => $"https://api.openweathermap.org/data/2.5/weather?q={{city}}&appid={{apiKey}}&units=metric\";
+    private string apiUrl => $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
+
+    private void Start()
+    {
+        StartCoroutine(GetWeatherData());
+    }
+
+    private IEnumerator GetWeatherData()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get(apiUrl))
+        {
+            yield return request.SendWebRequest();
+            // Parser for JSON
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                WeatherInfo weatherInfo = JsonUtility.FromJson<WeatherInfo>(request.downloadHandler.text);
+                UpdateEnvironment(weatherInfo);
+            }
+            else
+            {
+                Debug.LogError("Weather API Error: " + request.error);
+            }
+        }
+
+        // Refresh every 5 minutes (we don't have to do this but I thought why not)
+        yield return new WaitForSeconds(300f);
+        StartCoroutine(GetWeatherData());
+    }
+
+    private void UpdateEnvironment(WeatherInfo info)
+    {
+        string condition = info.weather[0].main.ToLower();
+        float temp = info.main.temp;
+
+        Debug.Log($"Weather: {condition}, Temp: {temp} celcius");
+
+        // Adjust sunlight intensity depending on the weather
+        if (condition.Contains("cloud"))
+            sunLight.intensity = 0.6f;
+        else if (condition.Contains("rain"))
+            sunLight.intensity = 0.4f;
+        else
+            sunLight.intensity = 1.0f;
+
+        // Toggle the rain effect on/off depending on the weather
+        if (condition.Contains("rain"))
+        {
+            if (!rainEffect.isPlaying)
+                rainEffect.Play();
+        }
+        else
+        {
+            if (rainEffect.isPlaying)
+                rainEffect.Stop();
+        }
+    }
 }
+    
