@@ -76,7 +76,7 @@ public class WeatherManager : MonoBehaviour
         if (condition.Contains("cloud"))
             sunLight.intensity = 0.6f;
         else if (condition.Contains("rain"))
-            sunLight.intensity = 0.4f;
+            sunLight.intensity = 0.6f;
         else
             sunLight.intensity = 1.0f;
 
