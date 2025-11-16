@@ -1,75 +1,58 @@
+using Mono.Cecil;
 using System.IO;
 using System.Linq;
+using Unity.VisualScripting.FullSerializer;
 using UnityEditor.Overlays;
 using UnityEngine;
 
-public class SavingSystem : MonoBehaviour
+public static class SavingSystem
 {
-    const string saveFileName = "saveFile.whisper";
-    string saveFilePath;
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
-    {
-		saveFilePath = Application.persistentDataPath + "/" + saveFileName;
-    }
+    static string saveFileName = "SaveData.json";
+    static string saveFilePath = Application.persistentDataPath + "/" + saveFileName;
 
-    void Awake()
+    public static void SaveGameData(SaveData saveData)
     {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SaveGameData(SaveData saveData)
-    {
+		// Saving a file with all the data
 		string jsonData = JsonUtility.ToJson(saveData, true);
 		File.WriteAllText(saveFilePath, jsonData);
-
-		//using (StreamWriter writer = new StreamWriter(saveFilePath))
-		//{
-		//	writer.Write(jsonData);
-		//}
-
 	}
 
-    public void ReadSaveFile()
+    public static void LoadSaveFile()
     {
-		//string json = "";
-		//try
-		//{
-		//	using (StreamReader reader = new StreamReader(saveFilePath))
-		//	{
-		//		json = reader.ReadToEnd();
-		//	}
-
-		//	print(json);
-		//}
-		//catch (System.Exception exception)
-		//{
-		//	Debug.LogError($"[DATA LOAD FAILED] Couldn't read file at {saveFilePath} | Error: {exception.Message}");
-		//	return;
-		//}
-
+		// Check if a save file exists
 		string saveData;
 		if (File.Exists(saveFilePath))
 		{
+			// Load the data from the existing file
 			saveData = File.ReadAllText(saveFilePath);
 			SaveData loadedData = JsonUtility.FromJson<SaveData>(saveData);
 
-			//foreach (InventoryItem inventoryItem in loadedData.inventorySystem.GetItems())
-			//{
-			//	GridPlantData plantData = ScriptableObject.CreateInstance<GridPlantData>();
-			//	JsonUtility.FromJsonOverwrite(saveData, plantData);
-			//	print("Looping through: " + plantData.objectName);
+			// Make sure that the data exists
+			if (loadedData != null)
+			{
+				// Make sure that we have a game manager and grid system to work with
+				if (GameManager.instance != null && GameManager.gridSystem != null)
+				{
+					// Spawn any grid objects from previous playthrough
+					if (loadedData.occupiedGridCells != null && loadedData.occupiedGridCells.Count > 0)
+					{
+						foreach (SaveData.GridCellData gridCellData in loadedData.occupiedGridCells)
+						{
+							// Get a grid cell from the grid system based on the cell data from the save file
+							(int z, int x) cellLocation = (gridCellData.cellZ, gridCellData.cellX); // Location of the cell on the grid system
+							GridCell gridCellFromData = GameManager.gridSystem.GetGridCellFromLocation(cellLocation);
 
-			//}
+							// Load the object the grid cell has been occupied with in the previous playthrough
+							GameObject gridObjectPrefab = Resources.Load<GameObject>(gridCellData.prefabName);
+
+							PlantObject plantObject = gridObjectPrefab.GetComponent<PlantObject>();
+							GridObjectData plantData = plantObject.GetPlantData();
+
+							GameManager.gridSystem.SpawnGridObject(gridCellFromData, plantData);
+						}
+					}
+				}
+			}
 		}
-
-		//StreamReader reader = new StreamReader(saveFilePath);
-		//      string line = reader.ReadLine();
-		//      reader.Close();
 	}
 }

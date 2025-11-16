@@ -163,6 +163,19 @@ public class GridSystem : MonoBehaviour
 		return null;
 	}
 
+	public GridPlantData GetPlantDataFromGridCell(GridCell gridCell)
+	{
+		if (gridCell == null || gridCell.storedGridObject == null) return null;
+
+		PlantObject plantObject = gridCell.storedGridObject.GetComponent<PlantObject>();
+		if (plantObject != null)
+		{
+			return plantObject.GetPlantData();
+		}
+
+		return null;
+	}
+
 	// Checks if the grid cell can be found in the grid system
 	bool DoesGridCellExist(GridCell cellToCheck)
 	{
