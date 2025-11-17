@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ad1875c9e83f662458eda7564799fcd0
+guid: 1a63424c685ac4840aaf783981fefdb7
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,32 +8,32 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: beige
-    second: {fileID: 2100000, guid: 5fd752ecbab533d40a4b074b053b706c, type: 2}
+    second: {fileID: 2100000, guid: 55cc8a6f50c62cb4f92f08daad869e4b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: grey
-    second: {fileID: 2100000, guid: d1a8cbc6aff378743afd62e0cbeb3d83, type: 2}
+    second: {fileID: 2100000, guid: b4ded2acc628d604facbc946b4b0ed67, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: houseroof
-    second: {fileID: 2100000, guid: 841859a9257540c49a50d54b25e92663, type: 2}
+    second: {fileID: 2100000, guid: 4ad42083bd40c98428f4b24af9f8e80d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: lambert5
-    second: {fileID: 2100000, guid: 2003612d8149fb648b0bc5aecca74bc9, type: 2}
+    second: {fileID: 2100000, guid: 556bf7d4e9b8e7644bb38849cca72d42, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: lambert8
-    second: {fileID: 2100000, guid: 8e27ed45e5537b344bf1d10f66917a86, type: 2}
+    second: {fileID: 2100000, guid: 81a660a35078036449b70c88421a283c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: red
-    second: {fileID: 2100000, guid: d92dd151bcfd16a4eb66e307b655b202, type: 2}
+    second: {fileID: 2100000, guid: cfcde15c67695154e8d01bb966b4197e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
