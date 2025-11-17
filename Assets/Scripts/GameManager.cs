@@ -104,22 +104,15 @@ public class GameManager : MonoBehaviour
         List<GridCell> cleanList = new List<GridCell>();
 
         // Loop through all the occupied grid cells in the grid system
-        foreach(GridCell cell in occupiedGridCellList)
+        foreach(GridCell currentCell in occupiedGridCellList)
         {
-            if (HasDuplicatedOccupiedCells(cell, cleanList)) continue; // Skip iteration if there are any cells that store the same game object reference
-			cleanList.Add(cell); // Add the cell to the clean list if no other instance was found with a similar reference
+            PlantObject currentCellPlantObject = currentCell.storedGridObject.GetComponent<PlantObject>();
+            GridCell objectParentCell = currentCellPlantObject.GetObjectParentGridCell();
+            if (currentCell != objectParentCell) continue;
+
+			cleanList.Add(objectParentCell); // Add the cell to the clean list if no other instance was found with a similar reference
 		}
 
 		return cleanList;
-    }
-
-	// Checks if there are any cells that store the same game object reference
-	bool HasDuplicatedOccupiedCells(GridCell gridCell, List<GridCell> gridCellList)
-    {
-        foreach (GridCell currentCell in gridCellList)
-        {
-            if (currentCell.storedGridObject == gridCell.storedGridObject) return true;
-        }
-        return false;
     }
 }

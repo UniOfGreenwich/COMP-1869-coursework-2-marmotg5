@@ -34,7 +34,6 @@ public abstract class GridObject : MonoBehaviour
             parentCell = cell;
 	}
 
-    public GridCell GetObjectGridCell() {  return parentCell; }
-
+    public GridCell GetObjectParentGridCell() {  return parentCell; }
 
 }

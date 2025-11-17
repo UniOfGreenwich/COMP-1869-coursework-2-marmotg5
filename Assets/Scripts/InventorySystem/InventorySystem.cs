@@ -40,7 +40,7 @@ public class InventorySystem
 		}
 	}
 
-	public void RemoveItem(InventoryItem item)   // Remove an item from the inventory
+	public void RemoveItem(InventoryItem item) // Remove an item from the inventory
     {
         if (items.Contains(item))
         {
