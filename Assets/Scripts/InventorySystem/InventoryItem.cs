@@ -1,12 +1,11 @@
 using UnityEngine;
 
-[System.Serializable]
 public class InventoryItem
 {
-    public GridPlantData itemData;
+    public GridObjectData itemData;
     public int quantity;
 
-    public InventoryItem(GridPlantData plantData)
+    public InventoryItem(GridObjectData plantData)
     {
         itemData = plantData;
         quantity = 1; // Create a new item with a default quantity of 1

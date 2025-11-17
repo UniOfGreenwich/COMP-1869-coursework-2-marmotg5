@@ -14,14 +14,14 @@ public class Player : MonoBehaviour
 
     PlayerBuilding playerBuilding;
 	CameraControl cameraControl;
-    InventorySystem inventorySystem;
+    InventorySystem inventorySystem = new InventorySystem();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         playerBuilding = GetComponent<PlayerBuilding>();
         cameraControl = GetComponent<CameraControl>();
-        inventorySystem = GetComponent<InventorySystem>();
+        //inventorySystem = GetComponent<InventorySystem>();
     }
 
     // Update is called once per frame

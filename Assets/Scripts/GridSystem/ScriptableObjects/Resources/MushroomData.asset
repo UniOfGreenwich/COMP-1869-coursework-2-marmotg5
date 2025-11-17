@@ -18,7 +18,7 @@ MonoBehaviour:
   objectSprite: {fileID: 0}
   objectCost: 10
   objectRequiredLevel: 0
-  gridCellRequirement: {x: 1, y: 1}
+  gridCellRequirement: {x: 3, y: 3}
   growingStages: 3
   cashReward: 100
   requiredGrowingTime: 10
