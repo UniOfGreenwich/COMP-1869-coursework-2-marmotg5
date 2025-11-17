@@ -42,25 +42,19 @@ public class SaveData
 	[System.Serializable]
 	public class InventoryData
 	{
+		public string prefabName; // The prefab object that should be spawned in the world
+		public int quantity; // The amount of the object the player has
 
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		// BREAK DOWN THE INVENTORY SYSTEM INTO A SAVE-ABLE CHUCK OF JSON CODE
-		public InventoryData(InventorySystem inventorySystem)
+		public InventoryData(InventoryItem inventoryItem)
 		{
+			prefabName = inventoryItem.itemData.objectPrefab.name;
+			quantity = inventoryItem.quantity;
 		}
 	}
 
 	public int playerCash;
 	public int playerLevel;
 
-	public InventorySystem inventorySystem; // The player's inventory with all their items inside
+	public List<InventoryData> inventoryData = new List<InventoryData>(); // The player's inventory with all their items inside
 	public List<GridCellData> occupiedGridCells = new List<GridCellData>(); // All the grid cells that are occupied with plants
 }

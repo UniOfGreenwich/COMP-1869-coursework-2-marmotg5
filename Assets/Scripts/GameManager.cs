@@ -1,7 +1,6 @@
 using Mono.Cecil;
 using System.Collections.Generic;
 using UnityEngine;
-using static SaveData;
 
 public class GameManager : MonoBehaviour
 {
@@ -49,21 +48,25 @@ public class GameManager : MonoBehaviour
     // On game quit
 	void OnApplicationQuit()
 	{
-        SaveData saveData = new SaveData();  // Create a new sava data file for the player
-		PopulateSaveData(saveData); // Populate the sava data file with all the current game data
-
-        // Call a function to the saving system to save all that data to a file on the player's device
-        SavingSystem.SaveGameData(saveData);
+		CreateSaveData(); // Create a new save data file every time the game is quit
 	}
 
-	void PopulateSaveData(SaveData saveData)
+	void CreateSaveData()
     {
-        // Save player data
-        if (player != null)
+		SaveData saveData = new SaveData();  // Create a new sava data file for the player
+
+		// Save player data
+		if (player != null)
         {
             saveData.playerCash = player.GetCash();
             saveData.playerLevel = player.GetLevel();
-            saveData.inventorySystem = player.GetInventory();
+
+            // Save the player's inventory
+            foreach (InventoryItem inventoryItem in player.GetInventory().GetItems())
+            {
+                SaveData.InventoryData data = new SaveData.InventoryData(inventoryItem);
+			    saveData.inventoryData.Add(data);
+            }
         }
 
         // Save grid system data
@@ -82,15 +85,18 @@ public class GameManager : MonoBehaviour
 						GridPlantData plantData = gridSystem.GetPlantDataFromGridCell(gridCell);
 						if (plantData != null)
 						{
-                            // Create a new grid cell data structure to save onto the file
-							GridCellData gridCellData = new GridCellData(gridCell.GetCellIndex(), plantData.objectPrefab.name);
+							// Create a new grid cell data structure to save onto the file
+							SaveData.GridCellData gridCellData = new SaveData.GridCellData(gridCell.GetCellIndex(), plantData.objectPrefab.name);
 							saveData.occupiedGridCells.Add(gridCellData);
 						}
 					}
 				}
 			}
 		}
-    }
+
+		// Call a function to the saving system to save all that data to a file on the player's device
+		SavingSystem.SaveGameData(saveData);
+	}
 
     // Removes any occupied grid cells from the list that are occupied by the same plant, resulting in saving only 1 instance of the grid cell
     List<GridCell> GetCleanListFromDuplicateCells(List<GridCell> occupiedGridCellList)
