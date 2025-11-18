@@ -29,9 +29,9 @@ public class GameManager : MonoBehaviour
         gridSystem = FindFirstObjectByType<GridSystem>();
         UIManager = FindFirstObjectByType<UIManager>();
 
-		// Load the game file
-		SavingSystem.LoadSaveFile();
-	}
+        // Load the game file
+        SavingSystem.LoadSaveFile();
+    }
 
 	void Awake()
 	{

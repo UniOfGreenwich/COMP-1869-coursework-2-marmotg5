@@ -44,15 +44,15 @@ public class GridSystem : MonoBehaviour
 		if (gridCellVisualPrefab != null)
 			gridCellVisualDefaultColor = gridCellVisualPrefab.GetComponent<SpriteRenderer>() ? gridCellVisualPrefab.GetComponent<SpriteRenderer>().color : Color.white;
 
-		// Create the grid
-		InitializeGrid();
-		
-	}
+    }
 
 	void Awake()
 	{
 		DontDestroyOnLoad(gameObject);
-	}
+
+        // Create the grid
+        InitializeGrid();
+    }
 
 	// Update is called once per frame
 	void Update()
@@ -104,11 +104,14 @@ public class GridSystem : MonoBehaviour
 		if (DoesGridCellExist(cellToSpawnIn))
 		{
 			Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
+            print("Trying to spawn object");
 
-			// Check if the grid object we are trying to place has enough space to be spawned on the grid
-			if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
+            // Check if the grid object we are trying to place has enough space to be spawned on the grid
+            if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
 			{
 				GameObject gridObjectPrefab = gridObjectData.objectPrefab;
+				print("Prefab name: " + gridObjectPrefab.name);
+				print("Grid cell location to spawn at: " + cellToSpawnIn.GetCellIndex());
 
 				// Calculate the object's spawn position
 				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
@@ -119,6 +122,7 @@ public class GridSystem : MonoBehaviour
 				GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
 				if (spawnedGridObjectData != null)
 				{
+					print("Detected gird object data");
 					// Set the spawned grid object to keep track of the parent cell its placed in
 					spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
 
@@ -179,11 +183,13 @@ public class GridSystem : MonoBehaviour
 	// Checks if the grid cell can be found in the grid system
 	bool DoesGridCellExist(GridCell cellToCheck)
 	{
+		print("Checking function works");
 		foreach (KeyValuePair<(int z, int x), GridCell> search in gridArray)
 		{
 			GridCell arrayGridCell = search.Value;
 			if (cellToCheck == arrayGridCell)
 			{
+
 				return true;
 			}
 		}
