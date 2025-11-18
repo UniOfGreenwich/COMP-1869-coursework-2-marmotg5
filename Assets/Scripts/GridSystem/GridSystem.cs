@@ -104,14 +104,11 @@ public class GridSystem : MonoBehaviour
 		if (DoesGridCellExist(cellToSpawnIn))
 		{
 			Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
-            print("Trying to spawn object");
 
             // Check if the grid object we are trying to place has enough space to be spawned on the grid
             if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
 			{
 				GameObject gridObjectPrefab = gridObjectData.objectPrefab;
-				print("Prefab name: " + gridObjectPrefab.name);
-				print("Grid cell location to spawn at: " + cellToSpawnIn.GetCellIndex());
 
 				// Calculate the object's spawn position
 				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
@@ -122,7 +119,6 @@ public class GridSystem : MonoBehaviour
 				GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
 				if (spawnedGridObjectData != null)
 				{
-					print("Detected gird object data");
 					// Set the spawned grid object to keep track of the parent cell its placed in
 					spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
 
@@ -167,23 +163,18 @@ public class GridSystem : MonoBehaviour
 		return null;
 	}
 
-	public GridPlantData GetPlantDataFromGridCell(GridCell gridCell)
+	public PlantObject GetPlantObjectFromGridCell(GridCell gridCell)
 	{
 		if (gridCell == null || gridCell.storedGridObject == null) return null;
-
 		PlantObject plantObject = gridCell.storedGridObject.GetComponent<PlantObject>();
-		if (plantObject != null)
-		{
-			return plantObject.GetPlantData();
-		}
-
+		
+		if (plantObject != null) return plantObject;
 		return null;
 	}
 
 	// Checks if the grid cell can be found in the grid system
 	bool DoesGridCellExist(GridCell cellToCheck)
 	{
-		print("Checking function works");
 		foreach (KeyValuePair<(int z, int x), GridCell> search in gridArray)
 		{
 			GridCell arrayGridCell = search.Value;

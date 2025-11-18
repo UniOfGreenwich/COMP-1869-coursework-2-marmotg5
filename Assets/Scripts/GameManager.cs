@@ -82,12 +82,16 @@ public class GameManager : MonoBehaviour
                 {
 					foreach (GridCell gridCell in cleanedOccupiedGridCells)
 					{
-						GridPlantData plantData = gridSystem.GetPlantDataFromGridCell(gridCell);
-						if (plantData != null)
-						{
-							// Create a new grid cell data structure to save onto the file
-							SaveData.GridCellData gridCellData = new SaveData.GridCellData(gridCell.GetCellIndex(), plantData.objectPrefab.name);
-							saveData.occupiedGridCells.Add(gridCellData);
+                        PlantObject gridPlantObject = gridSystem.GetPlantObjectFromGridCell(gridCell);
+                        if (gridPlantObject != null)
+                        {
+							GridPlantData plantData = gridPlantObject.GetPlantData();
+							if (plantData != null)
+							{
+								// Create a new grid cell data structure to save onto the file
+								SaveData.GridCellData gridCellData = new SaveData.GridCellData(gridCell.GetCellIndex(), gridPlantObject);
+								saveData.occupiedGridCells.Add(gridCellData);
+							}
 						}
 					}
 				}

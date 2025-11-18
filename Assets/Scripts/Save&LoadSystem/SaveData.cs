@@ -9,34 +9,30 @@ public class SaveData
 	{
 		public int cellZ; // Z location on the grid system
 		public int cellX; // X location on the grid system 
-		public string prefabName;
+		
+		public string prefabName; // The prefab name of the grid object
 
-		public GridCellData((int z, int x) cellIndex, string prefabName)
+		// Data about the plant we could be storing
+		public int plantHealth;
+		public float plantWater;
+		public float plantGrowingTime;
+
+
+		public GridCellData((int z, int x) cellIndex, PlantObject plantObject)
 		{
+			GridPlantData plantData = plantObject.GetPlantData(); // Grab data about the plant object
+
+			// Set cell data
 			this.cellZ = cellIndex.z;
 			this.cellX = cellIndex.x;
-			this.prefabName = prefabName;
+			
+			// Set plant object data
+			this.prefabName = plantData.objectPrefab.name;
+			this.plantHealth = plantObject.GetPlantHealth();
+			this.plantWater = plantObject.GetPlantWaterLevel();
+			this.plantGrowingTime= plantObject.GetPlantCurrentGrowingTime();
+
 		}
-
-		// FIX THE ERROR WHERE THE CLEAN LIST IN GameManager.cs IS REMOVING
-		// RANDOM CELLS AND LEAVES ONLY 1, MAKE IT SO IT ONLY LEAVES THE HOST/PARENT CELL WHERE
-		// THE PLANT WAS ACTUALLY PLACED ON IT
-
-		// FIX THE ERROR WHERE THE CLEAN LIST IN GameManager.cs IS REMOVING
-		// RANDOM CELLS AND LEAVES ONLY 1, MAKE IT SO IT ONLY LEAVES THE HOST/PARENT CELL WHERE
-		// THE PLANT WAS ACTUALLY PLACED ON IT
-
-		// FIX THE ERROR WHERE THE CLEAN LIST IN GameManager.cs IS REMOVING
-		// RANDOM CELLS AND LEAVES ONLY 1, MAKE IT SO IT ONLY LEAVES THE HOST/PARENT CELL WHERE
-		// THE PLANT WAS ACTUALLY PLACED ON IT
-
-		// FIX THE ERROR WHERE THE CLEAN LIST IN GameManager.cs IS REMOVING
-		// RANDOM CELLS AND LEAVES ONLY 1, MAKE IT SO IT ONLY LEAVES THE HOST/PARENT CELL WHERE
-		// THE PLANT WAS ACTUALLY PLACED ON IT
-
-		// FIX THE ERROR WHERE THE CLEAN LIST IN GameManager.cs IS REMOVING
-		// RANDOM CELLS AND LEAVES ONLY 1, MAKE IT SO IT ONLY LEAVES THE HOST/PARENT CELL WHERE
-		// THE PLANT WAS ACTUALLY PLACED ON IT
 	}
 
 	[System.Serializable]

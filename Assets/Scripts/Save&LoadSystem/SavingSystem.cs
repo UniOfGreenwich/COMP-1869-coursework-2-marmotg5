@@ -59,7 +59,15 @@ public static class SavingSystem
 				PlantObject plantObject = gridObjectPrefab.GetComponent<PlantObject>();
 				GridObjectData plantData = plantObject.GetPlantData();
 
-				GameManager.gridSystem.SpawnGridObject(gridCellFromData, plantData);
+				// If we have sucessfully spawned the grid object
+				if (GameManager.gridSystem.SpawnGridObject(gridCellFromData, plantData))
+				{
+					// Check if it's a plant object, and if it is, update the plant's data with the saved one
+					PlantObject cellPlantObject = gridCellFromData.storedGridObject.GetComponent<PlantObject>();
+					cellPlantObject.SetPlantHealth(gridCellData.plantHealth);
+					cellPlantObject.SetPlantWaterLevel (gridCellData.plantWater);
+					cellPlantObject.SetPlantCurrentGrowingTime(gridCellData.plantGrowingTime);
+				}
 			}
 		}
 	}

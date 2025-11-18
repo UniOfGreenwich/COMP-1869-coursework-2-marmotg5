@@ -281,17 +281,20 @@ public class PlantObject : GridObject
 		}
 	}
 
-    public float GetPlantGrowingTimeLeft()
-    {
-        return plantData.requiredGrowingTime - currentGrowingTime;
-    }
+    public float GetPlantGrowingTimeLeft() { return plantData.requiredGrowingTime - currentGrowingTime; }
 
     public string GetPlantName() { return plantData.objectName; }
+
     public int GetPlantHealth() {return plantHealth; }
     public float GetPlantWaterLevel() { return plantWaterLevel; }
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
 
-    public GridPlantData GetPlantData() { return plantData; }
+    // Used when the save data file is being loaded (when the player starts the game)
+	public void SetPlantHealth(int healthToSet) { plantHealth = healthToSet; }
+	public void SetPlantWaterLevel(float waterToSet) { plantWaterLevel = waterToSet; }
+	public void SetPlantCurrentGrowingTime(float timeToSet) { currentGrowingTime = timeToSet; }
+
+	public GridPlantData GetPlantData() { return plantData; }
 
     bool IsPlantFullyGrown() { return (currentGrowingTime >= plantData.requiredGrowingTime); }
 }

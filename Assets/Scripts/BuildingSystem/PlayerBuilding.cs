@@ -5,8 +5,7 @@ using UnityEngine.EventSystems;
 public enum BuildingState
 {
     NONE,
-    CHOOSING_OBJECT,
-    PLACING_OBJECT
+    CHOOSING_OBJECT
 }
 
 public class PlayerBuilding : MonoBehaviour
@@ -23,9 +22,6 @@ public class PlayerBuilding : MonoBehaviour
     BuildingState buildingState;
     Camera mainCamera;
 
-	GridObjectData selectedObjectData = null;
-
-
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
@@ -37,7 +33,6 @@ public class PlayerBuilding : MonoBehaviour
     void Update()
     {
         HandleBuildingStates();
-        HandleBuilding();
 	}
 
     void HandleBuildingStates()
@@ -52,7 +47,7 @@ public class PlayerBuilding : MonoBehaviour
             }
 
             // Exit building
-            else if(buildingState == BuildingState.CHOOSING_OBJECT || buildingState ==  BuildingState.PLACING_OBJECT)
+            else if(buildingState == BuildingState.CHOOSING_OBJECT)
             {
 				SetBuildingState(BuildingState.NONE);
                 CloseBuildingMenu();
@@ -60,34 +55,6 @@ public class PlayerBuilding : MonoBehaviour
 			}
         }
     }
-
-    void HandleBuilding()
-    {
-		//if (buildingState == BuildingState.CHOOSING_OBJECT || buildingState == BuildingState.PLACING_OBJECT)
-		if (buildingState == BuildingState.CHOOSING_OBJECT)
-		{
-			//Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-			//if (Physics.Raycast(ray, out RaycastHit raycastHit))
-			//{
-   //             GridCell gridCell = GridSystem.instance.GetGridCellFromCoords(raycastHit.point);
-                
-   //             // Make sure player is clicking with the grid system and a grid cell has been found
-   //             if (gridCell != null)
-   //             {
-			//		if (Input.GetMouseButtonDown((int)MouseButton.Left))
-			//		{
-   //                     // Check if the mouse IS NOT over any UI element object
-   //                     if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
-   //                     {
-   //                         GridSystem.instance.SpawnGridObject(gridCell);
-   //                     }
-
-			//		}
-			//	}
-   //         }
-
-        }
-	}
 
     void OpenBuildingMenu()
     {
@@ -124,10 +91,7 @@ public class PlayerBuilding : MonoBehaviour
                 playerBuildingUIGameObject = null;
 
 			}
-
-			selectedObjectData = null;
 		}
-
 	}
 
 
