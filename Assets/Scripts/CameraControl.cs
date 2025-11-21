@@ -68,6 +68,9 @@ public class CameraControl : MonoBehaviour
     GameObject cameraFreeroamBox; // The box where the camera will have to stay within in freeroam mode (can't leave/exit it)
     BoxCollider cameraFreeroamBoxCollider = null;
 
+    // Storing phone stuff
+    Vector2 touchScreenStartPosition = Vector2.zero;
+
     void Start()
     {
         mainCamera = Camera.main;
@@ -137,6 +140,109 @@ public class CameraControl : MonoBehaviour
             //print("Are coords in barrier: " + AreCoordsInBox(mainCamera.transform.position, cameraFreeroamBoxCollider));
             //print("Camera bounding box max bounds coords: " + cameraFreeroamBoxCollider.bounds.max);
             //print("Camera bounding box min bounds coords: " + cameraFreeroamBoxCollider.bounds.min);
+        }
+    }
+
+    void ApplyPhoneCameraMovement()
+    {
+        // Check if there are any inputs from a mobile device
+        if (Input.touchCount >= 1)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            // If the touch has begun
+            if (touch.phase == TouchPhase.Began)
+            {
+                touchScreenStartPosition = touch.position;
+            }
+            // If the player starts swiping their finger while holding down
+            else if (touch.phase == TouchPhase.Moved)
+            {
+                Vector2 movementChange = touchScreenStartPosition - touch.position;
+                if (cameraState == CameraState.CAMERA_LOCKED)
+                {
+                    // Player swiped right
+                    if (movementChange.x > 0)
+                    {
+                        mainCamera.transform.RotateAround(pointingCoords, Vector3.down, cameraRotatingSpeed * Time.deltaTime);
+                    }
+                    // Player swiped left
+                    else
+                    {
+                        mainCamera.transform.RotateAround(pointingCoords, Vector3.up, cameraRotatingSpeed * Time.deltaTime);
+                    }
+                }
+                else if (cameraState == CameraState.CAMERA_FREEMODE)
+                {
+                    movementChange.Normalize();
+                    float horizontalPhoneInput = movementChange.x;
+                    float verticalPhoneInput = movementChange.y;
+
+                    Vector3 cameraDirection = new Vector3(mainCamera.transform.forward.x * horizontalPhoneInput, 0.0f, mainCamera.transform.forward.z * horizontalPhoneInput); // Ignore Y - we don't want to be able to go up/down (only zoom)
+                    Vector3 moveDir = mainCamera.transform.right * horizontalPhoneInput + mainCamera.transform.forward * horizontalPhoneInput;
+                    moveDir.y = 0.0f;
+
+                    // Player swiped right
+                    if (movementChange.x > 0)
+                    {
+
+                    }
+                    // Player swiped left
+                    else
+                    {
+
+                    }
+
+                    // Check if we are holding right-click to rotate camera horizontally
+                    if (Input.GetMouseButton((int)freeroamCameraRotateButton))
+                    {
+                        float mouseX = Input.GetAxis("Mouse X");
+                        if (mouseX != 0)
+                        {
+                            Vector3 cameraRotation = new Vector3(0.0f, mouseX * mouseSensitivity, 0.0f); // Camera uses Y to rotate horizontally
+                            mainCamera.transform.eulerAngles += cameraRotation;
+                        }
+                    }
+
+                    // We start moving the camera in freeroam state using player input
+                    if (horizontalPhoneInput != 0 || verticalPhoneInput != 0)
+                    {
+                        currentCameraAcceleration = Mathf.Min(currentCameraAcceleration + cameraAcceleration * Time.deltaTime, cameraMaxAcceleration);
+                    }
+                    else
+                    {
+                        currentCameraAcceleration = Mathf.Max(currentCameraAcceleration - cameraDeceleration * Time.deltaTime, 0.0f);
+                    }
+
+                    mainCamera.transform.position += moveDir * cameraMovingSpeed * currentCameraAcceleration * Time.deltaTime;
+
+                }
+            }
+            // Touch has ended
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                touchScreenStartPosition = Vector2.zero;
+            }
+
+            //if (cameraState == CameraState.CAMERA_LOCKED)
+            //{
+            //    // Force the camera to look at the pointing coords at all times
+            //    mainCamera.transform.LookAt(pointingCoords, Vector3.up);
+
+            //    // Move camera around offset coords
+            //    if (Input.GetKey(moveCamLeftKey))
+            //    {
+            //        mainCamera.transform.RotateAround(pointingCoords, Vector3.up, cameraRotatingSpeed * Time.deltaTime);
+            //    }
+            //    else if (Input.GetKey(moveCamRightKey))
+            //    {
+            //        mainCamera.transform.RotateAround(pointingCoords, Vector3.down, cameraRotatingSpeed * Time.deltaTime);
+            //    }
+            //}
+            //else if (cameraState == CameraState.CAMERA_FREEMODE)
+            //{
+
+            //}
         }
     }
 
