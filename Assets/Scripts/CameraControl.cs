@@ -70,6 +70,8 @@ public class CameraControl : MonoBehaviour
 
     // Storing phone stuff
     Vector2 touchScreenStartPosition = Vector2.zero;
+    Vector2 touchScreenMoveDirection = Vector2.zero;
+    int currentFingerID = -1;
 
     void Start()
     {
@@ -83,10 +85,69 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
+        ApplyPhoneControls();
         HandleCameraControl();
         HandleCameraZoom();
         HandleCameraLock();
 	}
+
+    void ApplyPhoneControls()
+    {
+        if (Input.touches.Length >= 1)
+        {
+            foreach (Touch touch in Input.touches)
+            {
+                if (touch.phase == TouchPhase.Began)
+                {
+                    if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight)
+                    {
+                        // Check if the player is touching the left half side of the screen
+                        if (touch.position.y < Screen.height / 2.0f) // CHECK THE WIDTH AS WELL WITH X VALUE
+                        {
+                            if (currentFingerID != touch.fingerId)
+                            {
+                                currentFingerID = touch.fingerId;
+                                touchScreenStartPosition = touch.position;
+                            }
+
+                            print("Phone began touch on left side of scren");
+                        }
+                    }
+                    else if (Input.deviceOrientation == DeviceOrientation.Portrait || Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
+                    {
+                        // Check if the player is touching the left half side of the screen
+                        if (touch.position.x < Screen.width / 2.0f)
+                        {
+                            if (currentFingerID != touch.fingerId)
+                            {
+                                currentFingerID = touch.fingerId;
+                                touchScreenStartPosition = touch.position;
+                            }
+
+                            print("Phone began touch on left side of scren");
+                        }
+                    }
+
+                }
+                else if (touch.phase == TouchPhase.Moved)
+                {
+                    // Make sure it's the same finger that's being moved on the screen
+                    if (currentFingerID == touch.fingerId)
+                    {
+                        touchScreenMoveDirection = (touch.position - touchScreenStartPosition).normalized;
+                        print("Moving finger FROM the left side of screen");
+                    }
+
+                }
+                else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+                {
+                    touchScreenStartPosition = Vector2.zero;
+                    currentFingerID = -1;
+                }
+
+            }
+        }
+    }
 
     void HandleCameraControl()
     {
