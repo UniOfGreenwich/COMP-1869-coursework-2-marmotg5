@@ -99,33 +99,14 @@ public class CameraControl : MonoBehaviour
             {
                 if (touch.phase == TouchPhase.Began)
                 {
+                    // Check for the device orienation
                     if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight)
                     {
-                        // Check if the player is touching the left half side of the screen
-                        if (touch.position.y < Screen.height / 2.0f) // CHECK THE WIDTH AS WELL WITH X VALUE
-                        {
-                            if (currentFingerID != touch.fingerId)
-                            {
-                                currentFingerID = touch.fingerId;
-                                touchScreenStartPosition = touch.position;
-                            }
-
-                            print("Phone began touch on left side of scren");
-                        }
+                        ApplyLeftSidePhoneTouch(touch);
                     }
                     else if (Input.deviceOrientation == DeviceOrientation.Portrait || Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
                     {
-                        // Check if the player is touching the left half side of the screen
-                        if (touch.position.x < Screen.width / 2.0f)
-                        {
-                            if (currentFingerID != touch.fingerId)
-                            {
-                                currentFingerID = touch.fingerId;
-                                touchScreenStartPosition = touch.position;
-                            }
-
-                            print("Phone began touch on left side of scren");
-                        }
+                        ApplyLeftSidePhoneTouch(touch);
                     }
 
                 }
@@ -135,7 +116,26 @@ public class CameraControl : MonoBehaviour
                     if (currentFingerID == touch.fingerId)
                     {
                         touchScreenMoveDirection = (touch.position - touchScreenStartPosition).normalized;
-                        print("Moving finger FROM the left side of screen");
+                        print("Touch screen move dir: " + touchScreenMoveDirection);
+
+                        Vector3 moveDir = mainCamera.transform.right * touchScreenMoveDirection.x + mainCamera.transform.forward * touchScreenMoveDirection.y;
+                        moveDir.y = 0.0f;
+
+                        mainCamera.transform.position += moveDir * cameraMovingSpeed * Time.deltaTime;
+
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
                     }
 
                 }
@@ -145,6 +145,20 @@ public class CameraControl : MonoBehaviour
                     currentFingerID = -1;
                 }
 
+            }
+        }
+    }
+
+    void ApplyLeftSidePhoneTouch(Touch touch)
+    {
+        // Check if the player is touching the left half side of the screen
+        if (touch.position.x < Screen.width / 2.0f)
+        {
+            // Save the current finger the player is using to operate their device
+            if (currentFingerID != touch.fingerId)
+            {
+                currentFingerID = touch.fingerId;
+                touchScreenStartPosition = touch.position;
             }
         }
     }
