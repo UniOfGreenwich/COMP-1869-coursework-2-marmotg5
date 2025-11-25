@@ -30,6 +30,11 @@ public class PlantObject : GridObject
 	[SerializeField] float maxAttackTimer = 20.0f; // In seconds
     [SerializeField] int pestDamage = 1; // Per tick
 
+    [Header("Audio Settings")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip harvestSFX;
+    [SerializeField] private AudioClip waterSFX;
+
     float randomPestAttackTimer = 0.0f; // Gets set in void Start()
     float currentTimeFromLastAttack = 0.0f;
 
@@ -206,6 +211,12 @@ public class PlantObject : GridObject
         {
             plantWaterLevel = MAX_WATER_LEVEL;
         }
+
+        // Play watering sfx
+        if (audioSource != null && waterSFX != null)
+        {
+            audioSource.PlayOneShot(waterSFX);
+        }
     }
 
 	public void HarvestPlant()
@@ -221,6 +232,12 @@ public class PlantObject : GridObject
 				// Reset the grid cell's visual object's colour to the default one since the plant is not occupying anything anymore
 				ResetGridCellsVisualObjectsColour();
 
+                // Play harvest sfx
+                if (audioSource != null && harvestSFX != null)
+                {
+                    audioSource.PlayOneShot(harvestSFX);
+                }
+
 				// Destroy the plant
 				KillPlant();
             }
@@ -235,7 +252,7 @@ public class PlantObject : GridObject
             // Reset the colour of the grid cells the plant was previously occupying
 
 
-            Destroy(gameObject);
+            Destroy(gameObject, harvestSFX.length);
         }
     }
 
