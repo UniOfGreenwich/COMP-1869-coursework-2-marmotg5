@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -54,7 +55,7 @@ public class CameraControl : MonoBehaviour
 
     [Header("Camera Freeroam Settings")]
     [SerializeField]
-    float mouseSensitivity = 10.0f;
+    float mouseSensitivity = 0.5f;
     [SerializeField]
     float cameraAcceleration = 2.5f;
     [SerializeField]
@@ -68,10 +69,11 @@ public class CameraControl : MonoBehaviour
     GameObject cameraFreeroamBox; // The box where the camera will have to stay within in freeroam mode (can't leave/exit it)
     BoxCollider cameraFreeroamBoxCollider = null;
 
-    // Storing phone stuff
-    Vector2 touchScreenStartPosition = Vector2.zero;
-    Vector2 touchScreenMoveDirection = Vector2.zero;
-    int currentFingerID = -1;
+    // Phone swipe data (stores data for the phone inputs done by players)
+    Vector2 leftTouchScreenStartPosition = Vector2.zero;
+    int leftSideFingerID = -1;
+    Vector2 rightTouchScreenStartPosition = Vector2.zero;
+    int rightSideFingerID = -1;
 
     void Start()
     {
@@ -85,8 +87,19 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
+        Vector3 screenPosition = new Vector3(Screen.width / 2f, Screen.height / 2f, 0.0f);
+        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, cameraLockDistanceRay))
+        {
+            // Get the coords
+            Vector3 hitpoint = hit.point;
+
+            pointingCoords = hitpoint;
+        }
+
         ApplyPhoneControls();
-        HandleCameraControl();
+        //HandleCameraControl();
         HandleCameraZoom();
         HandleCameraLock();
 	}
@@ -95,58 +108,162 @@ public class CameraControl : MonoBehaviour
     {
         if (Input.touches.Length >= 1)
         {
+            // Handle the rest of the touches on the screen
             foreach (Touch touch in Input.touches)
             {
                 if (touch.phase == TouchPhase.Began)
                 {
-                    // Check for the device orienation
+                    // Ignore the phone touch and the rest of the code if the player is clicking/moving any UI elements
+                    if (EventSystem.current.IsPointerOverGameObject(touch.fingerId)) return;
+
+                    // Check for the device orienation (using the same functions after determening which orientation to phone is in
+                    // because the Screen.width changes which is what's checked in the functions
                     if (Input.deviceOrientation == DeviceOrientation.LandscapeLeft || Input.deviceOrientation == DeviceOrientation.LandscapeRight)
                     {
+                        // Do some check to see which side of the screen the touch has been made on
                         ApplyLeftSidePhoneTouch(touch);
+                        ApplyRightSidePhoneTouch(touch);
                     }
                     else if (Input.deviceOrientation == DeviceOrientation.Portrait || Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
                     {
+                        // Do some check to see which side of the screen the touch has been made on
                         ApplyLeftSidePhoneTouch(touch);
+                        ApplyRightSidePhoneTouch(touch);
                     }
-
                 }
                 else if (touch.phase == TouchPhase.Moved)
                 {
-                    // Make sure it's the same finger that's being moved on the screen
-                    if (currentFingerID == touch.fingerId)
-                    {
-                        touchScreenMoveDirection = (touch.position - touchScreenStartPosition).normalized;
-                        print("Touch screen move dir: " + touchScreenMoveDirection);
+                    // Checks first if the player is trying to pinch their screen
+                    //if (ApplyPhonePinch()) return; // Ignore the rest of the function, since player is only trying to zoom in/out the camera
 
-                        Vector3 moveDir = mainCamera.transform.right * touchScreenMoveDirection.x + mainCamera.transform.forward * touchScreenMoveDirection.y;
+                    // Left side finger detected -> move the camera with the player's input
+                    if (leftSideFingerID == touch.fingerId)
+                    {
+                        // Get the touch screen swipe movement direction
+                        Vector2 leftTouchScreenMoveDirection = (leftTouchScreenStartPosition - touch.position).normalized; // (touch.position - leftTouchScreenStartPosition ).normalized; // Goes where the player swipes towards
+
+                        //Vector3 moveDir = mainCamera.transform.right * leftTouchScreenMoveDirection.x + mainCamera.transform.forward * leftTouchScreenMoveDirection.y;
+                        Vector3 moveDir = transform.right * leftTouchScreenMoveDirection.x +  transform.forward * leftTouchScreenMoveDirection.y;
                         moveDir.y = 0.0f;
 
-                        mainCamera.transform.position += moveDir * cameraMovingSpeed * Time.deltaTime;
+                        currentCameraAcceleration = Mathf.Min(currentCameraAcceleration + cameraAcceleration * Time.deltaTime, cameraMaxAcceleration);
 
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
-                        // MAKE IT SO IT ONLY MOVES THE APPROPRIATE DIRECTION AND IT DOESNT ROTATE THE CAMREA
+                        mainCamera.transform.position += moveDir * cameraMovingSpeed * currentCameraAcceleration * Time.deltaTime;
                     }
+                    // Rotate the camera -> right side finger is detected
+                    else if (rightSideFingerID == touch.fingerId)
+                    {
+                        Vector2 rightTouchScreenMoveDirection = (rightTouchScreenStartPosition - touch.position).normalized;
 
+                        Vector3 cameraRotation = new Vector3(0.0f, rightTouchScreenMoveDirection.x * mouseSensitivity, 0.0f); // Camera uses Y to rotate horizontally
+                        mainCamera.transform.eulerAngles += cameraRotation;
+                    }
                 }
                 else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
                 {
-                    touchScreenStartPosition = Vector2.zero;
-                    currentFingerID = -1;
+                    if (leftSideFingerID == touch.fingerId)
+                    {
+                        leftSideFingerID = -1;
+                        leftTouchScreenStartPosition = Vector2.zero;
+                        currentCameraAcceleration = 0.0f; // Reset the camera accelaration when the left/movement touch is ended
+                    }
+                    else if (rightSideFingerID == touch.fingerId)
+                    {
+                        rightSideFingerID = -1;
+                        rightTouchScreenStartPosition = Vector2.zero;
+                    }
                 }
-
             }
         }
+    }
+
+    // Handles the zoom in/out (returns true if the player is zooming in/out)
+    bool ApplyPhonePinch()
+    {
+        // Check if the player is trying to pinch the screen with 2 fingers (zoom in/out)
+        if (Input.touches.Length == 2)
+        {
+            // Check which direction the player is trying to pinch their phone at
+            foreach (Touch touch in Input.touches) 
+            {
+                // Make sure that all the finger touches match and exist (-1 finger ID = doesn't exist)
+                if (leftSideFingerID == touch.fingerId && rightSideFingerID >= 0)
+                {
+                    //Vector2 leftFingerDirection = (touch.position - leftTouchScreenStartPosition).normalized;
+                    //Vector2 rightFingerDirection = (Input.GetTouch(rightSideFingerID).position - rightTouchScreenStartPosition).normalized;
+
+                    Vector3 direction = mainCamera.transform.forward;
+                    Vector3 newCameraPosition = Vector3.zero;
+
+                    // Zoom out
+                    if (touch.position.x > leftTouchScreenStartPosition.x && Input.GetTouch(rightSideFingerID).position.x < rightTouchScreenStartPosition.x)
+                    {
+                        newCameraPosition = mainCamera.transform.position + (direction * zoomAmountPerScroll);
+
+                    }
+                    // Zoom in
+                    else if(touch.position.x < leftTouchScreenStartPosition.x && Input.GetTouch(rightSideFingerID).position.x > rightTouchScreenStartPosition.x)
+                    {
+                        newCameraPosition = mainCamera.transform.position + (-direction * zoomAmountPerScroll);
+
+                    }
+
+
+                    // Making sure that we are keeping the distance from the camera to the offset limited within the min/max zoom distances
+                    float yDistance = Mathf.Abs(newCameraPosition.y - pointingCoords.y);
+                    if (yDistance > minZoomDistance || yDistance < maxZoomDistance)
+                    {
+                        newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, minZoomDistance, maxZoomDistance);
+
+                        mainCamera.transform.position = newCameraPosition;
+                        return true;
+
+                    }
+                    //if (yDistance < minZoomDistance || yDistance > maxZoomDistance) return false;
+
+                    // Try to clamp the y-value of the new position in case it exceeds the min/max zoom distances
+
+                }
+                else if(rightSideFingerID == touch.fingerId && leftSideFingerID >= 0)
+                {
+
+                    Vector3 direction = mainCamera.transform.forward;
+                    Vector3 newCameraPosition = Vector3.zero;
+
+                    // Zoom out
+                    if (touch.position.x > rightTouchScreenStartPosition.x && Input.GetTouch(leftSideFingerID).position.x < leftTouchScreenStartPosition.x)
+                    {
+                        newCameraPosition = mainCamera.transform.position + (direction * zoomAmountPerScroll);
+
+                    }
+                    // Zoom in
+                    else if (touch.position.x < rightTouchScreenStartPosition.x && Input.GetTouch(leftSideFingerID).position.x > leftTouchScreenStartPosition.x)
+                    {
+                        newCameraPosition = mainCamera.transform.position + (-direction * zoomAmountPerScroll);
+
+                    }
+
+
+                    // Making sure that we are keeping the distance from the camera to the offset limited within the min/max zoom distances
+                    float yDistance = Mathf.Abs(newCameraPosition.y - pointingCoords.y);
+                    if (yDistance > minZoomDistance || yDistance < maxZoomDistance)
+                    {
+                        newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, minZoomDistance, maxZoomDistance);
+
+                        mainCamera.transform.position = newCameraPosition;
+                        return true;
+
+                    }
+
+                    //// Try to clamp the y-value of the new position in case it exceeds the min/max zoom distances
+                    //newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, minZoomDistance, maxZoomDistance);
+
+                    //mainCamera.transform.position = newCameraPosition;
+                    //return true;
+                }
+            }
+        }
+        return false;
     }
 
     void ApplyLeftSidePhoneTouch(Touch touch)
@@ -155,10 +272,24 @@ public class CameraControl : MonoBehaviour
         if (touch.position.x < Screen.width / 2.0f)
         {
             // Save the current finger the player is using to operate their device
-            if (currentFingerID != touch.fingerId)
+            if (leftSideFingerID != touch.fingerId)
             {
-                currentFingerID = touch.fingerId;
-                touchScreenStartPosition = touch.position;
+                leftSideFingerID = touch.fingerId;
+                leftTouchScreenStartPosition = touch.position;
+            }
+        }
+    }
+
+    void ApplyRightSidePhoneTouch(Touch touch)
+    {
+        // Check if the player is touching the right half side of the screen
+        if (touch.position.x >= Screen.width / 2.0f)
+        {
+            // Save the current finger the player is using to operate their device
+            if (rightSideFingerID != touch.fingerId)
+            {
+                rightSideFingerID = touch.fingerId;
+                rightTouchScreenStartPosition = touch.position;
             }
         }
     }
@@ -185,7 +316,6 @@ public class CameraControl : MonoBehaviour
             float horizontalInput = Input.GetAxis("Horizontal"); // A-D
             float verticalInput = Input.GetAxis("Vertical"); // W-S
            
-            Vector3 cameraDirection = new Vector3(mainCamera.transform.forward.x * horizontalInput, 0.0f, mainCamera.transform.forward.z * verticalInput); // Ignore Y - we don't want to be able to go up/down (only zoom)
             Vector3 moveDir = mainCamera.transform.right * horizontalInput + mainCamera.transform.forward * verticalInput;
             moveDir.y = 0.0f;
 
@@ -215,109 +345,6 @@ public class CameraControl : MonoBehaviour
             //print("Are coords in barrier: " + AreCoordsInBox(mainCamera.transform.position, cameraFreeroamBoxCollider));
             //print("Camera bounding box max bounds coords: " + cameraFreeroamBoxCollider.bounds.max);
             //print("Camera bounding box min bounds coords: " + cameraFreeroamBoxCollider.bounds.min);
-        }
-    }
-
-    void ApplyPhoneCameraMovement()
-    {
-        // Check if there are any inputs from a mobile device
-        if (Input.touchCount >= 1)
-        {
-            Touch touch = Input.GetTouch(0);
-
-            // If the touch has begun
-            if (touch.phase == TouchPhase.Began)
-            {
-                touchScreenStartPosition = touch.position;
-            }
-            // If the player starts swiping their finger while holding down
-            else if (touch.phase == TouchPhase.Moved)
-            {
-                Vector2 movementChange = touchScreenStartPosition - touch.position;
-                if (cameraState == CameraState.CAMERA_LOCKED)
-                {
-                    // Player swiped right
-                    if (movementChange.x > 0)
-                    {
-                        mainCamera.transform.RotateAround(pointingCoords, Vector3.down, cameraRotatingSpeed * Time.deltaTime);
-                    }
-                    // Player swiped left
-                    else
-                    {
-                        mainCamera.transform.RotateAround(pointingCoords, Vector3.up, cameraRotatingSpeed * Time.deltaTime);
-                    }
-                }
-                else if (cameraState == CameraState.CAMERA_FREEMODE)
-                {
-                    movementChange.Normalize();
-                    float horizontalPhoneInput = movementChange.x;
-                    float verticalPhoneInput = movementChange.y;
-
-                    Vector3 cameraDirection = new Vector3(mainCamera.transform.forward.x * horizontalPhoneInput, 0.0f, mainCamera.transform.forward.z * horizontalPhoneInput); // Ignore Y - we don't want to be able to go up/down (only zoom)
-                    Vector3 moveDir = mainCamera.transform.right * horizontalPhoneInput + mainCamera.transform.forward * horizontalPhoneInput;
-                    moveDir.y = 0.0f;
-
-                    // Player swiped right
-                    if (movementChange.x > 0)
-                    {
-
-                    }
-                    // Player swiped left
-                    else
-                    {
-
-                    }
-
-                    // Check if we are holding right-click to rotate camera horizontally
-                    if (Input.GetMouseButton((int)freeroamCameraRotateButton))
-                    {
-                        float mouseX = Input.GetAxis("Mouse X");
-                        if (mouseX != 0)
-                        {
-                            Vector3 cameraRotation = new Vector3(0.0f, mouseX * mouseSensitivity, 0.0f); // Camera uses Y to rotate horizontally
-                            mainCamera.transform.eulerAngles += cameraRotation;
-                        }
-                    }
-
-                    // We start moving the camera in freeroam state using player input
-                    if (horizontalPhoneInput != 0 || verticalPhoneInput != 0)
-                    {
-                        currentCameraAcceleration = Mathf.Min(currentCameraAcceleration + cameraAcceleration * Time.deltaTime, cameraMaxAcceleration);
-                    }
-                    else
-                    {
-                        currentCameraAcceleration = Mathf.Max(currentCameraAcceleration - cameraDeceleration * Time.deltaTime, 0.0f);
-                    }
-
-                    mainCamera.transform.position += moveDir * cameraMovingSpeed * currentCameraAcceleration * Time.deltaTime;
-
-                }
-            }
-            // Touch has ended
-            else if (touch.phase == TouchPhase.Ended)
-            {
-                touchScreenStartPosition = Vector2.zero;
-            }
-
-            //if (cameraState == CameraState.CAMERA_LOCKED)
-            //{
-            //    // Force the camera to look at the pointing coords at all times
-            //    mainCamera.transform.LookAt(pointingCoords, Vector3.up);
-
-            //    // Move camera around offset coords
-            //    if (Input.GetKey(moveCamLeftKey))
-            //    {
-            //        mainCamera.transform.RotateAround(pointingCoords, Vector3.up, cameraRotatingSpeed * Time.deltaTime);
-            //    }
-            //    else if (Input.GetKey(moveCamRightKey))
-            //    {
-            //        mainCamera.transform.RotateAround(pointingCoords, Vector3.down, cameraRotatingSpeed * Time.deltaTime);
-            //    }
-            //}
-            //else if (cameraState == CameraState.CAMERA_FREEMODE)
-            //{
-
-            //}
         }
     }
 
@@ -365,16 +392,16 @@ public class CameraControl : MonoBehaviour
             }
             else if (cameraState == CameraState.CAMERA_FREEMODE)
             {
-                Vector3 screenPosition = new Vector3(Screen.width / 2f, Screen.height / 2f, 0.0f);
-                Ray ray = Camera.main.ScreenPointToRay(screenPosition);
+                //Vector3 screenPosition = new Vector3(Screen.width / 2f, Screen.height / 2f, 0.0f);
+                //Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
-                if (Physics.Raycast(ray, out RaycastHit hit, cameraLockDistanceRay))
-                {
-                    // Get the coords
-                    Vector3 hitpoint = hit.point;
+                //if (Physics.Raycast(ray, out RaycastHit hit, cameraLockDistanceRay))
+                //{
+                //    // Get the coords
+                //    Vector3 hitpoint = hit.point;
 
-                    pointingCoords = hitpoint;
-                }
+                //    pointingCoords = hitpoint;
+                //}
 
                 SetCameraState(CameraState.CAMERA_LOCKED);
             }
