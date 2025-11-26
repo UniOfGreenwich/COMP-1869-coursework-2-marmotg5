@@ -115,9 +115,13 @@ public class PlantObject : GridObject
 
     void ApplyHarvestVFX()
     {
-        if (plantParticleSystem != null) {
+        if (plantParticleSystem != null)
+        {
+            // Change the plant's particle system to green to indicate to the player that the plant can be harvested
+            var plantParticleSystemMain = plantParticleSystem.main;
+            plantParticleSystemMain.startColor = Color.green;
             plantParticleSystem.Play();
-            }
+        }
     }
 
     // Drain the water meter of the plant over time
@@ -179,8 +183,12 @@ public class PlantObject : GridObject
                 // Create pests that will attack the plant
                 pestAttackCoroutine = TakePeriodicPestDamage();
                 StartCoroutine(pestAttackCoroutine);
-            }
 
+                // Change the plant's particle system to orange to indicate to the player that the plant is being attacked
+                var plantParticleSystemMain = plantParticleSystem.main;
+                plantParticleSystemMain.startColor = new Color(1.0f, 0.65f, 0.0f); // Orange colour
+                plantParticleSystem.Play();
+            }
 
             // Reset the current pest attack timer back to 0, and generate a new wait timer
             currentTimeFromLastAttack = 0.0f;
@@ -212,6 +220,8 @@ public class PlantObject : GridObject
         {
 			StopCoroutine(pestAttackCoroutine);
             pestAttackCoroutine = null;
+
+            plantParticleSystem.Stop();
         }
     }
 
