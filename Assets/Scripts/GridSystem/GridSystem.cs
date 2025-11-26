@@ -18,8 +18,8 @@ public class GridSystem : MonoBehaviour
 	const string VISUAL_OBJECT_NAME = "GridCellVisual_";
 
 	public static GridSystem instance { get; private set; }
-	[SerializeField] GridObjectData[] allowedGridObjects;
 	[SerializeField] GameObject gridCellVisualPrefab;
+	Color gridCellVisualDefaultColor; // The default color of the grid cell's visual prefab sprite renderer
 
 	[SerializeField] int gridCellWidthAmount = 25, gridCellHeightAmount = 25;
 	[SerializeField] float gridCellSize = 1.0f; // 1 meter unit in Unity 
@@ -40,14 +40,19 @@ public class GridSystem : MonoBehaviour
 			Destroy(this.gameObject);
 		}
 
-		//grid = GetComponent<Grid>();
-		InitializeGrid();
-	}
+		// Grab the default color of the grid cell visual object from its prefab
+		if (gridCellVisualPrefab != null)
+			gridCellVisualDefaultColor = gridCellVisualPrefab.GetComponent<SpriteRenderer>() ? gridCellVisualPrefab.GetComponent<SpriteRenderer>().color : Color.white;
+
+    }
 
 	void Awake()
 	{
 		DontDestroyOnLoad(gameObject);
-	}
+
+        // Create the grid
+        InitializeGrid();
+    }
 
 	// Update is called once per frame
 	void Update()
@@ -64,11 +69,13 @@ public class GridSystem : MonoBehaviour
 		{
 			for (int z = 0; z < gridCellWidthAmount; z++)
 			{
+				// Calculate the position of the new grid cell
 				Vector3 cellPosition = new Vector3(x * gridCellSize, transform.position.y, z * gridCellSize);
 				GridCell gridCell = new GridCell((z, x), gridCellSize, cellPosition);
 
 				gridArray.Add((z, x), gridCell);
 
+				// Create a visual object to represent the grid cell
 				GameObject gridCellVisual = Instantiate(gridCellVisualPrefab, gridCell.GetCenteredPosition() + gridCellVisualPrefab.transform.position, gridCellVisualPrefab.transform.rotation, transform);
 				gridCellVisual.name = VISUAL_OBJECT_NAME + z + x;
 				gridCellVisuals.Add(gridCellVisual);
@@ -76,11 +83,11 @@ public class GridSystem : MonoBehaviour
 		}
 
 		SetGridSystemRendering(false); // Don't render grid by default
-		//RenderGrid();
 	}
 
 	public void SetGridSystemRendering(bool toggle)
 	{
+		// Show/hide the sprite renderer for each grid cell visual object
 		foreach (GameObject visualObject in gridCellVisuals)
 		{
 			SpriteRenderer spriteRenderer = visualObject.GetComponent<SpriteRenderer>();
@@ -92,22 +99,40 @@ public class GridSystem : MonoBehaviour
 		}
 	}
 
-	//  void RenderGrid()
-	//  {
-	//for (int z = 0; z < gridCellWidthAmount; z++)
-	//{
-	//	GridCell firstCell = gridArray[(z, 0)];
-	//	GridCell lastCell = gridArray[(z, gridCellHeightAmount - 1)];
-	//	Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
-	//}
+	public bool SpawnGridObject(GridCell cellToSpawnIn, GridObjectData gridObjectData)
+	{
+		if (DoesGridCellExist(cellToSpawnIn))
+		{
+			Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
 
-	//      for (int x = 0; x < gridCellHeightAmount; x++)
-	//      {
-	//          GridCell firstCell = gridArray[(0, x)];
-	//          GridCell lastCell = gridArray[(gridCellWidthAmount - 1, x)];
-	//          Debug.DrawLine(firstCell.GetCellCornerPosition(), lastCell.GetCellCornerPosition(), Color.white, 100.0f, true);
-	//      }
-	//  }
+            // Check if the grid object we are trying to place has enough space to be spawned on the grid
+            if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
+			{
+				GameObject gridObjectPrefab = gridObjectData.objectPrefab;
+
+				// Calculate the object's spawn position
+				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
+				Vector3 spawnPosition = GetObjectSpawnPosition(cellToSpawnIn, gridObjectPrefab);
+
+				// Create the grid object
+				GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
+				GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
+				if (spawnedGridObjectData != null)
+				{
+					// Set the spawned grid object to keep track of the parent cell its placed in
+					spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
+
+					// Set each necessary grid cell to keep track of the spawned grid object that may occupy more than 1x1 cells
+					Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(cellToSpawnIn, gridObjectCellRequirements);
+					OccupyCellsWithObject(gridCellsInArea, spawnedGridObject);
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	public GridCell GetGridCellFromCoords(Vector3 coords)
 	{
@@ -138,6 +163,15 @@ public class GridSystem : MonoBehaviour
 		return null;
 	}
 
+	public PlantObject GetPlantObjectFromGridCell(GridCell gridCell)
+	{
+		if (gridCell == null || gridCell.storedGridObject == null) return null;
+		PlantObject plantObject = gridCell.storedGridObject.GetComponent<PlantObject>();
+		
+		if (plantObject != null) return plantObject;
+		return null;
+	}
+
 	// Checks if the grid cell can be found in the grid system
 	bool DoesGridCellExist(GridCell cellToCheck)
 	{
@@ -146,88 +180,15 @@ public class GridSystem : MonoBehaviour
 			GridCell arrayGridCell = search.Value;
 			if (cellToCheck == arrayGridCell)
 			{
+
 				return true;
 			}
 		}
 		return false;
 	}
 
-	GameObject FindVisualObjectBasedOnCell(GridCell gridCell)
-	{
-		(int z, int x) gridCellLocation = gridCell.GetCellIndex();
-
-		for (int i = 0; i < gridCellVisuals.Count; i++)
-		{
-			GameObject visualObject = gridCellVisuals[i];
-			if (visualObject != null)
-			{
-				if (visualObject.name == VISUAL_OBJECT_NAME + gridCellLocation.z + gridCellLocation.x)
-				{
-					return visualObject;
-				}
-			}
-		}
-
-		return null;
-	}
-
-	// Spawn a default grid object for testing purposes
-	public void SpawnGridObject(GridCell cellToSpawnIn)
-	{
-		if (allowedGridObjects.Contains(allowedGridObjects[0]))
-		{
-			if (DoesGridCellExist(cellToSpawnIn))
-			{
-				// Grab the allowed grid object's data
-				GridObjectData gridObjectData = allowedGridObjects[0];
-				Vector2Int gridObjectCellRequirements = gridObjectData.gridCellRequirement;
-
-				// Check if the grid object we are trying to place has enough space to be spawned on the grid
-				if (IsGridCellAreaClear(cellToSpawnIn, gridObjectCellRequirements))
-				{
-					GameObject gridObjectPrefab = gridObjectData.objectPrefab;
-
-					// Calculate the object's spawn position
-					GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
-					Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
-
-					// Create the grid object
-					GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
-					GridObject spawnedGridObjectData = spawnedGridObject.GetComponent<GridObject>();
-					if (spawnedGridObjectData != null)
-					{
-						// Set the spawned grid object to keep track of the parent cell its placed in
-						spawnedGridObjectData.UpdateParentCell(cellToSpawnIn);
-
-						// Set each necessary grid cell to keep track of the spawned grid object that may occupy more than 1x1 cells
-						Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(cellToSpawnIn, gridObjectCellRequirements);
-						OccupyCellsWithObject(gridCellsInArea, spawnedGridObject);
-					}
-				}
-			}
-		}
-	}
-
-	public void SpawnGridObject(GridCell cellToSpawnIn, GridObjectData gridObjectData)
-	{
-		if (allowedGridObjects.Contains(gridObjectData))
-		{
-			if (DoesGridCellExist(cellToSpawnIn))
-			{
-				GameObject gridObjectPrefab = gridObjectData.objectPrefab;
-				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
-
-				Vector3 spawnPosition = cellToSpawnIn.GetCenteredPosition() + gridObjectPrefab.transform.position;
-
-				GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);
-
-				cellToSpawnIn.StoreGridObject(spawnedGridObject);
-			}
-		}
-	}
-
 	// Checks if any grid cell is occupied within a specified range
-	bool IsGridCellAreaClear(GridCell gridCell, Vector2Int gridCellRequirements) // x = Z | y = X
+	public bool IsGridCellAreaClear(GridCell gridCell, Vector2Int gridCellRequirements) // x = Z | y = X
 	{
 		Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(gridCell, gridCellRequirements);
 
@@ -247,7 +208,7 @@ public class GridSystem : MonoBehaviour
 	}
 
 	// Returns a dictionary of all grid cells around the "targetCell" with a set cell location radius
-	Dictionary<(int z, int x), GridCell> GetGridCellsInArea(GridCell targetCell, Vector2Int cellLocationRadius)
+	public Dictionary<(int z, int x), GridCell> GetGridCellsInArea(GridCell targetCell, Vector2Int targetCellSizeRequierements)
 	{
 		Dictionary<(int z, int x), GridCell> gridCellsInArea = new Dictionary<(int z, int x), GridCell>();
 
@@ -255,8 +216,8 @@ public class GridSystem : MonoBehaviour
 		(int z, int x) targetCellLocation = targetCell.GetCellIndex();
 
 		// Locations in the grid system that we will loop to
-		int widthMax = targetCellLocation.z + cellLocationRadius.x;
-		int heightMax = targetCellLocation.x - cellLocationRadius.y;
+		int widthMax = targetCellLocation.z + targetCellSizeRequierements.x;
+		int heightMax = targetCellLocation.x - targetCellSizeRequierements.y;
 
 		// Grab each cell that is within those locations in the grid ystem
 		for (int x = targetCellLocation.x; x > heightMax; x--)
@@ -276,6 +237,67 @@ public class GridSystem : MonoBehaviour
 		return gridCellsInArea;
 	}
 
+	public GameObject FindVisualObjectBasedOnCell(GridCell gridCell)
+	{
+		(int z, int x) gridCellLocation = gridCell.GetCellIndex(); // The location of the grid cell on the grid system
+
+		for (int i = 0; i < gridCellVisuals.Count; i++)
+		{
+			GameObject visualObject = gridCellVisuals[i];
+			if (visualObject != null)
+			{
+				if (visualObject.name == VISUAL_OBJECT_NAME + gridCellLocation.z + gridCellLocation.x)
+				{
+					return visualObject;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public List<GameObject> FindVisualObjectsBasedOnCell(GridCell targetCell, Vector2Int targetCellRequirements)
+	{
+		// Grab the actual grid cells using the target cell and its size requirements
+		Dictionary<(int z, int x), GridCell> gridCellsInArea = GetGridCellsInArea(targetCell, targetCellRequirements);
+	
+		if (gridCellsInArea.Count > 0)
+		{
+			List<GameObject> cellVisualObjects = new List<GameObject>();
+
+			// Loop through the grid cells
+			foreach (KeyValuePair<(int z, int x), GridCell> search in gridCellsInArea)
+			{
+				// Grab the visual object for the grid cell
+				GameObject cellVisualObject = FindVisualObjectBasedOnCell(search.Value);
+				if (cellVisualObject != null)
+				{
+					cellVisualObjects.Add(cellVisualObject);
+				}
+			}
+
+			return cellVisualObjects;
+		}
+
+		return null;
+	}
+
+	// Returns a list of all grid cells that have objects placed on top of the cells
+	public List<GridCell> GetAllOccupiedGridCells()
+	{
+		List<GridCell> occupiedCells = new List<GridCell>();
+
+		// Loop through the grid cells in the grid system
+		foreach (KeyValuePair<(int z, int x), GridCell> search in gridArray)
+		{
+			if (!search.Value.IsOccupied()) continue; // Ignore the grid cell if it's not occupied
+			
+			occupiedCells.Add(search.Value);
+		}
+
+		return occupiedCells;
+	}
+
 	// Set grid cells to be occupied with a certain game object (disallowing other game/grid objects to be spawned on the grid cells)
 	void OccupyCellsWithObject(Dictionary<(int z, int x), GridCell> parentCells, GameObject occupyingObject)
 	{
@@ -289,5 +311,14 @@ public class GridSystem : MonoBehaviour
 		}
 	}
 
+	// Function used in PlayerBuildingItemUI.cs as well
+	// Gets the location of where the prefab object should spawn on top of the specified grid cell
+	public Vector3 GetObjectSpawnPosition(GridCell gridCell, GameObject prefabObject)
+	{
+		return gridCell.GetCenteredPosition() + prefabObject.transform.position;
+	}
+
     public Dictionary<(int z, int x), GridCell> GetGridArray() { return gridArray; }
+
+	public Color GetGridCellVisualDefaultColor() { return gridCellVisualDefaultColor; }
 }

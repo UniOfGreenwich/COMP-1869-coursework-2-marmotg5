@@ -3,13 +3,14 @@ using Unity.VisualScripting.FullSerializer;
 using UnityEditor;
 using UnityEngine;
 
+[System.Serializable]
 public class GridCell
 {
     (int z, int x) cellIndex; // ex. [0, 1] | 0 = Z , 1 = X
     Vector3 cellPosition;
     float cellSize;
 
-    GameObject storedGridObject = null;
+    public GameObject storedGridObject { get; private set; }
 
     public GridCell((int z, int x) index, float cellSize, Vector3 cellPosition)
     {

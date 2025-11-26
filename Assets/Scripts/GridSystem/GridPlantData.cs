@@ -1,10 +1,12 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Grid Plant Object", menuName = "Scriptable Objects/Grid/Grid Plant Data")]
+[System.Serializable]
 public class GridPlantData : GridObjectData
 {
 	[Range(0, 3)]
 	public int growingStages = 3;
+
 	public int cashReward = 100;
 	public float requiredGrowingTime = 10.0f; // In seconds 
 
