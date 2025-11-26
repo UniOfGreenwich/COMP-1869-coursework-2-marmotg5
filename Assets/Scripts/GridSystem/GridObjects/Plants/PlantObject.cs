@@ -46,14 +46,14 @@ public class PlantObject : GridObject
 
 	IEnumerator pestAttackCoroutine = null;
 
-    ParticleSystem particleSystem = null;
+    ParticleSystem plantParticleSystem = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 		plantMeshFilter = GetComponent<MeshFilter>();
 		randomPestAttackTimer = Random.Range(minAttackTimer, maxAttackTimer);
-        particleSystem = GetComponent<ParticleSystem>();
+        plantParticleSystem = GetComponent<ParticleSystem>();
 
         if (plantData != null)
         {
@@ -115,8 +115,8 @@ public class PlantObject : GridObject
 
     void ApplyHarvestVFX()
     {
-        if (particleSystem != null) {
-            particleSystem.Play();
+        if (plantParticleSystem != null) {
+            plantParticleSystem.Play();
             }
     }
 
@@ -233,7 +233,7 @@ public class PlantObject : GridObject
             if (player != null)
             {
                 player.AddCash(plantData.cashReward);
-                Destroy(particleSystem);
+                Destroy(plantParticleSystem);
                 Destroy(gameObject);
             }
         }
@@ -257,6 +257,10 @@ public class PlantObject : GridObject
     public int GetPlantHealth() {return plantHealth; }
     public float GetPlantWaterLevel() { return plantWaterLevel; }
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
+
+    public void SetPlantHealth(int healthToSet) { plantHealth = healthToSet; }
+    public void SetPlantWaterLevel (float waterToSet) { plantWaterLevel = waterToSet; }
+    public void SetPlantCurrentGrowingTime(float timeToSet) { currentGrowingTime = timeToSet; }
 
     public GridPlantData GetPlantData() { return plantData; }
 
