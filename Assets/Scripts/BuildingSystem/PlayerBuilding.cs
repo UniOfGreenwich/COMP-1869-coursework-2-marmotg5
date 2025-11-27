@@ -22,6 +22,8 @@ public class PlayerBuilding : MonoBehaviour
     BuildingState buildingState;
     Camera mainCamera;
 
+    bool isUIToggled = false;
+
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
@@ -56,8 +58,27 @@ public class PlayerBuilding : MonoBehaviour
         }
     }
 
+    // Turn on/off the building UI for the grid system (Called from a UI button)
+    public void ToggleBuildingMenu()
+    {
+        // Turn on
+        if (!isUIToggled)
+        {
+            SetBuildingState(BuildingState.CHOOSING_OBJECT);
+            OpenBuildingMenu();
+        }
+        // Turn off
+        else
+        {
+            SetBuildingState(BuildingState.NONE);
+            CloseBuildingMenu();
+        }
+    }
+
     void OpenBuildingMenu()
     {
+        if (isUIToggled) return; // Menu is already toggled on and working
+
         if (GameManager.gridSystem != null)
         {
             // Activate the grid system
@@ -74,11 +95,13 @@ public class PlayerBuilding : MonoBehaviour
                 }
 			}
 		}
-
+        isUIToggled = true;
 	}
 
     void CloseBuildingMenu()
     {
+        if (!isUIToggled) return; // Menu is already turned off
+
 		if (GameManager.gridSystem != null)
 		{
             // Close the grid system UI
@@ -92,17 +115,13 @@ public class PlayerBuilding : MonoBehaviour
 
 			}
 		}
+        isUIToggled = false;
 	}
 
 
 	public void SetBuildingState(BuildingState state)
     {
         buildingState = state;
-    }
-
-    void SwitchBuildingObject()
-    {
-
     }
 
     BuildingState GetBuildingState() {return buildingState;}
