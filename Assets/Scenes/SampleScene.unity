@@ -6659,10 +6659,50 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1227069440487433590, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_fontSize
+      value: 47.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227069440487433590, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227069440487433590, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 47.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 1227069440487433590, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4693664364213179378, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 48.79995
+      objectReference: {fileID: 0}
+    - target: {fileID: 4693664364213179378, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -24.400024
+      objectReference: {fileID: 0}
     - target: {fileID: 5409644033882671771, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
       propertyPath: potionObjectPrefab
       value: 
       objectReference: {fileID: 1856910737939168278, guid: 3082e3f18d6e4bd46bb810d61c7a7683, type: 3}
+    - target: {fileID: 6424096560752173263, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e27b494249fe6a240ab0f9cf03551c35, type: 3}
+    - target: {fileID: 6424096560752173263, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424096560752173263, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6424096560752173263, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6584238079010529960, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
       propertyPath: m_Name
       value: ClearPestsPotion
