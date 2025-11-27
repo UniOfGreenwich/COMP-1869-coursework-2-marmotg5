@@ -67,6 +67,11 @@ public class PlantObject : GridObject
             // Giving the plant a time frame to "grow" and get bigger
             if (plantData.growingStages > 0)
             {
+                if (plantData.growingStageMeshes[currentGrowingStage] != null)
+                {
+                    plantMeshFilter.mesh = plantData.growingStageMeshes[currentGrowingStage];
+
+                }
                 timePerGrowingStage = plantData.requiredGrowingTime / plantData.growingStages;
             }
             else
@@ -157,6 +162,8 @@ public class PlantObject : GridObject
             // Check if we have set-up meshes the plant needs to grow in
             if (plantData.growingStageMeshes.Length > 0)
             {
+                currentGrowingStage++;
+
                 // Check if the next phase of the plant growing mechanic exists 
                 if (plantData.growingStageMeshes[currentGrowingStage] != null)
                 {
@@ -164,7 +171,6 @@ public class PlantObject : GridObject
 
                     plantMeshFilter.mesh = nextMesh;
 
-                    currentGrowingStage++;
                 }
             }
         }
@@ -347,13 +353,17 @@ public class PlantObject : GridObject
     public float GetPlantWaterLevel() { return plantWaterLevel; }
     public float GetPlantWaterGainAmount() { return plantWaterGainAmount; }
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
+    public int GetPlantCurrentGrowingStage() { return currentGrowingStage; }
+    public float GetPlantElapsedTimeSinceLastGrowth() { return elapsedTimeSinceLastGrowth; }
 
     // Used when the save data file is being loaded (when the player starts the game)
-	public void SetPlantHealth(int healthToSet) { plantHealth = healthToSet; }
+    public void SetPlantHealth(int healthToSet) { plantHealth = healthToSet; }
 	public void SetPlantWaterLevel(float waterToSet) { plantWaterLevel = waterToSet; }
 	public void SetPlantCurrentGrowingTime(float timeToSet) { currentGrowingTime = timeToSet; }
+    public float SetPlantCurrentGrowingStage(int stageToSet) { return currentGrowingStage = stageToSet; }
+    public float SetPlantElapsedTimeSinceLastGrowth(float timeToSet) { return elapsedTimeSinceLastGrowth = timeToSet; }
 
-	public GridPlantData GetPlantData() { return plantData; }
+    public GridPlantData GetPlantData() { return plantData; }
 
     bool IsPlantFullyGrown() { return (currentGrowingTime >= plantData.requiredGrowingTime); }
 }

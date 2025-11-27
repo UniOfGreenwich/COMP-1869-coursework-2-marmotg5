@@ -103,38 +103,6 @@ public class ShopSystem : MonoBehaviour
                 }
             }
 
-            //print("min level: " + minPlantLevel + " , " + maxPlantLevel);
-
-            //// Check each plant's level
-            //for (int i = 0; i < shopItemsArray.Length; i++)
-            //{
-            //    // Check if the current plant data we are looping through has the same level that we are going through
-            //    GridPlantData plantData = shopItemsArray[i];
-            //    if (plantData != null)
-            //    {
-            //        organizedPlantArray[i] = plantData;
-            //    }
-            //}
-
-            //// For each level (range - mininum to maximum level out of the array)
-            //         for (int currentShopLevel = minPlantLevel; currentShopLevel <= maxPlantLevel; currentShopLevel++)
-            //         {
-            //	// Check each plant's level
-            //             for (int plantIndex = 0; plantIndex < shopItemsArray.Length; plantIndex++)
-            //             {
-            //		// Check if the current plant data we are looping through has the same level that we are going through
-            //                 GridPlantData plantData = shopItemsArray[plantIndex];
-            //                 if (plantData != null)
-            //                 {
-            //                     if (plantData.objectRequiredLevel == currentShopLevel)
-            //                     {
-            //                         organizedPlantArray[currentShopLevel] = plantData;
-            //                     }
-            //                 }
-            //             }
-
-            //         }
-
             return organizedPlantList;
 		}
 

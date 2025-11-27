@@ -73,7 +73,6 @@ public class PlantUI : MonoBehaviour
     void UpdatePlantHealthBar(PlantObject plantObject)
     {
         float progressImageBarValue = (float)plantObject.GetPlantHealth() / (float)plantObject.GetPlantData().maxHealth;
-        print("plant health : " + progressImageBarValue);
         plantHealthText.text = healthPrefix + plantObject.GetPlantHealth();
         plantHealthBarImage.fillAmount = progressImageBarValue;
     }

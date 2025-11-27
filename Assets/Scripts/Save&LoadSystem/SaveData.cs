@@ -16,9 +16,11 @@ public class SaveData
 		public int plantHealth;
 		public float plantWater;
 		public float plantGrowingTime;
+        public int plantGrowingStage;
+        public float plantElapsedTimeSinceLastGrowth;
 
 
-		public GridCellData((int z, int x) cellIndex, PlantObject plantObject)
+        public GridCellData((int z, int x) cellIndex, PlantObject plantObject)
 		{
 			GridPlantData plantData = plantObject.GetPlantData(); // Grab data about the plant object
 
@@ -30,7 +32,9 @@ public class SaveData
 			this.prefabName = plantData.objectPrefab.name;
 			this.plantHealth = plantObject.GetPlantHealth();
 			this.plantWater = plantObject.GetPlantWaterLevel();
-			this.plantGrowingTime= plantObject.GetPlantCurrentGrowingTime();
+			this.plantGrowingTime = plantObject.GetPlantCurrentGrowingTime();
+			this.plantGrowingStage = plantObject.GetPlantCurrentGrowingStage();
+			this.plantElapsedTimeSinceLastGrowth = plantObject.GetPlantElapsedTimeSinceLastGrowth();
 
 		}
 	}

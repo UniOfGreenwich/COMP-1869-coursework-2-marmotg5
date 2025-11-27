@@ -67,6 +67,8 @@ public static class SavingSystem
 					cellPlantObject.SetPlantHealth(gridCellData.plantHealth);
 					cellPlantObject.SetPlantWaterLevel(gridCellData.plantWater);
 					cellPlantObject.SetPlantCurrentGrowingTime(gridCellData.plantGrowingTime);
+					cellPlantObject.SetPlantCurrentGrowingStage(gridCellData.plantGrowingStage);
+					cellPlantObject.SetPlantElapsedTimeSinceLastGrowth(gridCellData.plantElapsedTimeSinceLastGrowth);
 				}
 			}
 		}

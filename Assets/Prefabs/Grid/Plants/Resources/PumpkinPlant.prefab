@@ -4846,6 +4846,7 @@ GameObject:
   - component: {fileID: 4832886762669347862}
   - component: {fileID: 425977243230248621}
   - component: {fileID: 9088679519958571509}
+  - component: {fileID: 5273895985779059848}
   m_Layer: 0
   m_Name: PumpkinPlant
   m_TagString: Untagged
@@ -5045,3 +5046,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &5273895985779059848
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6345889185508341187}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 125.59484, y: 99.558235, z: 122.18503}
+  m_Center: {x: 0, y: 50.61735, z: 0}

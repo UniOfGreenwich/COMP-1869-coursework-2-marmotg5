@@ -106,9 +106,10 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
 				MeshFilter placeHolderMeshFilter = placeHolderObject.GetComponent<MeshFilter>();
 				MeshRenderer placeHolderRenderer = placeHolderObject.GetComponent<MeshRenderer>();
 
-                // Set the new object's mesh filter and renderer to the ACTUAL prefab's
-				placeHolderMeshFilter.mesh = prefabMeshFilter.sharedMesh;
-				placeHolderRenderer.material = prefabMeshRenderer.sharedMaterial;
+                // Set the new object's settings/data to the ACTUAL prefab's
+				placeHolderMeshFilter.mesh = prefabMeshFilter.sharedMesh; // Mesh
+				placeHolderRenderer.material = prefabMeshRenderer.sharedMaterial; // Material
+                placeHolderObject.transform.localScale = inventoryItem.itemData.objectPrefab.transform.localScale; // Scale
 
                 // Change the new object's material to transparent
                 placeHolderRenderer.material.color = new Color(placeHolderRenderer.material.color.r, placeHolderRenderer.material.color.g, placeHolderRenderer.material.color.b, 0.5f);
