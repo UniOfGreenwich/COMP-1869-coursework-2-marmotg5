@@ -204,9 +204,9 @@ public class PlantObject : GridObject
         }
     }
 
-	public void WaterPlant()
+	public void WaterPlant(float waterAmount)
     {
-        plantWaterLevel += plantWaterGainAmount;
+        plantWaterLevel += waterAmount;
         if (plantWaterLevel > MAX_WATER_LEVEL)
         {
             plantWaterLevel = MAX_WATER_LEVEL;
@@ -304,6 +304,7 @@ public class PlantObject : GridObject
 
     public int GetPlantHealth() {return plantHealth; }
     public float GetPlantWaterLevel() { return plantWaterLevel; }
+    public float GetPlantWaterGainAmount() { return plantWaterGainAmount; }
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
 
     // Used when the save data file is being loaded (when the player starts the game)
