@@ -21,7 +21,7 @@ MonoBehaviour:
   gridCellRequirement: {x: 3, y: 3}
   growingStages: 3
   cashReward: 100
-  requiredGrowingTime: 30
+  requiredGrowingTime: 50
   growingStageMeshes:
   - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}

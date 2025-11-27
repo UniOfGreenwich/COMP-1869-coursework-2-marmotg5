@@ -18,7 +18,9 @@ public class PlantUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI plantTimeLeftText;
 
     [Header("UI Images")]
-    [SerializeField] Image planTimeLeftImage;
+    [SerializeField] Image plantHealthBarImage;
+    [SerializeField] Image plantWaterBarImage;
+    [SerializeField] Image plantTimeLeftImage;
 
     [Header("UI Buttons")]
     [SerializeField] Button clearPestsButton;
@@ -61,15 +63,35 @@ public class PlantUI : MonoBehaviour
 		if (plantObject == null) return;
 
 		plantNameText.text = plantObject.GetPlantName();
-        plantHealthText.text = healthPrefix + plantObject.GetPlantHealth();
-        plantWaterLevelText.text = waterPrefix + plantObject.GetPlantWaterLevel().ToString("F0") + "%";
 
+
+        UpdatePlantHealthBar(plantObject);
+        UpdatePlantWaterBar(plantObject);
+        UpdatePlantTimeLeftBar(plantObject);
+    }
+
+    void UpdatePlantHealthBar(PlantObject plantObject)
+    {
+        float progressImageBarValue = (float)plantObject.GetPlantHealth() / (float)plantObject.GetPlantData().maxHealth;
+        print("plant health : " + progressImageBarValue);
+        plantHealthText.text = healthPrefix + plantObject.GetPlantHealth();
+        plantHealthBarImage.fillAmount = progressImageBarValue;
+    }
+
+    void UpdatePlantWaterBar(PlantObject plantObject)
+    {
+        float progressImageBarValue = (plantObject.GetPlantWaterLevel() / PlantObject.MAX_WATER_LEVEL);
+        plantWaterLevelText.text = waterPrefix + plantObject.GetPlantWaterLevel().ToString("F0") + "%";
+        plantWaterBarImage.fillAmount = progressImageBarValue;
+    }
+
+    void UpdatePlantTimeLeftBar(PlantObject plantObject)
+    {
         // Update the timer left for the plant to fully grow
         float plantTimeLeft = plantObject.GetPlantData().requiredGrowingTime - plantObject.GetPlantCurrentGrowingTime();
         float progressImageBarValue = plantObject.GetPlantCurrentGrowingTime() / plantObject.GetPlantData().requiredGrowingTime;
 
-		//plantTimeLeftText.text = plantTimeLeft.ToString();
-		plantTimeLeftText.text = growingRemainingPrefix + Math.Round(plantTimeLeft).ToString() + "s";
-		planTimeLeftImage.fillAmount = progressImageBarValue;
+        plantTimeLeftText.text = growingRemainingPrefix + Math.Round(plantTimeLeft).ToString() + "s";
+        plantTimeLeftImage.fillAmount = progressImageBarValue;
     }
 }

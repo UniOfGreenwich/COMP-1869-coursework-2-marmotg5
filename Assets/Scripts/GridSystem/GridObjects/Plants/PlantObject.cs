@@ -6,9 +6,13 @@ using UnityEngine.EventSystems;
 
 public class PlantObject : GridObject
 {
-    const float MAX_WATER_LEVEL = 100.0f;
+    // Accessed from PlantUI.cs
+    public const float MAX_WATER_LEVEL = 100.0f;
 
 	const float MAX_PEST_ATTACK_CHANCE = 100.0f;
+
+    [Header("Plant Particle System/VFX")]
+    [SerializeField] ParticleSystem plantParticleSystem;
 
     [Header("Plant Settings")]
     [SerializeField] GameObject plantUIPrefab;
@@ -69,6 +73,12 @@ public class PlantObject : GridObject
             {
                 timePerGrowingStage = plantData.requiredGrowingTime;
             }
+
+            // Set the plant's health to the maximum allowed by the scriptable object (if exceeds max)
+            if (plantHealth > plantData.maxHealth)
+            {
+                plantHealth = plantData.maxHealth; // Makes sure the plant doesn't exceed the maximum amount allowed from the scriptable object
+            }
         }
 
 		SetGridCellsOccupationalColour();
@@ -92,6 +102,7 @@ public class PlantObject : GridObject
 	}
 
 
+    bool isPlayingHarvestVFX = false;
 	void HandleGrowing()
     {
         // Check if the plant still has time to grow
@@ -106,6 +117,18 @@ public class PlantObject : GridObject
 
             elapsedTimeSinceLastGrowth += Time.deltaTime;
             currentGrowingTime += Time.deltaTime;
+        }
+        // Plant has fully grown and is ready to be harvested
+        else
+        {
+            // Make sure we have the right components and we aren't already playing the VFX
+            if (!isPlayingHarvestVFX)
+            {
+                PlayPlantVFX(Color.green);
+
+                isPlayingHarvestVFX = true;
+            }
+
         }
     }
 
@@ -168,6 +191,10 @@ public class PlantObject : GridObject
                 // Create pests that will attack the plant
                 pestAttackCoroutine = TakePeriodicPestDamage();
                 StartCoroutine(pestAttackCoroutine);
+
+                // Play an orange VFX on the plant to indicate to the player it's being attacked
+                Color orangeColour = new Color(1.0f, 0.67f, 0.0f);
+                PlayPlantVFX(orangeColour);
             }
 
 
@@ -201,6 +228,11 @@ public class PlantObject : GridObject
         {
 			StopCoroutine(pestAttackCoroutine);
             pestAttackCoroutine = null;
+
+            if (plantParticleSystem != null)
+            {
+                plantParticleSystem.Stop();
+            }
         }
     }
 
@@ -297,6 +329,15 @@ public class PlantObject : GridObject
 			}
 		}
 	}
+
+    void PlayPlantVFX(Color color)
+    {
+        if (plantParticleSystem == null) return; // Make sure a particle system exists on the plant
+
+        ParticleSystem.MainModule plantParticleMain = plantParticleSystem.main;
+        plantParticleMain.startColor = color;
+        plantParticleSystem.Play();
+    }
 
     public float GetPlantGrowingTimeLeft() { return plantData.requiredGrowingTime - currentGrowingTime; }
 

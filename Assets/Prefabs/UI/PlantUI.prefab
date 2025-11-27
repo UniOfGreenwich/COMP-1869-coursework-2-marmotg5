@@ -433,7 +433,9 @@ MonoBehaviour:
   plantHealthText: {fileID: 5234937697439900807}
   plantWaterLevelText: {fileID: 7252356997861492963}
   plantTimeLeftText: {fileID: 646829595456790191}
-  planTimeLeftImage: {fileID: 7594691034266934064}
+  plantHealthBarImage: {fileID: 8935903966593385606}
+  plantWaterBarImage: {fileID: 6425107475806195094}
+  plantTimeLeftImage: {fileID: 7594691034266934064}
   clearPestsButton: {fileID: 2032675743851104931}
   waterPlantButton: {fileID: 8292108688033691152}
   harvestPlantButton: {fileID: 6507474135505707639}
@@ -1913,7 +1915,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0
+  m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
