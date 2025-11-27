@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 797a456d3b1c14445892bfd3106584ab, type: 3}
+  m_Name: PumpkinData
+  m_EditorClassIdentifier: 
+  objectName: Pumpkin
+  objectPrefab: {fileID: 6345889185508341187, guid: ff9acaec3a8677d4a819ae2160d37977, type: 3}
+  objectType: 1
+  objectSprite: {fileID: 0}
+  objectCost: 20
+  objectRequiredLevel: 2
+  gridCellRequirement: {x: 1, y: 1}
+  growingStages: 3
+  cashReward: 200
+  requiredGrowingTime: 60
+  maxHealth: 25
+  growingStageMeshes:
+  - {fileID: 7520757598018152183, guid: 7e109badd69afe5469b4fb554fab01d2, type: 3}
+  - {fileID: 2362114916095301316, guid: a6624641089f43042838a967fe137a4e, type: 3}
+  - {fileID: -9136590849949624283, guid: 3d5498f3dd95f514a9bbfa697d9a5373, type: 3}

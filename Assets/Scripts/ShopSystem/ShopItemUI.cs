@@ -18,12 +18,22 @@ public class ShopItemUI : MonoBehaviour
 
 	[Header("UI Button Elements")]
 	[SerializeField] Button buyButton;
+	Color defaultBuyButtonColour;
 
     GridPlantData shopItemData = null;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
+    }
+
+    void Awake()
+    {
+        // Stores the default buy button colour (displaying it later to indicate the player we can buy the item)
+        if (buyButton != null)
+        {
+            defaultBuyButtonColour = buyButton.image.color;
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +47,8 @@ public class ShopItemUI : MonoBehaviour
         if (plantData == null) return;
         shopItemData = plantData;
 
+        Player player = GameManager.player;
+
         // Update the template UI elements with the necessary information
         cropNameText.text = shopItemData.objectName;
         cropLevelText.text = levelPrefix + shopItemData.objectRequiredLevel.ToString();
@@ -44,7 +56,24 @@ public class ShopItemUI : MonoBehaviour
 
         cropImage.sprite = shopItemData.objectSprite;
 
-        buyButton.onClick.AddListener(BuyItem);
+        // Set the colour of the UI button (if the player has enough level and cash)
+		if (buyButton != null && player != null)
+		{
+            Image buyButtonImage = buyButton.image;
+
+			if (player.GetLevel() >= plantData.objectRequiredLevel && player.GetCash() >= plantData.objectCost)
+			{
+				// Player can buy the seed/crop
+                buyButtonImage.color = defaultBuyButtonColour;
+            }
+            else
+			{
+				// Not enough level
+                buyButtonImage.color = Color.red;
+            }
+
+            buyButton.onClick.AddListener(BuyItem);
+        }
     }
 
 	public void BuyItem()

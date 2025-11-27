@@ -86,21 +86,53 @@ public class ShopSystem : MonoBehaviour
             int minPlantLevel = GetMinPlantLevelFromArray(shopItemsArray); // Get the smallest level of a plant within the array
 			int maxPlantLevel = GetMaxPlantLevelFromArray(shopItemsArray); // Get the highest
 
-			// For each level (range - mininum to maximum level out of the array)
-            for (int currentShopLevel = minPlantLevel; currentShopLevel <= maxPlantLevel; currentShopLevel++)
+            // Loop through the levels
+            for (int currentLevel = minPlantLevel; currentLevel <= maxPlantLevel; currentLevel++)
             {
-				// Check each plant's level
-                for (int plantIndex = 0; plantIndex < shopItemsArray.Length; plantIndex++)
+                // Loop through the all items that are supposed to be in the shop list
+                for (int currentPlantData = 0; currentPlantData < shopItemsArray.Length; currentPlantData++)
                 {
-					// Check if the current plant data we are looping through has the same level that we are going through
-                    GridPlantData plantData = shopItemsArray[plantIndex];
-                    if (plantData.objectRequiredLevel == currentShopLevel)
+                    GridPlantData plantData = shopItemsArray[currentPlantData];
+                    if (plantData == null) continue;
+
+                    if (plantData.objectRequiredLevel == currentLevel)
                     {
-						organizedPlantArray[currentShopLevel] = plantData;
+                        organizedPlantArray[currentPlantData] = plantData;
                     }
                 }
-
             }
+
+            //print("min level: " + minPlantLevel + " , " + maxPlantLevel);
+
+            //// Check each plant's level
+            //for (int i = 0; i < shopItemsArray.Length; i++)
+            //{
+            //    // Check if the current plant data we are looping through has the same level that we are going through
+            //    GridPlantData plantData = shopItemsArray[i];
+            //    if (plantData != null)
+            //    {
+            //        organizedPlantArray[i] = plantData;
+            //    }
+            //}
+
+            //// For each level (range - mininum to maximum level out of the array)
+            //         for (int currentShopLevel = minPlantLevel; currentShopLevel <= maxPlantLevel; currentShopLevel++)
+            //         {
+            //	// Check each plant's level
+            //             for (int plantIndex = 0; plantIndex < shopItemsArray.Length; plantIndex++)
+            //             {
+            //		// Check if the current plant data we are looping through has the same level that we are going through
+            //                 GridPlantData plantData = shopItemsArray[plantIndex];
+            //                 if (plantData != null)
+            //                 {
+            //                     if (plantData.objectRequiredLevel == currentShopLevel)
+            //                     {
+            //                         organizedPlantArray[currentShopLevel] = plantData;
+            //                     }
+            //                 }
+            //             }
+
+            //         }
 
             return organizedPlantArray;
 		}
@@ -117,8 +149,11 @@ public class ShopSystem : MonoBehaviour
         {
 			foreach (GridPlantData plantData in plantDataArray)
 			{
-				if (plantData.objectRequiredLevel < minLevel)
-					minLevel = plantData.objectRequiredLevel;
+                if (plantData != null)
+                {
+                    if (plantData.objectRequiredLevel < minLevel)
+                        minLevel = plantData.objectRequiredLevel;
+                }
 			}
 		}
 
@@ -134,8 +169,11 @@ public class ShopSystem : MonoBehaviour
 		{
 			foreach (GridPlantData plantData in plantDataArray)
 			{
-				if (plantData.objectRequiredLevel > maxLevel)
-					maxLevel = plantData.objectRequiredLevel;
+                if (plantData != null)
+                {
+                    if (plantData.objectRequiredLevel > maxLevel)
+                        maxLevel = plantData.objectRequiredLevel;
+                }
 			}
 		}
 
