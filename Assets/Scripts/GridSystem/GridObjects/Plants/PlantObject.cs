@@ -213,7 +213,7 @@ public class PlantObject : GridObject
         yield return null;
     }
 
-    // Gonna be executed when the "Clear Pests" UI element for the plant is clicked
+    // Gonna be executed when the "Clear Pests" UI element or potions for the plant is clicked/thrown
     public void ClearPestDamage()
     {
         if (pestAttackCoroutine != null)
@@ -225,9 +225,9 @@ public class PlantObject : GridObject
         }
     }
 
-	public void WaterPlant()
+	public void WaterPlant(float waterAmonut)
     {
-        plantWaterLevel += plantWaterGainAmount;
+        plantWaterLevel += waterAmonut;
         if (plantWaterLevel > MAX_WATER_LEVEL)
         {
             plantWaterLevel = MAX_WATER_LEVEL;
@@ -266,6 +266,7 @@ public class PlantObject : GridObject
     public string GetPlantName() { return plantData.objectName; }
     public int GetPlantHealth() {return plantHealth; }
     public float GetPlantWaterLevel() { return plantWaterLevel; }
+    public float GetPlantWaterGainAmount () {  return plantWaterGainAmount; }
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
 
     public void SetPlantHealth(int healthToSet) { plantHealth = healthToSet; }
