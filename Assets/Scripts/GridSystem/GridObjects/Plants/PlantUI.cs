@@ -25,7 +25,6 @@ public class PlantUI : MonoBehaviour
     [SerializeField] Button waterPlantButton;
     [SerializeField] Button harvestPlantButton;
 
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -42,7 +41,7 @@ public class PlantUI : MonoBehaviour
         if (plantObject == null) return;
 
         clearPestsButton.onClick.AddListener(plantObject.ClearPestDamage);
-        waterPlantButton.onClick.AddListener(plantObject.WaterPlant);
+        waterPlantButton.onClick.AddListener(() => plantObject.WaterPlant(plantObject.GetPlantWaterGainAmount()));
         harvestPlantButton.onClick.AddListener(plantObject.HarvestPlant);
     }
 
@@ -51,8 +50,8 @@ public class PlantUI : MonoBehaviour
 		if (plantObject == null) return;
 
 		clearPestsButton.onClick.RemoveListener(plantObject.ClearPestDamage);
-		waterPlantButton.onClick.RemoveListener(plantObject.WaterPlant);
-		harvestPlantButton.onClick.RemoveListener(plantObject.HarvestPlant);
+		waterPlantButton.onClick.RemoveListener(() => plantObject.WaterPlant(plantObject.GetPlantWaterGainAmount()));
+        harvestPlantButton.onClick.RemoveListener(plantObject.HarvestPlant);
 
 	}
 
