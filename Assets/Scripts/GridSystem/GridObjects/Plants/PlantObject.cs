@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -47,11 +46,14 @@ public class PlantObject : GridObject
 
 	IEnumerator pestAttackCoroutine = null;
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+    ParticleSystem plantParticleSystem = null;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
 		plantMeshFilter = GetComponent<MeshFilter>();
 		randomPestAttackTimer = Random.Range(minAttackTimer, maxAttackTimer);
+        plantParticleSystem = GetComponent<ParticleSystem>();
 
         if (plantData != null)
         {
@@ -65,12 +67,10 @@ public class PlantObject : GridObject
                 timePerGrowingStage = plantData.requiredGrowingTime;
             }
         }
+    }
 
-		SetGridCellsOccupationalColour();
-	}
-
-	// Update is called once per frame
-	void Update()
+    // Update is called once per frame
+    void Update()
     {
         HandleGrowing();
         DrainWaterLevel();
@@ -86,7 +86,7 @@ public class PlantObject : GridObject
         }
 	}
 
-
+    bool hasPlayedHarvestVFX = false;
 	void HandleGrowing()
     {
         // Check if the plant still has time to grow
@@ -101,6 +101,26 @@ public class PlantObject : GridObject
 
             elapsedTimeSinceLastGrowth += Time.deltaTime;
             currentGrowingTime += Time.deltaTime;
+        }
+        // Plant is ready to be harvested
+        else
+        {
+            if (!hasPlayedHarvestVFX)
+            {
+                ApplyHarvestVFX();
+                hasPlayedHarvestVFX = true;
+            }
+        }
+    }
+
+    void ApplyHarvestVFX()
+    {
+        if (plantParticleSystem != null)
+        {
+            // Change the plant's particle system to green to indicate to the player that the plant can be harvested
+            var plantParticleSystemMain = plantParticleSystem.main;
+            plantParticleSystemMain.startColor = Color.green;
+            plantParticleSystem.Play();
         }
     }
 
@@ -163,8 +183,12 @@ public class PlantObject : GridObject
                 // Create pests that will attack the plant
                 pestAttackCoroutine = TakePeriodicPestDamage();
                 StartCoroutine(pestAttackCoroutine);
-            }
 
+                // Change the plant's particle system to orange to indicate to the player that the plant is being attacked
+                var plantParticleSystemMain = plantParticleSystem.main;
+                plantParticleSystemMain.startColor = new Color(1.0f, 0.65f, 0.0f); // Orange colour
+                plantParticleSystem.Play();
+            }
 
             // Reset the current pest attack timer back to 0, and generate a new wait timer
             currentTimeFromLastAttack = 0.0f;
@@ -196,6 +220,8 @@ public class PlantObject : GridObject
         {
 			StopCoroutine(pestAttackCoroutine);
             pestAttackCoroutine = null;
+
+            plantParticleSystem.Stop();
         }
     }
 
@@ -217,12 +243,8 @@ public class PlantObject : GridObject
             if (player != null)
             {
                 player.AddCash(plantData.cashReward);
-
-				// Reset the grid cell's visual object's colour to the default one since the plant is not occupying anything anymore
-				ResetGridCellsVisualObjectsColour();
-
-				// Destroy the plant
-				KillPlant();
+                Destroy(plantParticleSystem);
+                Destroy(gameObject);
             }
         }
 	}
@@ -230,71 +252,27 @@ public class PlantObject : GridObject
 	void KillPlant()
     {
         // If health or water level reaches 0
-        if (plantHealth <= 0 || plantWaterLevel <= 0.0f || currentGrowingTime >= plantData.requiredGrowingTime)
+        if (plantHealth <= 0 || plantWaterLevel <= 0.0f)
         {
-            // Reset the colour of the grid cells the plant was previously occupying
-
-
             Destroy(gameObject);
         }
     }
 
-	// Change the colour of the grid cell visual objects the plant is staying on top of and any other nearby that it's occupying
-	void SetGridCellsOccupationalColour()
+    public float GetPlantGrowingTimeLeft()
     {
-        if (GameManager.gridSystem == null || parentCell == null) return;
-
-		List<GameObject> gridCellsVisualObjects = GameManager.gridSystem.FindVisualObjectsBasedOnCell(parentCell, plantData.gridCellRequirement);
-
-		if (gridCellsVisualObjects != null && gridCellsVisualObjects.Count > 0)
-		{
-			// Loop through all coloured grid cell visual game objects and set them to their default colour
-			foreach (GameObject gridCellVisualObject in gridCellsVisualObjects)
-			{
-				SpriteRenderer spriteRenderer = gridCellVisualObject.GetComponent<SpriteRenderer>();
-				if (spriteRenderer != null)
-				{
-					spriteRenderer.color = Color.red;
-				}
-			}
-		}
-	}
-
-    // Same functions as the one on top, but this one just returns back all the cells to the their default colour
-    void ResetGridCellsVisualObjectsColour()
-    {
-		if (GameManager.gridSystem == null || parentCell == null) return;
-
-		List<GameObject> gridCellsVisualObjects = GameManager.gridSystem.FindVisualObjectsBasedOnCell(parentCell, plantData.gridCellRequirement);
-
-		if (gridCellsVisualObjects != null && gridCellsVisualObjects.Count > 0)
-		{
-			// Loop through all grid cell visual game objects and set them to their default colour
-			foreach (GameObject gridCellVisualObject in gridCellsVisualObjects)
-			{
-				SpriteRenderer spriteRenderer = gridCellVisualObject.GetComponent<SpriteRenderer>();
-				if (spriteRenderer != null)
-				{
-					spriteRenderer.color = GameManager.gridSystem.GetGridCellVisualDefaultColor();
-				}
-			}
-		}
-	}
-
-    public float GetPlantGrowingTimeLeft() { return plantData.requiredGrowingTime - currentGrowingTime; }
+        return plantData.requiredGrowingTime - currentGrowingTime;
+    }
 
     public string GetPlantName() { return plantData.objectName; }
-
     public int GetPlantHealth() {return plantHealth; }
     public float GetPlantWaterLevel() { return plantWaterLevel; }
     public float GetPlantCurrentGrowingTime() { return currentGrowingTime; }
 
-    // Used when the save data file is being loaded (when the player starts the game)
-	public void SetPlantHealth(int healthToSet) { plantHealth = healthToSet; }
-	public void SetPlantWaterLevel(float waterToSet) { plantWaterLevel = waterToSet; }
-	public void SetPlantCurrentGrowingTime(float timeToSet) { currentGrowingTime = timeToSet; }
+    public void SetPlantHealth(int healthToSet) { plantHealth = healthToSet; }
+    public void SetPlantWaterLevel (float waterToSet) { plantWaterLevel = waterToSet; }
+    public void SetPlantCurrentGrowingTime(float timeToSet) { currentGrowingTime = timeToSet; }
 
-	public GridPlantData GetPlantData() { return plantData; }
+    public GridPlantData GetPlantData() { return plantData; }
 
     bool IsPlantFullyGrown() { return (currentGrowingTime >= plantData.requiredGrowingTime); }
 }

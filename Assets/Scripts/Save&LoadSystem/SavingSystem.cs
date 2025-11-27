@@ -65,7 +65,7 @@ public static class SavingSystem
 					// Check if it's a plant object, and if it is, update the plant's data with the saved one
 					PlantObject cellPlantObject = gridCellFromData.storedGridObject.GetComponent<PlantObject>();
 					cellPlantObject.SetPlantHealth(gridCellData.plantHealth);
-					cellPlantObject.SetPlantWaterLevel (gridCellData.plantWater);
+					cellPlantObject.SetPlantWaterLevel(gridCellData.plantWater);
 					cellPlantObject.SetPlantCurrentGrowingTime(gridCellData.plantGrowingTime);
 				}
 			}
