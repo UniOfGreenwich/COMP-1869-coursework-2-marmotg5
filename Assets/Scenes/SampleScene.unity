@@ -6631,6 +6631,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5409644033882671771, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
+      propertyPath: potionObjectPrefab
+      value: 
+      objectReference: {fileID: 1856910737939168278, guid: 3082e3f18d6e4bd46bb810d61c7a7683, type: 3}
     - target: {fileID: 6584238079010529960, guid: 338736bd679d48c4c81b1159eab279c0, type: 3}
       propertyPath: m_Name
       value: ClearPestsPotion
@@ -6705,6 +6709,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 288684829}
     m_Modifications:
+    - target: {fileID: 754694347459011358, guid: 9c1ec069f56379c42a57174e83b63c7b, type: 3}
+      propertyPath: potionObjectPrefab
+      value: 
+      objectReference: {fileID: 1856910737939168278, guid: 3082e3f18d6e4bd46bb810d61c7a7683, type: 3}
     - target: {fileID: 6466108998627488692, guid: 9c1ec069f56379c42a57174e83b63c7b, type: 3}
       propertyPath: m_Name
       value: WaterPlantsPotion
