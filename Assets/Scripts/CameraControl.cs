@@ -87,6 +87,16 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
+        UpdateCameraPointingCoords();
+
+        ApplyPhoneControls();
+        HandleCameraControl();
+        HandleCameraZoom();
+        HandleCameraLock();
+	}
+
+    void UpdateCameraPointingCoords()
+    {
         Vector3 screenPosition = new Vector3(Screen.width / 2f, Screen.height / 2f, 0.0f);
         Ray ray = Camera.main.ScreenPointToRay(screenPosition);
 
@@ -97,12 +107,7 @@ public class CameraControl : MonoBehaviour
 
             pointingCoords = hitpoint;
         }
-
-        ApplyPhoneControls();
-        //HandleCameraControl();
-        HandleCameraZoom();
-        HandleCameraLock();
-	}
+    }
 
     void ApplyPhoneControls()
     {
@@ -189,9 +194,6 @@ public class CameraControl : MonoBehaviour
                 // Make sure that all the finger touches match and exist (-1 finger ID = doesn't exist)
                 if (leftSideFingerID == touch.fingerId && rightSideFingerID >= 0)
                 {
-                    //Vector2 leftFingerDirection = (touch.position - leftTouchScreenStartPosition).normalized;
-                    //Vector2 rightFingerDirection = (Input.GetTouch(rightSideFingerID).position - rightTouchScreenStartPosition).normalized;
-
                     Vector3 direction = mainCamera.transform.forward;
                     Vector3 newCameraPosition = Vector3.zero;
 
@@ -208,7 +210,6 @@ public class CameraControl : MonoBehaviour
 
                     }
 
-
                     // Making sure that we are keeping the distance from the camera to the offset limited within the min/max zoom distances
                     float yDistance = Mathf.Abs(newCameraPosition.y - pointingCoords.y);
                     if (yDistance > minZoomDistance || yDistance < maxZoomDistance)
@@ -219,10 +220,6 @@ public class CameraControl : MonoBehaviour
                         return true;
 
                     }
-                    //if (yDistance < minZoomDistance || yDistance > maxZoomDistance) return false;
-
-                    // Try to clamp the y-value of the new position in case it exceeds the min/max zoom distances
-
                 }
                 else if(rightSideFingerID == touch.fingerId && leftSideFingerID >= 0)
                 {
@@ -254,12 +251,6 @@ public class CameraControl : MonoBehaviour
                         return true;
 
                     }
-
-                    //// Try to clamp the y-value of the new position in case it exceeds the min/max zoom distances
-                    //newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, minZoomDistance, maxZoomDistance);
-
-                    //mainCamera.transform.position = newCameraPosition;
-                    //return true;
                 }
             }
         }
@@ -340,8 +331,10 @@ public class CameraControl : MonoBehaviour
                 currentCameraAcceleration = Mathf.Max(currentCameraAcceleration - cameraDeceleration * Time.deltaTime, 0.0f);
             }
 
-            mainCamera.transform.position += moveDir * cameraMovingSpeed * currentCameraAcceleration * Time.deltaTime;
-
+            if (horizontalInput != 0 || verticalInput != 0)
+            {
+                mainCamera.transform.position += moveDir * cameraMovingSpeed * currentCameraAcceleration * Time.deltaTime;
+            }
             //print("Are coords in barrier: " + AreCoordsInBox(mainCamera.transform.position, cameraFreeroamBoxCollider));
             //print("Camera bounding box max bounds coords: " + cameraFreeroamBoxCollider.bounds.max);
             //print("Camera bounding box min bounds coords: " + cameraFreeroamBoxCollider.bounds.min);
@@ -392,17 +385,6 @@ public class CameraControl : MonoBehaviour
             }
             else if (cameraState == CameraState.CAMERA_FREEMODE)
             {
-                //Vector3 screenPosition = new Vector3(Screen.width / 2f, Screen.height / 2f, 0.0f);
-                //Ray ray = Camera.main.ScreenPointToRay(screenPosition);
-
-                //if (Physics.Raycast(ray, out RaycastHit hit, cameraLockDistanceRay))
-                //{
-                //    // Get the coords
-                //    Vector3 hitpoint = hit.point;
-
-                //    pointingCoords = hitpoint;
-                //}
-
                 SetCameraState(CameraState.CAMERA_LOCKED);
             }
         }
