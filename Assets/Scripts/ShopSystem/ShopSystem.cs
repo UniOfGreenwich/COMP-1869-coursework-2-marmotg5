@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
+using System.Collections.Generic;
 
 public class ShopSystem : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class ShopSystem : MonoBehaviour
     [Header("Shop Items"), Tooltip("The items that will be shown for purchase in the shop")]
     [SerializeField] GridPlantData[] shopItemsArray; // Placeholder array to just tell the shop what items it will have inside
 
-    GridPlantData[] organizedItemArray; // The actual organized array with all the items from "shopItemsArray"
+    List<GridPlantData> organizedItemList = new List<GridPlantData>(); // The actual organized array with all the items from "shopItemsArray"
 
     // Shop UI
     GameObject currentShopUIGameObject = null;
@@ -20,7 +21,7 @@ public class ShopSystem : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-		organizedItemArray = GetOrganizedShopByPlantLevel();
+        organizedItemList = GetOrganizedShopByPlantLevel();
 	}
 
     // Update is called once per frame
@@ -41,7 +42,7 @@ public class ShopSystem : MonoBehaviour
 	void ToggleShopUI()
 	{
 		// Make sure we have a UI manager handling the shop UI and items to populate the shop UI with
-		if (organizedItemArray != null && organizedItemArray.Length > 0)
+		if (organizedItemList != null && organizedItemList.Count > 0)
 		{
             CreateShopUI();
 		}
@@ -57,7 +58,7 @@ public class ShopSystem : MonoBehaviour
             ShopUI shopUI = currentShopUIGameObject.GetComponent<ShopUI>();
             if (shopUI != null)
             {
-                shopUI.PopulateShop(organizedItemArray); // Populate the shop list with items
+                shopUI.PopulateShop(organizedItemList); // Populate the shop list with items
             }
         }
         // We already have a shop created, so delete it
@@ -77,11 +78,11 @@ public class ShopSystem : MonoBehaviour
     }
 
     // Function that will organize an array which will start with the smallest level of plants at the beginning and put the highest levels at the end
-    GridPlantData[] GetOrganizedShopByPlantLevel()
+    List<GridPlantData> GetOrganizedShopByPlantLevel()
     {
         if (shopItemsArray.Length > 0)
         {
-			GridPlantData[] organizedPlantArray = new GridPlantData[shopItemsArray.Length];
+            List<GridPlantData> organizedPlantList = new List<GridPlantData>();
 
             int minPlantLevel = GetMinPlantLevelFromArray(shopItemsArray); // Get the smallest level of a plant within the array
 			int maxPlantLevel = GetMaxPlantLevelFromArray(shopItemsArray); // Get the highest
@@ -97,7 +98,7 @@ public class ShopSystem : MonoBehaviour
 
                     if (plantData.objectRequiredLevel == currentLevel)
                     {
-                        organizedPlantArray[currentPlantData] = plantData;
+                        organizedPlantList.Add(plantData);
                     }
                 }
             }
@@ -134,7 +135,7 @@ public class ShopSystem : MonoBehaviour
 
             //         }
 
-            return organizedPlantArray;
+            return organizedPlantList;
 		}
 
         return null;

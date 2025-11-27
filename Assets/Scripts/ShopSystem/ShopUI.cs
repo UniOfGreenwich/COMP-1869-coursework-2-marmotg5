@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ShopUI : MonoBehaviour
 {
@@ -25,9 +26,9 @@ public class ShopUI : MonoBehaviour
     }
 
     // Populates/re-popualtes the shop with items we want the UI to display
-    public void PopulateShop(GridPlantData[] itemsArray)
+    public void PopulateShop(List<GridPlantData> itemsList)
     {
-        foreach (GridPlantData item in itemsArray)
+        foreach (GridPlantData item in itemsList)
         {
             // Create the shop item UI and add it to the UI's list
             GameObject shopItemUIGameObject = Instantiate(shopItemUIPrefab, shopItemList);
