@@ -1,2 +1,16 @@
 fileFormatVersion: 2
 guid: d324d34f5c723be49bfdae5111beaf9c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - timerText: {instanceID: 0}
+  - potionParticlePrefab: {instanceID: 0}
+  - potionObjectPrefab: {instanceID: 0}
+  - potionPlaceholderPrefab: {instanceID: 0}
+  - impactSFX: {fileID: 8300000, guid: fa5ad48c17d4957449b69037280c46b4, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

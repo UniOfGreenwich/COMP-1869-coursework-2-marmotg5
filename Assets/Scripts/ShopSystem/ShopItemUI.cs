@@ -20,6 +20,10 @@ public class ShopItemUI : MonoBehaviour
 	[SerializeField] Button buyButton;
 	Color defaultBuyButtonColour;
 
+    [Header("Audio stuff")]
+    [SerializeField] private AudioClip buySFX;
+    private AudioSource audioSource;
+
     GridPlantData shopItemData = null;
 
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -33,6 +37,8 @@ public class ShopItemUI : MonoBehaviour
         if (buyButton != null)
         {
             defaultBuyButtonColour = buyButton.image.color;
+            
+        audioSource = GetComponent<AudioSource>();
         }
     }
 
@@ -76,6 +82,14 @@ public class ShopItemUI : MonoBehaviour
         }
     }
 
+    void PlayBuySFX()
+    {
+        if (audioSource != null && buySFX != null)
+        {
+            audioSource.PlayOneShot(buySFX);
+        }
+    }
+
 	public void BuyItem()
 	{
 		if (shopItemData == null) return; // Won't be null since we save a reference to it above but just in case
@@ -90,6 +104,8 @@ public class ShopItemUI : MonoBehaviour
 			{
 				player.RemoveCash(shopItemData.objectCost);
 				player.GetInventory().AddItem(shopItemData);
+
+                PlayBuySFX();
 			}
 		}
 	}
