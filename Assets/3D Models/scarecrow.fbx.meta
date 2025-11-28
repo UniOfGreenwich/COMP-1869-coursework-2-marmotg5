@@ -1,23 +1,29 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/3D Models/Models for Field/Assets/stones.fbx.meta
-guid: 6f6aaa98ec51fa648ab41ed7c6c949c8
-========
-guid: d04f2993b392d0548adcf1a116a9d71f
->>>>>>>> env-assets:Assets/3D Models/broom 1.fbx.meta
+guid: 21690be9ae9ee58449550953eba79db2
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
   externalObjects:
   - first:
-      type: UnityEngine:Texture2D
+      type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: stones_openPBR_shader1_BaseMap
-    second: {fileID: 2800000, guid: d946e5849ce10f345a672e814091218c, type: 3}
+      name: lambert4
+    second: {fileID: 2100000, guid: 5dc2e5cddc03f1b4392596b8c813b486, type: 2}
   - first:
-      type: UnityEngine:Texture2D
+      type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: stones_openPBR_shader1_Normal
-    second: {fileID: 2800000, guid: e35b964024da94e46b5fb9f0df32ccca, type: 3}
+      name: lambert5
+    second: {fileID: 2100000, guid: 2e7a394d6dd042748a53aacfbcd078ed, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert6
+    second: {fileID: 2100000, guid: cc9a82b561394d140b24c4f3dc8bb39a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lambert7
+    second: {fileID: 2100000, guid: 6de569449b0652248860b68df0235db4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
