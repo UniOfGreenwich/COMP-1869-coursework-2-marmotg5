@@ -1,46 +1,9 @@
 fileFormatVersion: 2
-guid: ad1875c9e83f662458eda7564799fcd0
+guid: 964e950d50bd31645b226abc0a08c63e
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-<<<<<<< Updated upstream:Assets/3D Models/shop export.fbx.meta
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: beige
-    second: {fileID: 2100000, guid: 5fd752ecbab533d40a4b074b053b706c, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: grey
-    second: {fileID: 2100000, guid: d1a8cbc6aff378743afd62e0cbeb3d83, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: houseroof
-    second: {fileID: 2100000, guid: 841859a9257540c49a50d54b25e92663, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lambert5
-    second: {fileID: 2100000, guid: 2003612d8149fb648b0bc5aecca74bc9, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lambert8
-    second: {fileID: 2100000, guid: 8e27ed45e5537b344bf1d10f66917a86, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: red
-    second: {fileID: 2100000, guid: d92dd151bcfd16a4eb66e307b655b202, type: 2}
-=======
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: pumpkin_jack_pumpkin_jack1_BaseMap
-    second: {fileID: 2800000, guid: 3be09db532004f84e8af7889f3f3b5fe, type: 3}
->>>>>>> Stashed changes:Assets/3D Models/Models for Field/Assets/pumpkin_jack_decoration.fbx.meta
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
