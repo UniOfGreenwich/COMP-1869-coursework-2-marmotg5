@@ -113,6 +113,7 @@ public class GridSystem : MonoBehaviour
 				// Calculate the object's spawn position
 				GameObject visualObjectForCell = FindVisualObjectBasedOnCell(cellToSpawnIn);
 				Vector3 spawnPosition = GetObjectSpawnPosition(cellToSpawnIn, gridObjectPrefab);
+				spawnPosition += gridObjectPrefab.transform.position; // Add the prefab's offset position onto the spawn position
 
 				// Create the grid object
 				GameObject spawnedGridObject = Instantiate(gridObjectPrefab, spawnPosition, gridObjectPrefab.transform.rotation, visualObjectForCell.transform);

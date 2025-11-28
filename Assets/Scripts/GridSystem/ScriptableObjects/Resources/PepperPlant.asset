@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 797a456d3b1c14445892bfd3106584ab, type: 3}
-  m_Name: PumpkinData
+  m_Name: PepperPlant
   m_EditorClassIdentifier: 
-  objectName: Pumpkin
-  objectPrefab: {fileID: 6345889185508341187, guid: ff9acaec3a8677d4a819ae2160d37977, type: 3}
+  objectName: Pepper
+  objectPrefab: {fileID: 8138410920950185357, guid: 3d0120b703b1fcc4d9ef3bee1441d6d3, type: 3}
   objectType: 1
   objectSprite: {fileID: 0}
-  objectCost: 20
+  objectCost: 10
   objectRequiredLevel: 0
   gridCellRequirement: {x: 1, y: 1}
   growingStages: 3
-  cashReward: 200
-  requiredGrowingTime: 30
+  cashReward: 100
+  requiredGrowingTime: 10
   maxHealth: 25
   growingStageMeshes:
-  - {fileID: 7520757598018152183, guid: 7e109badd69afe5469b4fb554fab01d2, type: 3}
-  - {fileID: 2362114916095301316, guid: a6624641089f43042838a967fe137a4e, type: 3}
-  - {fileID: -9136590849949624283, guid: 3d5498f3dd95f514a9bbfa697d9a5373, type: 3}
+  - {fileID: -2234499861746754787, guid: 61fc7553751796e4086f7e55855a465f, type: 3}
+  - {fileID: 5019961380242404530, guid: aa9d399d506649842a427ca9d41d3974, type: 3}
+  - {fileID: -1703633680943046366, guid: dcd5fc64507fe8d4a94fc4a84c01b48a, type: 3}

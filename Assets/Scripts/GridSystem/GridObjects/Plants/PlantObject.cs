@@ -67,7 +67,7 @@ public class PlantObject : GridObject
             // Giving the plant a time frame to "grow" and get bigger
             if (plantData.growingStages > 0)
             {
-                if (plantData.growingStageMeshes[currentGrowingStage] != null)
+                if (currentGrowingStage <= plantData.growingStageMeshes.Length - 1)
                 {
                     plantMeshFilter.mesh = plantData.growingStageMeshes[currentGrowingStage];
 
@@ -165,7 +165,8 @@ public class PlantObject : GridObject
                 currentGrowingStage++;
 
                 // Check if the next phase of the plant growing mechanic exists 
-                if (plantData.growingStageMeshes[currentGrowingStage] != null)
+                //if (plantData.growingStageMeshes[currentGrowingStage] != null)
+                if (currentGrowingStage <= plantData.growingStageMeshes.Length - 1)
                 {
                     Mesh nextMesh = plantData.growingStageMeshes[currentGrowingStage];
 

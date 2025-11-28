@@ -100,7 +100,11 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
 			{
                 // Create the placeholder object
 				placeHolderObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                placeHolderObject.transform.position = GameManager.gridSystem.GetObjectSpawnPosition(gridCellToSpawnAt, inventoryItem.itemData.objectPrefab);
+
+                Vector3 spawnPosition = GameManager.gridSystem.GetObjectSpawnPosition(gridCellToSpawnAt, inventoryItem.itemData.objectPrefab);
+                spawnPosition += inventoryItem.itemData.objectPrefab.transform.position; // Add the prefab's offset position
+
+                placeHolderObject.transform.position = spawnPosition;
 
                 // Get the new object's mesh filter and renderer
 				MeshFilter placeHolderMeshFilter = placeHolderObject.GetComponent<MeshFilter>();
