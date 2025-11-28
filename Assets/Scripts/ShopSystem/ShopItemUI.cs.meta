@@ -1,2 +1,17 @@
 fileFormatVersion: 2
 guid: 744ed2717b1a7c14180301fcb91f7ab4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - cropNameText: {instanceID: 0}
+  - cropLevelText: {instanceID: 0}
+  - cropCostText: {instanceID: 0}
+  - cropImage: {instanceID: 0}
+  - buyButton: {instanceID: 0}
+  - buySFX: {fileID: 8300000, guid: 1926343819b2b6d489486361253aa1cd, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

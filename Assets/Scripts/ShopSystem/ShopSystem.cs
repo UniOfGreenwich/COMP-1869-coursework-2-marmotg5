@@ -11,6 +11,10 @@ public class ShopSystem : MonoBehaviour
     [Header("Shop Items"), Tooltip("The items that will be shown for purchase in the shop")]
     [SerializeField] GridPlantData[] shopItemsArray; // Placeholder array to just tell the shop what items it will have inside
 
+    // ui click sound
+    [SerializeField] private AudioClip clickSFX;
+    private AudioSource audioSource;
+
     List<GridPlantData> organizedItemList = new List<GridPlantData>(); // The actual organized array with all the items from "shopItemsArray"
 
     // Shop UI
@@ -22,6 +26,7 @@ public class ShopSystem : MonoBehaviour
     void Start()
     {
         organizedItemList = GetOrganizedShopByPlantLevel();
+        audioSource = GetComponent<AudioSource>();
 	}
 
     // Update is called once per frame
@@ -30,11 +35,20 @@ public class ShopSystem : MonoBehaviour
         
     }
 
+    void PlayClickSound()
+    {
+        if (audioSource != null && clickSFX != null)
+        {
+            audioSource.PlayOneShot(clickSFX);
+        }
+    }
+
     // When the shop is clicked on by the player
 	void OnMouseDown()
 	{
 		if (!(bool)(EventSystem.current?.IsPointerOverGameObject()))
 		{
+            PlayClickSound();
 			ToggleShopUI();
 		}
 	}

@@ -26,16 +26,21 @@ public abstract class ThrowablePotion : MonoBehaviour, IDragHandler, IEndDragHan
 
     [Header("Potion Settings")]
     [SerializeField] float potionRadius = 15.0f;
-    [SerializeField, Tooltip("How hight from the ground should the potion be dropped at")]
+    [SerializeField, Tooltip("How high from the ground should the potion be dropped at")]
     float dropHeight = 3.0f;
     [SerializeField] float dropSpeed = 6.0f;
     [SerializeField] float potionUseCooldown = 5.0f; // In seconds
+
+    [Header("Audio settings")]
+    [SerializeField] private AudioClip impactSFX;
+    private AudioSource audioSource;
 
     float elapsedTimeSinceLastPotionUse = 0.0f; // Updated at runtime
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -110,6 +115,14 @@ public abstract class ThrowablePotion : MonoBehaviour, IDragHandler, IEndDragHan
         yield return null;
     }
 
+    void PlayImpactSFX()    // sfx
+    {
+        if (audioSource != null && impactSFX != null)
+        {
+            audioSource.PlayOneShot(impactSFX);
+        }
+    }
+
     void DropPotion()
     {
         // Make sure we have a spawned potion and we know where it has been dropped at
@@ -121,6 +134,8 @@ public abstract class ThrowablePotion : MonoBehaviour, IDragHandler, IEndDragHan
             float distanceFromThrownPosition = Vector3.Distance(potionObject.transform.position, potionThrownPosition);
             if (distanceFromThrownPosition <= 0.25f)
             {
+                PlayImpactSFX();
+
                 // Potion has hit the ground, loop through all the objects within the potion radius
                 Collider[] objectsNearPotion = Physics.OverlapSphere(potionThrownPosition, potionRadius);
                 foreach (Collider objectCollider in objectsNearPotion)

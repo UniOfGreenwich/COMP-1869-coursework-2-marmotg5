@@ -17,6 +17,10 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
 	[Header("UI Image")]
 	[SerializeField] Image itemImage;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip placeSFX;
+    private AudioSource audioSource;
+
     // The data
     InventoryItem inventoryItem = null;
 
@@ -36,6 +40,11 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
     void Update()
     {   
         
+    }
+
+    void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Gets called when the player drags the UI element
@@ -59,6 +68,14 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
 
     }
 
+    void PlayPlaceSFX()
+    {
+        if (audioSource != null && placeSFX != null)
+        {
+            audioSource.PlayOneShot(placeSFX);
+        }
+    }
+
     // Gets called when the player stops dragging the mouse
     void IEndDragHandler.OnEndDrag(PointerEventData eventData)
     {
@@ -77,6 +94,8 @@ public class PlayerBuildingItemUI : MonoBehaviour, IDragHandler, IEndDragHandler
         // If the player successfully spawned the plant
         if (successfulSpawn && GameManager.player != null)
         {
+            PlayPlaceSFX();
+
             InventorySystem playerInventory = GameManager.player.GetInventory();
             playerInventory.UseItem(inventoryItem);
 

@@ -923,6 +923,7 @@ MonoBehaviour:
   shopItemsArray:
   - {fileID: 11400000, guid: 685537ba817538243a78a45162dbf2e6, type: 2}
   - {fileID: 11400000, guid: 6aa59e7d818f7d74ab8673ce4cc1f0b9, type: 2}
+  clickSFX: {fileID: 8300000, guid: 1926343819b2b6d489486361253aa1cd, type: 3}
 --- !u!65 &2336603634463036077
 BoxCollider:
   m_ObjectHideFlags: 0
