@@ -379,8 +379,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -164, y: 172}
-  m_SizeDelta: {x: 1469.5, y: 872.8982}
+  m_AnchoredPosition: {x: -44.861206, y: 172}
+  m_SizeDelta: {x: 2184.3315, y: 872.8982}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &474793782
 MonoBehaviour:
@@ -601,6 +601,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1160759038}
+  - component: {fileID: 1160759039}
   m_Layer: 5
   m_Name: LoadingManager
   m_TagString: Untagged
@@ -627,6 +628,23 @@ RectTransform:
   m_AnchoredPosition: {x: 509.53522, y: 235.50871}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1160759039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160759037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fde29567da57bea46b3295d7435f8dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bar: {fileID: 474793781}
+  speed: 50
+  startX: 400
+  endX: -300
+  LoadingScene: SampleScene
 --- !u!1 &1195723215
 GameObject:
   m_ObjectHideFlags: 0

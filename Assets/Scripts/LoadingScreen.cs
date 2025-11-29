@@ -44,23 +44,14 @@ public class LoadingBar : MonoBehaviour
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(LoadingScene);
         op.allowSceneActivation = false;
-
         while (!op.isDone)
         {
-            float progress = Mathf.Clamp01(op.progress / 0.9f); 
-
-            if (progressBar != null)
-                progressBar.value = progress;
-
-            if (progressText != null)
-                progressText.text = Mathf.RoundToInt(progress * 100f) + "%";
-
-            if (progress >= 0.99f)
+            // Check if the load has finished
+            if (op.progress >= 0.9f)
             {
-                // when its nearly done it will allow the scene to activate
+                // Activate the scene
                 op.allowSceneActivation = true;
             }
-
             yield return null;
         }
     }
