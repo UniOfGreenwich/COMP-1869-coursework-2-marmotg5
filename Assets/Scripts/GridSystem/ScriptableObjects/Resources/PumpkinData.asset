@@ -15,7 +15,7 @@ MonoBehaviour:
   objectName: Pumpkin
   objectPrefab: {fileID: 6345889185508341187, guid: ff9acaec3a8677d4a819ae2160d37977, type: 3}
   objectType: 1
-  objectSprite: {fileID: 0}
+  objectSprite: {fileID: 21300000, guid: 3db7010806609a144b18923d225d69f1, type: 3}
   objectCost: 20
   objectRequiredLevel: 0
   gridCellRequirement: {x: 1, y: 1}

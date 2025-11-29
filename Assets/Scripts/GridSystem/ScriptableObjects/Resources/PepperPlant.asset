@@ -15,7 +15,7 @@ MonoBehaviour:
   objectName: Pepper
   objectPrefab: {fileID: 8138410920950185357, guid: 3d0120b703b1fcc4d9ef3bee1441d6d3, type: 3}
   objectType: 1
-  objectSprite: {fileID: 0}
+  objectSprite: {fileID: 21300000, guid: 78c4ff5c86ea8654faf95b5c965ddd0e, type: 3}
   objectCost: 10
   objectRequiredLevel: 0
   gridCellRequirement: {x: 1, y: 1}
