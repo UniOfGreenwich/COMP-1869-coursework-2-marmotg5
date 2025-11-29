@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 797a456d3b1c14445892bfd3106584ab, type: 3}
-  m_Name: PumpkinData
+  m_Name: OnionData
   m_EditorClassIdentifier: 
-  objectName: Pumpkin
-  objectPrefab: {fileID: 6345889185508341187, guid: ff9acaec3a8677d4a819ae2160d37977, type: 3}
+  objectName: Onion
+  objectPrefab: {fileID: 8861073034297715055, guid: d25433ebf57ca7348a5725c5fa7196c7, type: 3}
   objectType: 1
   objectSprite: {fileID: 0}
-  objectCost: 20
+  objectCost: 10
   objectRequiredLevel: 0
   gridCellRequirement: {x: 1, y: 1}
   growingStages: 3
-  cashReward: 200
-  requiredGrowingTime: 30
+  cashReward: 100
+  requiredGrowingTime: 10
   maxHealth: 25
   growingStageMeshes:
-  - {fileID: 7520757598018152183, guid: 7e109badd69afe5469b4fb554fab01d2, type: 3}
-  - {fileID: 2362114916095301316, guid: a6624641089f43042838a967fe137a4e, type: 3}
-  - {fileID: -9136590849949624283, guid: 3d5498f3dd95f514a9bbfa697d9a5373, type: 3}
+  - {fileID: -2000608859906291617, guid: 0a84b5485b2708a40a874d2d6f0e0624, type: 3}
+  - {fileID: 7949025131566757486, guid: 71e6ef0455aa0e346b392132fcbd249e, type: 3}
+  - {fileID: 1990984856603488363, guid: 944f635ad99ecbe4f8a9d0ae99816b66, type: 3}
