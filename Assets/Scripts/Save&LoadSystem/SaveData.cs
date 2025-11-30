@@ -54,7 +54,8 @@ public class SaveData
 
 	public int playerCash;
 	public int playerLevel;
+    public int playerLevelExperience;
 
-	public List<InventoryData> inventoryData = new List<InventoryData>(); // The player's inventory with all their items inside
+    public List<InventoryData> inventoryData = new List<InventoryData>(); // The player's inventory with all their items inside
 	public List<GridCellData> occupiedGridCells = new List<GridCellData>(); // All the grid cells that are occupied with plants
 }

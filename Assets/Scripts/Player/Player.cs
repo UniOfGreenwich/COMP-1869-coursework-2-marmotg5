@@ -3,7 +3,7 @@ using UnityEngine;
 [System.Serializable]
 struct PlayerStats
 {
-    public int level;
+	public Level level;
     public int cash;
 }
 
@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
     {
         playerBuilding = GetComponent<PlayerBuilding>();
         cameraControl = GetComponent<CameraControl>();
-        //inventorySystem = GetComponent<InventorySystem>();
     }
 
     // Update is called once per frame
@@ -29,22 +28,12 @@ public class Player : MonoBehaviour
     {
     }
 
-	public void SetLevel(int level)
+	// Used when loading the player's data (SavingSystem.cs)
+	public void SetLevel(Level levelToOverwrite)
 	{
-		if (level >= 0)
-		{
-			playerStats.level = level;
-		}
-		else
-		{
-			playerStats.level = 0;
-		}
+		playerStats.level = levelToOverwrite;
 	}
 
-	public void AddLevel(int levelToAdd)
-	{
-		playerStats.level += levelToAdd;
-	}
 
 	public void SetCash(int cash)
 	{
@@ -68,8 +57,9 @@ public class Player : MonoBehaviour
 		playerStats.cash -= cashToRemove;
 	}
 
-	public int GetLevel() { return playerStats.level; }
-	public int GetCash() { return playerStats.cash; }
+	public int GetLevelAmount() { return playerStats.level.levelAmount; }
+    public Level GetLevel() { return playerStats.level; }
+    public int GetCash() { return playerStats.cash; }
 
 	public InventorySystem GetInventory() { return inventorySystem; }
 }

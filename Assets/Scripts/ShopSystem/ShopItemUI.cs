@@ -67,7 +67,7 @@ public class ShopItemUI : MonoBehaviour
 		{
             Image buyButtonImage = buyButton.image;
 
-			if (player.GetLevel() >= plantData.objectRequiredLevel && player.GetCash() >= plantData.objectCost)
+			if (player.GetLevelAmount() >= plantData.objectRequiredLevel && player.GetCash() >= plantData.objectCost)
 			{
 				// Player can buy the seed/crop
                 buyButtonImage.color = defaultBuyButtonColour;
@@ -97,7 +97,7 @@ public class ShopItemUI : MonoBehaviour
 		Player player = GameManager.player;
 		if (player != null)
 		{
-			bool hasEnoughLevel = (player.GetLevel() >= shopItemData.objectRequiredLevel);
+			bool hasEnoughLevel = (player.GetLevelAmount() >= shopItemData.objectRequiredLevel);
 			bool hasEnoughCash = (player.GetCash() - shopItemData.objectCost) >= 0;
 
 			if (hasEnoughLevel && hasEnoughCash)

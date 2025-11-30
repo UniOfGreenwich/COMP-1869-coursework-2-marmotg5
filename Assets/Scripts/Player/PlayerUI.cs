@@ -31,8 +31,10 @@ public class PlayerUI : MonoBehaviour
     {
         if (GameManager.player == null) return;
         Player player = GameManager.player;
+        Level playerLevel = player.GetLevel();
 
         cashText.text = cashPrefix + player.GetCash();
-        levelText.text = levelPrefix + player.GetLevel();
+        levelText.text = levelPrefix + playerLevel.levelAmount;
+        experienceText.text = playerLevel.experience + "/" + playerLevel.maxExperience;
     }
 }

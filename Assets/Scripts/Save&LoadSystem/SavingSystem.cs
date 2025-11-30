@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.VisualScripting.FullSerializer;
 using UnityEditor.Overlays;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public static class SavingSystem
 {
@@ -37,6 +38,7 @@ public static class SavingSystem
 					LoadGridCells(loadedData.occupiedGridCells);
 				}
 
+				LoadPlayerStats(loadedData);
 				LoadInventory(loadedData.inventoryData);
 			}
 		}
@@ -74,7 +76,18 @@ public static class SavingSystem
 		}
 	}
 
-	static void LoadInventory(List<SaveData.InventoryData> inventoryData)
+    static void LoadPlayerStats(SaveData playerData)
+	{
+        if (GameManager.player == null) return; // No player exists, so they can't have any stats
+		Player player = GameManager.player;
+        Level savedLevel = new Level(playerData.playerLevel, playerData.playerLevelExperience);
+
+        player.SetCash(playerData.playerCash); // Load the cash
+		player.SetLevel(savedLevel);
+		
+    }
+
+    static void LoadInventory(List<SaveData.InventoryData> inventoryData)
 	{
 		if (GameManager.player == null) return; // No player exists, so they can't have an inventory
 

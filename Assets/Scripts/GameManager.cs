@@ -59,7 +59,8 @@ public class GameManager : MonoBehaviour
 		if (player != null)
         {
             saveData.playerCash = player.GetCash();
-            saveData.playerLevel = player.GetLevel();
+            saveData.playerLevel = player.GetLevelAmount();
+            saveData.playerLevelExperience = player.GetLevel().experience;
 
             // Save the player's inventory
             foreach (InventoryItem inventoryItem in player.GetInventory().GetItems())

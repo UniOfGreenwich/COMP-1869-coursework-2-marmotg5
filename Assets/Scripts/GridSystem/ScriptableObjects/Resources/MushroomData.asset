@@ -17,11 +17,12 @@ MonoBehaviour:
   objectType: 1
   objectSprite: {fileID: 21300000, guid: b6c1ae47d944441469bfb86b98e42265, type: 3}
   objectCost: 10
-  objectRequiredLevel: 0
+  objectRequiredLevel: 1
   gridCellRequirement: {x: 1, y: 1}
   growingStages: 3
   cashReward: 100
-  requiredGrowingTime: 50
+  experienceReward: 100
+  requiredGrowingTime: 10
   maxHealth: 25
   growingStageMeshes:
   - {fileID: 8082189009630114815, guid: 8ece6c6302225f6468b25a452421ce4b, type: 3}

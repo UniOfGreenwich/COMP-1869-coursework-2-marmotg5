@@ -267,6 +267,7 @@ public class PlantObject : GridObject
             if (player != null)
             {
                 player.AddCash(plantData.cashReward);
+                player.GetLevel().AddExperience(plantData.experienceReward);
 
 				// Reset the grid cell's visual object's colour to the default one since the plant is not occupying anything anymore
 				ResetGridCellsVisualObjectsColour();
@@ -274,9 +275,8 @@ public class PlantObject : GridObject
                 // Play harvest sfx
                 if (audioSource != null && harvestSFX != null)
                 {
-                    audioSource.PlayOneShot(harvestSFX);
+                    AudioSource.PlayClipAtPoint(harvestSFX, transform.position);
                 }
-
 				// Destroy the plant
 				KillPlant();
             }
@@ -288,10 +288,7 @@ public class PlantObject : GridObject
         // If health or water level reaches 0
         if (plantHealth <= 0 || plantWaterLevel <= 0.0f || currentGrowingTime >= plantData.requiredGrowingTime)
         {
-            // Reset the colour of the grid cells the plant was previously occupying
-
-
-            Destroy(gameObject, harvestSFX.length);
+            Destroy(gameObject);
         }
     }
 
