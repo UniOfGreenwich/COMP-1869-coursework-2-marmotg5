@@ -641,9 +641,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bar: {fileID: 474793781}
-  speed: 50
+  speed: 30
   startX: 400
-  endX: -300
+  endX: -400
   LoadingScene: SampleScene
 --- !u!1 &1195723215
 GameObject:
