@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
@@ -6,13 +6,16 @@ using System.Collections;
 public class LoadingBar : MonoBehaviour
 {
     [Header("Loading Bar")]
-    public RectTransform bar; 
-    public float speed = 50f;// how fast the mushrooms scroll
-    public float startX = 510f;// Where the mushrooms scrolls from
-    public float endX = -510f;// this is the point at which the mushrroma loop back to the start
+    public RectTransform bar;
+    public float speed = 50f;
+    public float startX = 400f;
+    public float endX = -400f;
 
-    [Header("LoadingScene")]
-    public string LoadingScene; //Name of the scene
+    [Header("Loading Scene")]
+    public string LoadingScene;
+
+    [Header("Load Time")]
+    public float minLoadTime = 2f;//how long the loading screen will load for before switiching to main
 
     private void Start()
     {
@@ -31,7 +34,6 @@ public class LoadingBar : MonoBehaviour
         Vector2 pos = bar.anchoredPosition;
         pos.x -= speed * Time.unscaledDeltaTime;
 
-        // once the mushrooms reach the end point, reset to start point
         if (pos.x <= endX)
         {
             pos.x = startX;
@@ -44,16 +46,20 @@ public class LoadingBar : MonoBehaviour
     {
         AsyncOperation op = SceneManager.LoadSceneAsync(LoadingScene);
         op.allowSceneActivation = false;
+
+        float timer = 0f;
+
         while (!op.isDone)
         {
-            // Check if the load has finished
-            if (op.progress >= 0.9f)
+            timer += Time.unscaledDeltaTime;
+
+           // this will check if the load screen has stayed long enough so that it can switch to the sample scene
+            if (op.progress >= 0.9f && timer >= minLoadTime)
             {
-                // Activate the scene
                 op.allowSceneActivation = true;
             }
+
             yield return null;
         }
     }
 }
-
