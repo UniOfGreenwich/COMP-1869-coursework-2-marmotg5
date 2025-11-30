@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 using static UnityEngine.GraphicsBuffer;
 
 enum CameraState
@@ -334,10 +335,15 @@ public class CameraControl : MonoBehaviour
             if (horizontalInput != 0 || verticalInput != 0)
             {
                 mainCamera.transform.position += moveDir * cameraMovingSpeed * currentCameraAcceleration * Time.deltaTime;
+
+                // Clamp the position so it doesn't leave the bounding box around the world
+                Vector3 clampedPosition;
+                clampedPosition.x = Mathf.Clamp(mainCamera.transform.position.x, cameraFreeroamBoxCollider.bounds.min.x, cameraFreeroamBoxCollider.bounds.max.x);
+                clampedPosition.y = Mathf.Clamp(mainCamera.transform.position.y, cameraFreeroamBoxCollider.bounds.min.y, cameraFreeroamBoxCollider.bounds.max.y);
+                clampedPosition.z = Mathf.Clamp(mainCamera.transform.position.z, cameraFreeroamBoxCollider.bounds.min.z, cameraFreeroamBoxCollider.bounds.max.z);
+
+                mainCamera.transform.position = clampedPosition;
             }
-            //print("Are coords in barrier: " + AreCoordsInBox(mainCamera.transform.position, cameraFreeroamBoxCollider));
-            //print("Camera bounding box max bounds coords: " + cameraFreeroamBoxCollider.bounds.max);
-            //print("Camera bounding box min bounds coords: " + cameraFreeroamBoxCollider.bounds.min);
         }
     }
 

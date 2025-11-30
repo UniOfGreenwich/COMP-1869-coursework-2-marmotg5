@@ -5499,7 +5499,7 @@ GameObject:
   - component: {fileID: 1330191836}
   - component: {fileID: 1330191835}
   m_Layer: 0
-  m_Name: PrototypeCameraBoundingBox
+  m_Name: CameraBoundingBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
