@@ -38,6 +38,8 @@ public class WeatherManager : MonoBehaviour
 
     private string apiUrl => $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
 
+    public string weatherCondition { get; private set; }
+
     private void Start()
     {
         StartCoroutine(GetWeatherData());
@@ -67,21 +69,22 @@ public class WeatherManager : MonoBehaviour
 
     private void UpdateEnvironment(WeatherInfo info)
     {
-        string condition = info.weather[0].main.ToLower();
+        //string condition = info.weather[0].main.ToLower();
+        weatherCondition = info.weather[0].main.ToLower();
         float temp = info.main.temp;
 
-        Debug.Log($"Weather: {condition}, Temp: {temp} celcius");
+        Debug.Log($"Weather: {weatherCondition}, Temp: {temp} celcius");
 
         // Adjust sunlight intensity depending on the weather
-        if (condition.Contains("cloud"))
+        if (weatherCondition.Contains("cloud"))
             sunLight.intensity = 0.6f;
-        else if (condition.Contains("rain"))
+        else if (weatherCondition.Contains("rain"))
             sunLight.intensity = 0.6f;
         else
             sunLight.intensity = 1.0f;
 
         // Toggle the rain effect on/off depending on the weather
-        if (condition.Contains("rain"))
+        if (weatherCondition.Contains("rain"))
         {
             if (!rainEffect.isPlaying)
                 rainEffect.Play();

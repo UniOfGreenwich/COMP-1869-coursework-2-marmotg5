@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 	public static GameManager instance { get; private set; }
 	public static GridSystem gridSystem {  get; private set; }
     public static UIManager UIManager{ get; private set; }
+    public static WeatherManager weatherManager { get; private set; }
     public static Camera mainCamera { get; private set; }
     public static Player player { get; private set; }
     //public static SavingSystem savingSystem { get; private set; }
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
         player = FindFirstObjectByType<Player>();
         gridSystem = FindFirstObjectByType<GridSystem>();
         UIManager = FindFirstObjectByType<UIManager>();
+        weatherManager = FindFirstObjectByType<WeatherManager>();
 
         // Load the game file
         SavingSystem.LoadSaveFile();

@@ -120,8 +120,19 @@ public class PlantObject : GridObject
                 elapsedTimeSinceLastGrowth = 0.0f;
             }
 
+            // Check if the weather conditions are saying it's rainy
+            if (GameManager.weatherManager != null && GameManager.weatherManager.weatherCondition.Contains("rain"))
+            {
+                // Increase the speed of the plant's growth if it's raining in real-time
+                currentGrowingTime = (currentGrowingTime + Time.deltaTime) * 1.15f; // Make the growing 15% faster 
+            }
+            else
+            {
+                // Normal plant growing
+                currentGrowingTime += Time.deltaTime;
+            }
+
             elapsedTimeSinceLastGrowth += Time.deltaTime;
-            currentGrowingTime += Time.deltaTime;
         }
         // Plant has fully grown and is ready to be harvested
         else
