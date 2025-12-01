@@ -8,7 +8,7 @@ public class ButtonClick : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void Clickme()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene(2);
     }
 
 }
