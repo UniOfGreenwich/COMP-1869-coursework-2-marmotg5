@@ -38,7 +38,7 @@ public class WeatherManager : MonoBehaviour
 
     private string apiUrl => $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={apiKey}&units=metric";
 
-    public string weatherCondition { get; private set; }
+    public string weatherCondition { get; private set; } = "";
 
     private void Start()
     {

@@ -125,7 +125,7 @@ public class PlantObject : GridObject
             // Check if the weather API exists and weather conditions are saying it's rainy
             if (GameManager.weatherManager != null)
             {
-                if (GameManager.weatherManager.weatherCondition.Contains("rain"))
+                if ((bool)(GameManager.weatherManager.weatherCondition?.Contains("rain")))
                 {
                     // Increase the speed of the plant's growth if it's raining in real-time
                     currentGrowingTime = (currentGrowingTime + Time.deltaTime) * 1.15f; // Make the growing 15% faster 
