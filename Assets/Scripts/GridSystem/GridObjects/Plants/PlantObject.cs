@@ -18,6 +18,8 @@ public class PlantObject : GridObject
     [SerializeField] GameObject plantUIPrefab;
 	[SerializeField] GridPlantData plantData;
 	[SerializeField] int plantHealth = 25;
+    [Range(1, 2), Tooltip("How much faster in % the plant will grow when the real-time data says it's raining")]
+    [SerializeField] float plantRainGrowthSpeedIncrease = 1.15f;
 
 	// Plant watering
 	[Header("Plant Watering Settings")]
@@ -120,11 +122,14 @@ public class PlantObject : GridObject
                 elapsedTimeSinceLastGrowth = 0.0f;
             }
 
-            // Check if the weather conditions are saying it's rainy
-            if (GameManager.weatherManager != null && GameManager.weatherManager.weatherCondition.Contains("rain"))
+            // Check if the weather API exists and weather conditions are saying it's rainy
+            if (GameManager.weatherManager != null)
             {
-                // Increase the speed of the plant's growth if it's raining in real-time
-                currentGrowingTime = (currentGrowingTime + Time.deltaTime) * 1.15f; // Make the growing 15% faster 
+                if (GameManager.weatherManager.weatherCondition.Contains("rain"))
+                {
+                    // Increase the speed of the plant's growth if it's raining in real-time
+                    currentGrowingTime = (currentGrowingTime + Time.deltaTime) * 1.15f; // Make the growing 15% faster 
+                }
             }
             else
             {
