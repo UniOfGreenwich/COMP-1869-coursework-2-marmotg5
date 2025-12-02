@@ -36,5 +36,14 @@ public class PlayerUI : MonoBehaviour
         cashText.text = cashPrefix + player.GetCash();
         levelText.text = levelPrefix + playerLevel.levelAmount;
         experienceText.text = playerLevel.experience + "/" + playerLevel.maxExperience;
+        UpdateLevelBar(playerLevel); // Updates the progress bar behind the experience text
+    }
+
+    void UpdateLevelBar(Level level)
+    {
+        // Update the timer left for the plant to fully grow
+        float progressImageBarValue = (float)level.experience / (float)level.maxExperience;
+
+        levelForegroundImage.fillAmount = progressImageBarValue;
     }
 }
