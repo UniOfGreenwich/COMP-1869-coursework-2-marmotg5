@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 4509619}
   - component: {fileID: 4509621}
   - component: {fileID: 4509620}
+  - component: {fileID: 4509622}
   m_Layer: 5
   m_Name: Buffer (1)
   m_TagString: Untagged
@@ -195,6 +196,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4509618}
   m_CullTransparentMesh: 1
+--- !u!114 &4509622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4509618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39f211c1e6898f94887c73b278d45e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spinspeed: 50
 --- !u!1 &388872100
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,8 +393,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 450, y: 78}
-  m_SizeDelta: {x: 2184.3315, y: 872.8982}
+  m_AnchoredPosition: {x: 488.86188, y: 116.2363}
+  m_SizeDelta: {x: 2106.608, y: 949.3706}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &474793782
 MonoBehaviour:
@@ -645,7 +659,7 @@ MonoBehaviour:
   startX: 400
   endX: -400
   LoadingScene: SampleScene
-  minLoadTime: 10
+  minLoadTime: 5
 --- !u!1 &1195723215
 GameObject:
   m_ObjectHideFlags: 0
