@@ -12409,7 +12409,7 @@ Light:
     m_Type: 2
     m_Resolution: -1
     m_CustomResolution: -1
-    m_Strength: 1
+    m_Strength: 0.52
     m_Bias: 0.05
     m_NormalBias: 0.4
     m_NearPlane: 0.2
@@ -12463,7 +12463,7 @@ Transform:
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
   m_LocalRotation: {x: -0.5482336, y: -0.14161572, z: -0.15486786, w: -0.80956835}
-  m_LocalPosition: {x: -0.42, y: 4.55, z: 4.1}
+  m_LocalPosition: {x: -0.18, y: 4.02, z: 4.32}
   m_LocalScale: {x: 2.6302595, y: 1.9723, z: 3.8593967}
   m_ConstrainProportionsScale: 0
   m_Children: []
