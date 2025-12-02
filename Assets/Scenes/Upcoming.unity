@@ -714,7 +714,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'this new feature wil allow players to combine plants to make magical mushrooms
     and potions. this will also allow them to create limited plants which will then
-    givw rewards and sell for higher prices. '
+    give rewards and sell for higher prices. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1384,7 +1384,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Our moon cycle feature will be in a form of a calander which will feature
     buffs on certain cycles matching womens cycles as it links to the moon. \nThis
-    will include discounted prices and extra buffs,"
+    will include discounted prices and extra buffs."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
