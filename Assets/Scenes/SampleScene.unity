@@ -13161,11 +13161,11 @@ MonoBehaviour:
   cameraRotatingSpeed: 100
   pointingCoords: {x: 0, y: 0, z: 0}
   cameraState: 0
-  mouseSensitivity: 10
+  mouseSensitivity: 1
   cameraAcceleration: 2.5
   cameraDeceleration: 15
   cameraMaxAcceleration: 5
-  cameraMovingSpeed: 5
+  cameraMovingSpeed: 500
   cameraFreeroamBox: {fileID: 1330191834}
 --- !u!114 &963194230
 MonoBehaviour:

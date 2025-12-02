@@ -79,6 +79,7 @@ public class CameraControl : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
+        cameraState = CameraState.CAMERA_FREEMODE;
 
         if (cameraFreeroamBox)
         {
@@ -183,6 +184,9 @@ public class CameraControl : MonoBehaviour
         }
     }
 
+    // DOESN'T WORK PROPERLY!!!!
+    // DOESN'T WORK PROPERLY!!!!
+    // DOESN'T WORK PROPERLY!!!!
     // Handles the zoom in/out (returns true if the player is zooming in/out)
     bool ApplyPhonePinch()
     {

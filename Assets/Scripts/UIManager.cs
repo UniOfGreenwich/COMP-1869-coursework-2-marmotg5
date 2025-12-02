@@ -47,11 +47,18 @@ public class UIManager : MonoBehaviour
         // Create a new plant UI for the UI manager to keep track of and follow the camera
         if (mainCamera != null && plantObject != null)
         {
-            Vector3 screenPosition = mainCamera.WorldToScreenPoint(plantObject.transform.position); // Convert the plant's 3D position into a 2D screen position
+            Vector3 defaultSpawnPosition = mainCamera.WorldToScreenPoint(plantObject.transform.position); // Convert the plant's 3D position into a 2D screen position
+
 
             // Set the UI manager script to store data of the current plant UI the player is trying to use/look at
-			currentPlantUIGameObject = Instantiate(plantUIPrefab, screenPosition + plantUIOffset, Quaternion.identity, transform);
-			currentPlantUI = currentPlantUIGameObject.GetComponent<PlantUI>();
+            currentPlantUIGameObject = Instantiate(plantUIPrefab, defaultSpawnPosition, Quaternion.identity, transform);
+
+
+			UpdatePlantUILocation(plantObject, mainCamera);
+            //currentPlantUIGameObject.transform.position = offsetPosition;
+
+
+            currentPlantUI = currentPlantUIGameObject.GetComponent<PlantUI>();
             currentPlantObject = plantObject;
 
             // Start a coroutine that tracks the current plant object the player has clicked on
@@ -68,8 +75,9 @@ public class UIManager : MonoBehaviour
 		// While the current plant we are tracking exists
 		while (plantObject != null && plantObject == currentPlantObject)
 		{
-			Vector3 screenPosition = renderCamera.WorldToScreenPoint(plantObject.transform.position);
-			currentPlantUIGameObject.transform.position = screenPosition + plantUIOffset;
+			UpdatePlantUILocation(plantObject, renderCamera);
+			//Vector3 screenPosition = renderCamera.WorldToScreenPoint(plantObject.transform.position);
+			//currentPlantUIGameObject.transform.position = screenPosition + plantUIOffset;
 
 			currentPlantUI.UpdatePlantUIData(plantObject);
 
@@ -81,6 +89,18 @@ public class UIManager : MonoBehaviour
 		currentPlantUI?.UnbindUIButtons(plantObject); // Unbind any old events/functions applied to the current tracked plant
 		StopCoroutine(trackCurrentPlantUICoroutine);
 	}
+
+	void UpdatePlantUILocation(PlantObject plantObject, Camera renderCamera)
+	{
+		if (currentPlantUIGameObject == null || plantObject == null) return;
+
+		Vector3 screenPosition = renderCamera.WorldToScreenPoint(plantObject.transform.position);
+        RectTransform plantUIBackgroundRectTransform = currentPlantUIGameObject.GetComponent<RectTransform>();
+        Vector3 offsetPosition = screenPosition;
+        offsetPosition.y -= plantUIBackgroundRectTransform.rect.height / 2.5f;
+
+		currentPlantUIGameObject.transform.position = offsetPosition;
+    }
 
 	public void RemovePlantUI()
 	{
