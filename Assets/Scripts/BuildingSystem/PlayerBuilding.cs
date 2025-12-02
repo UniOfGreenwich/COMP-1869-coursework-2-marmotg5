@@ -17,6 +17,10 @@ public class PlayerBuilding : MonoBehaviour
     [SerializeField]
     KeyCode buildingStateKey = KeyCode.Y;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip uiClickSFX;
+
     GameObject playerBuildingUIGameObject = null;
 
     BuildingState buildingState;
@@ -79,6 +83,11 @@ public class PlayerBuilding : MonoBehaviour
     {
         if (isUIToggled) return; // Menu is already toggled on and working
 
+        if (audioSource != null && uiClickSFX != null)
+        {
+            audioSource.PlayOneShot(uiClickSFX);
+        }
+
         if (GameManager.gridSystem != null)
         {
             // Activate the grid system
@@ -101,6 +110,11 @@ public class PlayerBuilding : MonoBehaviour
     void CloseBuildingMenu()
     {
         if (!isUIToggled) return; // Menu is already turned off
+
+        if (audioSource != null && uiClickSFX != null)
+        {
+            audioSource.PlayOneShot(uiClickSFX);
+        }
 
 		if (GameManager.gridSystem != null)
 		{

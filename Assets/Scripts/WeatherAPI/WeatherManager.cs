@@ -77,7 +77,7 @@ public class WeatherManager : MonoBehaviour
 
         // Adjust sunlight intensity depending on the weather
         if (weatherCondition.Contains("cloud"))
-            sunLight.intensity = 0.6f;
+            sunLight.intensity = 0.8f;
         else if (weatherCondition.Contains("rain"))
             sunLight.intensity = 0.6f;
         else
