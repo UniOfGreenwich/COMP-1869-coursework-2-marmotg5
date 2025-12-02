@@ -106,6 +106,7 @@ MonoBehaviour:
   plantUIPrefab: {fileID: 2520333981389030653, guid: d7128788996318b42abce6f63c2d401f, type: 3}
   plantData: {fileID: 11400000, guid: 685537ba817538243a78a45162dbf2e6, type: 2}
   plantHealth: 25
+  plantRainGrowthSpeedIncrease: 1.15
   plantWaterLevel: 100
   plantWaterGainAmount: 2.5
   plantWaterDrainingAmount: 0.25
@@ -116,6 +117,7 @@ MonoBehaviour:
   audioSource: {fileID: 678712704883545681}
   harvestSFX: {fileID: 8300000, guid: aa32fb90f28a2234a9456d8d9182136f, type: 3}
   waterSFX: {fileID: 8300000, guid: c27e9113a46e01943a6efc9f038654f2, type: 3}
+  pestSFX: {fileID: 8300000, guid: 89aa3fa4bc63e484e833bbf16f4b7494, type: 3}
 --- !u!82 &678712704883545681
 AudioSource:
   m_ObjectHideFlags: 0

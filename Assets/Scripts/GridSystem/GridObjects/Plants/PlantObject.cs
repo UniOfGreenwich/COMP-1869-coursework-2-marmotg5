@@ -40,6 +40,7 @@ public class PlantObject : GridObject
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip harvestSFX;
     [SerializeField] private AudioClip waterSFX;
+    [SerializeField] private AudioClip pestSFX;
 
     float randomPestAttackTimer = 0.0f; // Gets set in void Start()
     float currentTimeFromLastAttack = 0.0f;
@@ -255,6 +256,11 @@ public class PlantObject : GridObject
             if (plantParticleSystem != null)
             {
                 plantParticleSystem.Stop();
+            }
+            // Pest SFX
+            if (audioSource != null && pestSFX != null)
+            {
+                audioSource.PlayOneShot(pestSFX);
             }
         }
     }
