@@ -20,10 +20,10 @@ MonoBehaviour:
   objectRequiredLevel: 1
   gridCellRequirement: {x: 1, y: 1}
   growingStages: 3
-  cashReward: 100
+  cashReward: 125
   experienceReward: 100
   requiredGrowingTime: 10
-  maxHealth: 25
+  maxHealth: 10
   growingStageMeshes:
   - {fileID: 8082189009630114815, guid: 8ece6c6302225f6468b25a452421ce4b, type: 3}
   - {fileID: 804968360965662807, guid: bd7f3ed54be247441aae3739d2b9faa0, type: 3}
