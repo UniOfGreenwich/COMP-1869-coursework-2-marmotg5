@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Threading;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 using static UnityEngine.GraphicsBuffer;
 
 enum CameraState
